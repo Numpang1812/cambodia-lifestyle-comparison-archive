@@ -1,0 +1,90 @@
+.card {
+  margin-top: 24px;
+  padding: 24px;
+  background-color: #1C222C;
+  border: 1px solid #2E3644;
+  border-radius: 10px;
+}
+
+.kicker {
+  font-family: 'Courier New', monospace;
+  color: #2EE6A8;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #E8EDF2;
+  margin: 8px 0 16px;
+  line-height: 1.2;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.col {
+  padding: 16px;
+  background-color: #14181F;
+  border: 1px solid #2E3644;
+  border-left-width: 3px;
+  border-radius: 6px;
+  transition: border-color 200ms ease;
+}
+
+.colModern {
+  border-left-color: #2EE6A8;
+}
+
+.colHeritage {
+  border-left-color: #97A1B3;
+}
+
+.colLabel {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  margin: 0 0 8px;
+}
+
+.colLabelModern {
+  color: #2EE6A8;
+}
+
+.colLabelHeritage {
+  color: #97A1B3;
+}
+
+.colHeadline {
+  font-size: 16px;
+  font-weight: 600;
+  color: #E8EDF2;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.colDetails {
+  font-size: 14px;
+  color: #97A1B3;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.colRole {
+  font-size: 13px;
+  color: #5A6373;
+  font-style: italic;
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
