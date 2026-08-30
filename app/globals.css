@@ -1,0 +1,336 @@
+/* ============================================================
+   Dual-era token system — flip via <html data-era="modern|heritage">
+   ============================================================ */
+
+:root,
+[data-era="modern"] {
+  color-scheme: dark;
+
+  /* Surfaces — obsidian OLED + frosted glass */
+  --bg: #08090c;
+  --bg-card: rgba(14, 17, 23, 0.62);
+  --bg-inset: rgba(255, 255, 255, 0.03);
+
+  /* Text */
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+
+  /* Accents — electric cyan + violet */
+  --accent: #00f2fe;
+  --accent-2: #9b51e0;
+  --accent-soft: rgba(0, 242, 254, 0.1);
+  --accent-glow: 0 0 32px rgba(0, 242, 254, 0.14),
+    0 0 8px rgba(155, 81, 224, 0.12);
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* Typography — geometric neo-grotesque */
+  --font-body: var(--font-grotesk), "Inter", -apple-system, sans-serif;
+  --font-display: var(--font-grotesk), "Inter", sans-serif;
+  --font-mono: var(--font-courier), ui-monospace, monospace;
+
+  /* Card shape — glass */
+  --card-radius: 16px;
+  --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  --card-backdrop: blur(20px);
+
+  /* Texture */
+  --texture-opacity: 1;
+}
+
+[data-era="heritage"] {
+  color-scheme: dark;
+
+  /* Surfaces — dusty sepia archival */
+  --bg: #171412;
+  --bg-card: #231f1b;
+  --bg-inset: #1b1815;
+
+  /* Text — aged cream */
+  --text: #e8dfd1;
+  --text-muted: #a89880;
+  --text-faint: #7a6c58;
+
+  /* Accents — dusty amber */
+  --accent: #c88a3e;
+  --accent-2: #a86a30;
+  --accent-soft: rgba(200, 138, 62, 0.12);
+  --accent-glow: 0 6px 20px rgba(0, 0, 0, 0.45);
+
+  /* Borders — muted terracotta */
+  --border: rgba(200, 138, 62, 0.2);
+  --border-strong: rgba(200, 138, 62, 0.45);
+
+  /* Typography — editorial vintage serif / typewriter */
+  --font-body: var(--font-playfair), Georgia, serif;
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-mono: var(--font-courier), "Courier New", monospace;
+
+  /* Card shape — document sleeve */
+  --card-radius: 6px;
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --card-backdrop: none;
+
+  --texture-opacity: 0.35;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  transition: background-color 300ms ease, color 300ms ease;
+}
+
+/* Texture overlay — film grain (heritage) / neon wash (modern) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+[data-era="modern"] body::before {
+  background: radial-gradient(
+      ellipse at 15% 0%,
+      rgba(0, 242, 254, 0.06),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 85% 100%,
+      rgba(155, 81, 224, 0.08),
+      transparent 50%
+    );
+}
+
+[data-era="heritage"] body::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.55'/%3E%3C/svg%3E");
+  opacity: var(--texture-opacity);
+  mix-blend-mode: overlay;
+}
+
+/* ============================================================
+   Layout shell — wide viewport
+   ============================================================ */
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px 32px 96px;
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: 40px 20px 72px;
+  }
+}
+
+/* Header — anchored, accent seam morphs per era */
+.siteHeader {
+  padding-bottom: 32px;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.siteHeader::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent),
+    var(--accent-2),
+    transparent
+  );
+  opacity: 0.6;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 700;
+  margin: 16px 0 12px;
+  line-height: 1.05;
+  color: var(--text);
+}
+
+.description {
+  font-size: 18px;
+  max-width: 640px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.infoCard {
+  margin: 0;
+  padding: 20px 24px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+  transition: background-color 300ms ease, border-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.cardLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.cardValue {
+  font-size: 15px;
+  color: var(--text);
+  margin: 6px 0 0;
+}
+
+.footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 72px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-faint);
+  line-height: 1.7;
+  transition: border-color 300ms ease;
+}
+
+/* ============================================================
+   Era toggle — segmented pill, glowing active state
+   ============================================================ */
+
+.eraToggle {
+  display: inline-flex;
+  gap: 6px;
+  margin-top: 28px;
+  padding: 5px;
+  background-color: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: background-color 300ms ease, border-color 300ms ease;
+}
+
+.eraBtn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  padding: 9px 22px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 200ms ease, background-color 200ms ease,
+    border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.eraBtn:hover:not(:disabled):not(.active) {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.eraBtn.active {
+  background-color: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--accent-glow);
+}
+
+.eraBtn:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+/* ============================================================
+   Time-warp canvas + content distortion
+   ============================================================ */
+
+.warp-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.warp-canvas.active {
+  opacity: 1;
+}
+
+.content-warp {
+  animation: content-warp 1.2s ease-in-out;
+}
+
+@keyframes content-warp {
+  0%,
+  100% {
+    transform: none;
+    filter: blur(0);
+  }
+  42% {
+    transform: scale(0.975);
+    filter: blur(3px);
+  }
+  70% {
+    transform: scale(0.985);
+    filter: blur(1.5px);
+  }
+}
+
+/* Accessibility — skip warp, instant swap */
+@media (prefers-reduced-motion: reduce) {
+  .warp-canvas,
+  .content-warp {
+    animation: none;
+    display: none;
+  }
+}

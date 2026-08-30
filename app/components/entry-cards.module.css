@@ -1,90 +1,182 @@
-.card {
-  margin-top: 24px;
-  padding: 24px;
-  background-color: #1C222C;
-  border: 1px solid #2E3644;
-  border-radius: 10px;
-}
-
-.kicker {
-  font-family: 'Courier New', monospace;
-  color: #2EE6A8;
-  font-size: 12px;
-  letter-spacing: 1px;
-  margin: 0;
-}
-
-.title {
-  font-size: 22px;
-  font-weight: 700;
-  color: #E8EDF2;
-  margin: 8px 0 16px;
-  line-height: 1.2;
-}
+/* Bento grid + card anatomy. All colors/typography from era tokens
+   in globals.css — <html data-era> swap re-themes with zero component
+   changes. */
 
 .grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
+  margin-top: 16px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 960px) {
   .grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .wide {
+    grid-column: span 6;
+  }
+
+  .half {
+    grid-column: span 3;
+  }
+
+  .mid {
+    grid-column: 2 / span 4;
   }
 }
 
-.col {
-  padding: 16px;
-  background-color: #14181F;
-  border: 1px solid #2E3644;
-  border-left-width: 3px;
-  border-radius: 6px;
-  transition: border-color 200ms ease;
+/* Document sleeve: inner inset line, always rendered; terracotta on
+   heritage, near-invisible glass on modern */
+.card {
+  position: relative;
+  margin-top: 24px;
+  padding: 28px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+  transition: background-color 300ms ease, border-color 300ms ease,
+    box-shadow 300ms ease;
 }
 
-.colModern {
-  border-left-color: #2EE6A8;
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--card-radius) - 5px);
+  pointer-events: none;
 }
 
-.colHeritage {
-  border-left-color: #97A1B3;
-}
-
-.colLabel {
-  font-family: 'Courier New', monospace;
+.kicker {
+  font-family: var(--font-mono);
+  color: var(--accent);
   font-size: 11px;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 10px 0 14px;
+  line-height: 1.2;
+}
+
+/* Metric chips / sepia badges */
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  color: var(--accent);
+  background-color: var(--accent-soft);
+  border: 1px solid var(--border-strong);
+  white-space: nowrap;
+}
+
+.eraPanel {
+  padding: 18px 20px;
+  background-color: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: calc(var(--card-radius) - 6px);
+  transition: background-color 300ms ease, border-color 300ms ease;
+}
+
+.eraLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--accent);
   margin: 0 0 8px;
 }
 
-.colLabelModern {
-  color: #2EE6A8;
-}
-
-.colLabelHeritage {
-  color: #97A1B3;
-}
-
-.colHeadline {
-  font-size: 16px;
+.eraHeadline {
+  font-family: var(--font-display);
+  font-size: 17px;
   font-weight: 600;
-  color: #E8EDF2;
+  color: var(--text);
   margin: 0 0 8px;
   line-height: 1.3;
 }
 
-.colDetails {
+.eraDetails {
   font-size: 14px;
-  color: #97A1B3;
-  line-height: 1.6;
+  color: var(--text-muted);
+  line-height: 1.65;
   margin: 0;
 }
 
-.colRole {
+.eraRole {
   font-size: 13px;
-  color: #5A6373;
+  color: var(--text-faint);
   font-style: italic;
-  margin: 8px 0 0;
+  margin: 10px 0 0;
   line-height: 1.5;
+}
+
+/* Price index (card 04) */
+.priceIndex {
+  margin-top: 16px;
+  padding: 14px 16px;
+  background-color: var(--bg-inset);
+  border: 1px dashed var(--border-strong);
+  border-radius: calc(var(--card-radius) - 6px);
+}
+
+.priceTitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-faint);
+  margin: 0 0 10px;
+}
+
+.priceRow {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px 24px;
+  align-items: baseline;
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.priceItem {
+  color: var(--text);
+}
+
+.pricePast {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.pricePresent {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--accent);
+  margin: 40px 0 0;
 }
