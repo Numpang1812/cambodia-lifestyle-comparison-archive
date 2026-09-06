@@ -1,6 +1,6 @@
-/* Bento grid + card anatomy. All colors/typography from era tokens
-   in globals.css — <html data-era> swap re-themes with zero component
-   changes. */
+/* Uniform-width grid + popup entry modal + inline gallery.
+   All colors/typography from era tokens in globals.css — <html data-era>
+   swap re-themes with zero component changes. */
 
 .grid {
   display: grid;
@@ -9,21 +9,9 @@
   margin-top: 16px;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 720px) {
   .grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-
-  .wide {
-    grid-column: span 6;
-  }
-
-  .half {
-    grid-column: span 3;
-  }
-
-  .mid {
-    grid-column: 2 / span 4;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   }
 }
 
@@ -32,13 +20,13 @@
 .card {
   position: relative;
   margin-top: 24px;
-  padding: 28px;
   background-color: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   backdrop-filter: var(--card-backdrop);
   -webkit-backdrop-filter: var(--card-backdrop);
+  overflow: hidden;
   transition: background-color 300ms ease, border-color 300ms ease,
     box-shadow 300ms ease;
 }
@@ -50,9 +38,34 @@
   border: 1px solid var(--border);
   border-radius: calc(var(--card-radius) - 5px);
   pointer-events: none;
+  z-index: 1;
+}
+
+/* Invisible click target covering the whole card */
+.cardHit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: transparent;
+  border: 0;
+  border-radius: inherit;
+  cursor: pointer;
+}
+
+.cardHit:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+
+.cardBody {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding: 24px 64px 24px 28px;
 }
 
 .kicker {
+  display: block;
   font-family: var(--font-mono);
   color: var(--accent);
   font-size: 11px;
@@ -61,12 +74,37 @@
 }
 
 .title {
+  display: block;
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text);
-  margin: 10px 0 14px;
+  margin: 8px 0 14px;
   line-height: 1.2;
+}
+
+.chevron {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--accent);
+  background-color: var(--accent-soft);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  transition: background-color 200ms ease, border-color 200ms ease;
+}
+
+.card:hover .chevron {
+  border-color: var(--accent);
 }
 
 /* Metric chips / sepia badges */
@@ -74,7 +112,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin: 0 0 16px;
+  margin: 0;
 }
 
 .chip {
@@ -173,10 +211,188 @@
   font-size: 12px;
 }
 
+/* Photo gallery placeholder — infinite left/right */
+.gallery {
+  margin-top: 16px;
+  padding: 18px;
+  background-color: var(--bg-inset);
+  border: 1px dashed var(--border-strong);
+  border-radius: calc(var(--card-radius) - 6px);
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 16px;
+  text-align: center;
+  background: repeating-linear-gradient(
+    45deg,
+    var(--accent-soft) 0 12px,
+    transparent 12px 24px
+  );
+  border: 1px solid var(--border);
+  border-radius: calc(var(--card-radius) - 10px);
+  color: var(--text);
+}
+
+.slideMark {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.slideLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+
+.slideCaption {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  max-width: 36ch;
+}
+
+.galleryNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.galleryBtn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--accent);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 200ms ease, border-color 200ms ease,
+    color 200ms ease;
+}
+
+.galleryBtn:hover {
+  background-color: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.galleryBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.galleryCount {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+}
+
+/* Entry popup — opens above the page, closed via X / Esc / backdrop */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 28px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow), 0 0 60px rgba(0, 0, 0, 0.4);
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+}
+
+.modal::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--card-radius) - 5px);
+  pointer-events: none;
+}
+
+.modal > * {
+  position: relative;
+}
+
+.modal .title {
+  margin: 10px 0 16px;
+}
+
+.modalClose {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--text-muted);
+  background-color: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+
+.modalClose:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.modalClose:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .count {
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 1px;
   color: var(--accent);
   margin: 40px 0 0;
+}
+
+.empty {
+  margin-top: 24px;
+  padding: 28px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  background-color: var(--bg-inset);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--card-radius);
 }

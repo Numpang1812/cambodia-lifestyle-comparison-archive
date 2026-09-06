@@ -242,6 +242,156 @@ body::before {
 }
 
 /* ============================================================
+   Search bar — suggestions + Enter-to-search
+   ============================================================ */
+
+.searchBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 28px;
+  padding: 4px 8px 4px 4px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+  transition: border-color 200ms ease, background-color 200ms ease;
+  max-width: 560px;
+}
+
+.searchBar:focus-within {
+  border-color: var(--accent);
+}
+
+/* Magnifier = on-screen "Enter". SVG centers exactly inside the circle. */
+.searchSubmit {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.searchSubmit:hover {
+  background-color: var(--accent-soft);
+}
+
+.searchSubmit:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 4px;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.searchInput::placeholder {
+  color: var(--text-faint);
+}
+
+/* Hide native clear in webkit, we provide our own */
+.searchInput::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* X button — SVG child, padding 0 → perfectly centered */
+.searchClear {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--text-muted);
+  background-color: var(--bg-inset);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+
+.searchClear:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.searchClear:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Suggestions dropdown — direct jump into an entry popup */
+.searchSuggestList {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+}
+
+.searchSuggestItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.searchSuggestItem:hover,
+.searchSuggestItem:focus-visible {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+  outline: none;
+}
+
+.searchSuggestEmpty {
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--text-faint);
+}
+
+/* ============================================================
    Era toggle — segmented pill, glowing active state
    ============================================================ */
 
