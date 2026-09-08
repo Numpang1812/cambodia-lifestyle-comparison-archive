@@ -4,36 +4,48 @@ import { useEffect, useRef } from "react";
 
 /**
  * Time Warp Engine — horizontal hyperspace sweep, pure <canvas>,
- * 1.2s, ~220 GPU-light streak particles via rAF.
+ * GPU-light streak particles via rAF.
  *
- * Phase 1 (0.00–0.40s): stars accelerate left→right, stretch into
- *                       motion-blur streaks (variable velocities).
- * Phase 2 (0.40–0.80s): peak flux — flash spikes; onSwap() fires once
- *                       so the era/theme swap lands under peak blur.
- * Phase 3 (0.80–1.20s): streaks decelerate, resolve, onDone() fires.
+ * Two modes:
+ *   full  — main era switch: 1.2s, ~220 stars, swap at 34%.
+ *   quick — in-popup compare: 0.6s, ~90 stars, swap at 46% (~0.28s in).
+ *           Leaves the tail of the timeline for the popup rebuild
+ *           phase to play while streaks decelerate.
+ *
+ * Phase 1 (0 → swap): stars accelerate left→right, stretch into
+ *                     motion-blur streaks (variable velocities).
+ * Phase 2 (swap → 0.67): peak flux — flash spikes; onSwap() fires once
+ *                        so the era/theme swap lands under peak blur.
+ * Phase 3 (0.67 → 1.00): streaks decelerate, resolve, onDone() fires.
  *
  * Memory-safe: single rAF handle, listener cleanup on unmount/deactivate.
  */
 
-const DURATION = 1200; // ms
-const STAR_COUNT = 220;
+// Timeline fractions (relative to duration, shared by both modes)
+const ACCEL_END = 0.34; // Phase 1 end
+const PEAK_END = 0.67; // Phase 2 end (peak flux window)
 
-// Timeline fractions
-const ACCEL_END = 0.34; // 0.00–0.40s
-const PEAK_END = 0.67; // 0.40–0.80s (peak flux window)
+// Per-mode tuning: duration + star count + swap fraction
+const MODES = {
+  full: { duration: 1200, stars: 220, swap: 0.34 },
+  quick: { duration: 600, stars: 90, swap: 0.46 },
+};
 
 const TINTS = {
   modern: [0, 242, 254], // electric cyan
   heritage: [200, 138, 62], // dusty amber
 };
 
-export default function TimeWarp({ active, target, onSwap, onDone }) {
+export default function TimeWarp({ active, target, onSwap, onDone, mode = "full" }) {
   const canvasRef = useRef(null);
   const cbs = useRef({});
   cbs.current = { onSwap, onDone };
 
   useEffect(() => {
     if (!active) return;
+
+    const { duration: DURATION, stars: STAR_COUNT, swap: SWAP_AT } =
+      MODES[mode] ?? MODES.full;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -70,7 +82,7 @@ export default function TimeWarp({ active, target, onSwap, onDone }) {
         return;
       }
 
-      if (!swapFired && t >= ACCEL_END) {
+      if (!swapFired && t >= SWAP_AT) {
         swapFired = true;
         cbs.current.onSwap?.();
       }
@@ -134,7 +146,7 @@ export default function TimeWarp({ active, target, onSwap, onDone }) {
       window.removeEventListener("resize", resize);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, [active, target]);
+  }, [active, target, mode]);
 
   return (
     <canvas

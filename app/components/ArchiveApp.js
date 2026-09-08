@@ -10,7 +10,9 @@ const ERAS = [
   { id: "modern", label: "2020s · MODERN" },
 ];
 
-// TimeWarp fires onSwap at peak flux (~0.42 of 1.2s)
+// TimeWarp fires onSwap mid-timeline — full: 1.2s page switch (34%),
+// quick: 0.6s in-popup compare (46%) then the popup rebuilds on top of
+// the decelerating streaks
 export default function ArchiveApp() {
   const [era, setEra] = useState("modern");
   const [warping, setWarping] = useState(false);
@@ -18,12 +20,26 @@ export default function ArchiveApp() {
   const [query, setQuery] = useState("");
   const [showSuggest, setShowSuggest] = useState(false);
   const [selected, setSelected] = useState(null);
+  // Era shown inside the entry popup. Time Warp inside the popup flips
+  // this only — the page era stays put, so closing the popup (even while
+  // previewing the other era) returns the user to the page they started on.
+  const [modalEra, setModalEra] = useState("modern");
+  // Popup rebuild choreography: idle → dis (deconstruct) → reb (rebuild)
+  const [warpPhase, setWarpPhase] = useState("idle");
+  // Direction of the popup warp: fwd = past→future, back = future→past
+  const [warpDir, setWarpDir] = useState("fwd");
   const targetRef = useRef("modern");
+  // Is the running warp swapping the page era, or just the popup view?
+  const warpKindRef = useRef("page");
 
   // Drive the whole token layer from one attribute
   useEffect(() => {
     document.documentElement.dataset.era = era;
   }, [era]);
+
+  function setEraTheme(next) {
+    document.documentElement.dataset.era = next;
+  }
 
   function toggle(next) {
     if (warping || next === era) return;
@@ -34,16 +50,51 @@ export default function ArchiveApp() {
       return;
     }
 
+    warpKindRef.current = "page";
     targetRef.current = next;
     setWarping(true);
   }
 
+  // In-popup compare: deconstruct the card, play the TimeWarp streaks,
+  // then rebuild it in the other era on top of the decelerating stars.
+  // The page era underneath is untouched.
+  function warpModal() {
+    if (warping || !selected) return;
+    const next = modalEra === "heritage" ? "modern" : "heritage";
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setModalEra(next);
+      setEraTheme(next);
+      return;
+    }
+
+    warpKindRef.current = "modal";
+    targetRef.current = next;
+    setWarpDir(next === "modern" ? "fwd" : "back");
+    setWarpPhase("dis");
+    setWarping(true);
+  }
+
   function handleSwap() {
-    setEra(targetRef.current);
+    if (warpKindRef.current === "modal") {
+      if (!selected) {
+        // Popup was closed mid-warp — land back on the page era.
+        setEraTheme(era);
+        setWarpPhase("idle");
+        return;
+      }
+      // Popup compare: re-theme + swap the popup, keep page era.
+      setModalEra(targetRef.current);
+      setEraTheme(targetRef.current);
+      setWarpPhase("reb");
+    } else {
+      setEra(targetRef.current);
+    }
   }
 
   function handleDone() {
     setWarping(false);
+    setWarpPhase("idle");
   }
 
   function commitSearch() {
@@ -59,7 +110,17 @@ export default function ArchiveApp() {
 
   function pickSuggestion(card) {
     setSelected(card);
+    setModalEra(era);
     setShowSuggest(false);
+  }
+
+  function closeEntry() {
+    setSelected(null);
+    // Re-anchor the popup to the page era for the next open, and restore
+    // the page theme even if the user warped the popup to the other era.
+    setModalEra(era);
+    setEraTheme(era);
+    setWarpPhase("idle");
   }
 
   const suggestTerms = useMemo(() => searchTerms(draft), [draft]);
@@ -77,6 +138,7 @@ export default function ArchiveApp() {
       <TimeWarp
         active={warping}
         target={targetRef.current}
+        mode={warpKindRef.current === "modal" ? "quick" : "full"}
         onSwap={handleSwap}
         onDone={handleDone}
       />
@@ -211,8 +273,16 @@ export default function ArchiveApp() {
           count={collection.entries?.length ?? 5}
           query={query}
           selected={selected}
-          onSelect={setSelected}
-          onClose={() => setSelected(null)}
+          modalEra={modalEra}
+          warping={warping}
+          warpPhase={warpPhase}
+          warpDir={warpDir}
+          onSelect={(c) => {
+            setSelected(c);
+            setModalEra(era);
+          }}
+          onTimeWarp={warpModal}
+          onClose={closeEntry}
         />
 
         <footer className="footer">

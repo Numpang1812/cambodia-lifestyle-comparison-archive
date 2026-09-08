@@ -396,3 +396,278 @@
   border: 1px dashed var(--border-strong);
   border-radius: var(--card-radius);
 }
+
+/* ---- Time Warp v2 — in-popup rebuild choreography --------------------
+   fwd = past→future: arrow sweeps left→right, contents blur-skew out,
+        then wipe-rebuild left→right behind a traveling edge.
+   back = future→past: arrow sweeps right→left, modern blue outlines
+        fall down, then wipe-rebuild right→left.
+   Reduced motion never reaches these classes — ArchiveApp
+   short-circuits to an instant swap before any phase starts. */
+
+.modalBody {
+  position: relative;
+}
+
+/* Phase "dis" — deconstruct */
+.disFwd {
+  animation: disFwd 260ms ease-in forwards;
+}
+
+@keyframes disFwd {
+  from {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-28px) skewX(-4deg);
+    filter: blur(8px);
+  }
+}
+
+.disBack {
+  animation: disBack 300ms ease-in forwards;
+}
+
+@keyframes disBack {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(64px);
+  }
+}
+
+/* Phase "reb" — rebuild wipe (clip edge follows the arrow direction) */
+.rebFwd {
+  animation: rebFwd 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes rebFwd {
+  from {
+    opacity: 0.4;
+    transform: translateY(12px);
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.rebBack {
+  animation: rebBack 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes rebBack {
+  from {
+    opacity: 0.4;
+    transform: translateY(12px);
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Traveling edge light along the rebuild wipe */
+.rebEdge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  z-index: 3;
+  background: var(--accent);
+  opacity: 0;
+  pointer-events: none;
+  animation: rebEdgeFwd 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.rebEdgeBack {
+  left: auto;
+  right: 0;
+  animation-name: rebEdgeBack;
+}
+
+@keyframes rebEdgeFwd {
+  from {
+    left: 0;
+    opacity: 1;
+  }
+  to {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes rebEdgeBack {
+  from {
+    right: 0;
+    opacity: 1;
+  }
+  to {
+    right: 100%;
+    opacity: 0;
+  }
+}
+
+/* Falling blue outlines — only rendered while leaving the modern era */
+.warpFall {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.warpFall span {
+  position: absolute;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  opacity: 0;
+  animation: fallOut 300ms ease-in forwards;
+}
+
+.warpFall span:nth-child(1) {
+  left: 6%;
+  right: 55%;
+  top: 10%;
+  height: 46px;
+  animation-delay: 0ms;
+}
+
+.warpFall span:nth-child(2) {
+  left: 34%;
+  right: 8%;
+  top: 30%;
+  height: 70px;
+  animation-delay: 60ms;
+}
+
+.warpFall span:nth-child(3) {
+  left: 12%;
+  right: 32%;
+  top: 58%;
+  height: 92px;
+  animation-delay: 130ms;
+}
+
+@keyframes fallOut {
+  from {
+    transform: translateY(-6px) rotate(0deg);
+    opacity: 0.9;
+  }
+  to {
+    transform: translateY(140px) rotate(5deg);
+    opacity: 0;
+  }
+}
+
+/* Warp button — arrow idles at the left, sweeps across while running */
+.warpBtn {
+  position: relative;
+}
+
+.warpArrow {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1;
+  color: var(--accent);
+  pointer-events: none;
+}
+
+.warpLabel {
+  flex: 1;
+  padding-left: 38px;
+}
+
+.warpArrowRunFwd {
+  animation: arrowFwd 600ms linear forwards;
+}
+
+@keyframes arrowFwd {
+  0% {
+    left: 14px;
+    opacity: 1;
+  }
+  70% {
+    left: calc(100% - 22px);
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 22px);
+    opacity: 0;
+  }
+}
+
+.warpArrowRunBack {
+  animation: arrowBack 600ms linear forwards;
+}
+
+@keyframes arrowBack {
+  0% {
+    left: calc(100% - 22px);
+    opacity: 1;
+  }
+  70% {
+    left: 14px;
+    opacity: 1;
+  }
+  100% {
+    left: 14px;
+    opacity: 0;
+  }
+}
+
+/* Trail wash trailing behind the arrow */
+.warpTrail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  background: linear-gradient(90deg, transparent, var(--accent-soft));
+  pointer-events: none;
+  animation: trailFwd 600ms linear forwards;
+}
+
+@keyframes trailFwd {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.warpTrailBack {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  background: linear-gradient(270deg, transparent, var(--accent-soft));
+  pointer-events: none;
+  animation: trailBack 600ms linear forwards;
+}
+
+@keyframes trailBack {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}

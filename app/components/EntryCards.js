@@ -220,8 +220,14 @@ function MiniGallery({ photos, topic }) {
   );
 }
 
-function EntryModal({ card, era, onClose }) {
+function EntryModal({ card, era, warping, warpPhase, warpDir, onTimeWarp, onClose }) {
   const data = card[era] ?? {};
+  const other = era === "heritage" ? "modern" : "heritage";
+  const otherDecade = other === "heritage" ? "1980s" : "2020s";
+  // ← back to the past, → forward to the future
+  const arrow = other === "heritage" ? "←" : "→";
+  const running = warpPhase !== "idle";
+  const back = warpDir === "back";
 
   useEffect(() => {
     function onKey(e) {
@@ -239,6 +245,16 @@ function EntryModal({ card, era, onClose }) {
       document.body.style.overflow = prev;
     };
   }, []);
+
+  // Deconstruct (dis) and rebuild (reb) classes on the popup contents —
+  // fwd = past→future sweep, back = future→past with falling outlines
+  const bodyClass = [
+    styles.modalBody,
+    warpPhase === "dis" ? (back ? styles.disBack : styles.disFwd) : "",
+    warpPhase === "reb" ? (back ? styles.rebBack : styles.rebFwd) : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className={styles.modalOverlay} onClick={() => onClose?.()}>
@@ -265,22 +281,95 @@ function EntryModal({ card, era, onClose }) {
           </svg>
         </button>
 
-        <p className={styles.kicker}>
-          CARD {card.num} · {card.topic.toUpperCase()}
-        </p>
-        <h2 className={styles.title}>{card.topic}</h2>
+        {/* Rebuild wipe edge — sweeps along the clip edge (fwd LTR / back RTL) */}
+        {warpPhase === "reb" ? (
+          <span
+            className={`${styles.rebEdge}${back ? ` ${styles.rebEdgeBack}` : ""}`}
+            aria-hidden="true"
+          />
+        ) : null}
 
-        <ChipRow chips={data.chips} />
+        {/* Falling blue outlines — future→past deconstruct overlay */}
+        {warpPhase === "dis" && back ? (
+          <div className={styles.warpFall} aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+        ) : null}
 
-        <div className={styles.eraPanel}>
-          <p className={styles.eraLabel}>{data.label}</p>
-          <h3 className={styles.eraHeadline}>{data.headline}</h3>
-          <p className={styles.eraDetails}>{data.details}</p>
-          {data.role ? <p className={styles.eraRole}>{data.role}</p> : null}
+        <div className={bodyClass}>
+          <p className={styles.kicker}>
+            CARD {card.num} · {card.topic.toUpperCase()}
+          </p>
+          <h2 className={styles.title}>{card.topic}</h2>
+
+          <ChipRow chips={data.chips} />
+
+          <div className={styles.eraPanel}>
+            <p className={styles.eraLabel}>{data.label}</p>
+            <h3 className={styles.eraHeadline}>{data.headline}</h3>
+            <p className={styles.eraDetails}>{data.details}</p>
+            {data.role ? <p className={styles.eraRole}>{data.role}</p> : null}
+          </div>
+
+          <MiniGallery photos={card.photos ?? []} topic={card.topic} />
+          <PriceIndex rows={card.priceIndex} />
         </div>
 
-        <MiniGallery photos={card.photos ?? []} topic={card.topic} />
-        <PriceIndex rows={card.priceIndex} />
+        {/* Compare in place: warp the popup to the other era with animation */}
+        <button
+          type="button"
+          className={styles.warpBtn}
+          onClick={() => onTimeWarp?.()}
+          disabled={warping}
+          aria-label={`Time warp to the ${otherDecade} version of ${card.topic}`}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            position: "relative",
+            overflow: "hidden",
+            width: "100%",
+            margin: "14px 0 4px",
+            padding: "12px 16px",
+            fontFamily: "var(--font-mono)",
+            fontSize: "12px",
+            letterSpacing: "2px",
+            color: "var(--accent)",
+            backgroundColor: "var(--accent-soft)",
+            border: "1px solid var(--border-strong)",
+            borderRadius: "999px",
+            cursor: "pointer",
+            textAlign: "left",
+            transition: "background-color 200ms ease, border-color 200ms ease",
+          }}
+        >
+          {/* Trail wash sweeping behind the arrow */}
+          {running ? (
+            <span
+              className={back ? styles.warpTrailBack : styles.warpTrail}
+              aria-hidden="true"
+            />
+          ) : null}
+
+          {/* Direction arrow — idles at the left, sweeps across the pill */}
+          <span
+            className={[
+              styles.warpArrow,
+              running ? (back ? styles.warpArrowRunBack : styles.warpArrowRunFwd) : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            aria-hidden="true"
+          >
+            {arrow}
+          </span>
+
+          <span className={styles.warpLabel}>
+            {running ? "REBUILDING…" : `TIME WARP · ${otherDecade} · SEE THE DIFFERENCE`}
+          </span>
+        </button>
       </div>
     </div>
   );
@@ -291,7 +380,12 @@ export default function EntryCards({
   count = 5,
   query = "",
   selected = null,
+  modalEra = null,
+  warping = false,
+  warpPhase = "idle",
+  warpDir = "fwd",
   onSelect,
+  onTimeWarp,
   onClose,
 }) {
   const terms = useMemo(() => searchTerms(query), [query]);
@@ -352,7 +446,15 @@ export default function EntryCards({
       )}
 
       {selected ? (
-        <EntryModal card={selected} era={era} onClose={onClose} />
+        <EntryModal
+          card={selected}
+          era={modalEra ?? era}
+          warping={warping}
+          warpPhase={warpPhase}
+          warpDir={warpDir}
+          onTimeWarp={onTimeWarp}
+          onClose={onClose}
+        />
       ) : null}
     </section>
   );
