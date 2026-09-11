@@ -1,673 +1,112 @@
-/* Uniform-width grid + popup entry modal + inline gallery.
-   All colors/typography from era tokens in globals.css — <html data-era>
-   swap re-themes with zero component changes. */
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  margin-top: 16px;
-}
-
-@media (min-width: 720px) {
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
-}
-
-/* Document sleeve: inner inset line, always rendered; terracotta on
-   heritage, near-invisible glass on modern */
-.card {
-  position: relative;
-  margin-top: 24px;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--card-radius);
-  box-shadow: var(--card-shadow);
-  backdrop-filter: var(--card-backdrop);
-  -webkit-backdrop-filter: var(--card-backdrop);
-  overflow: hidden;
-  transition: background-color 300ms ease, border-color 300ms ease,
-    box-shadow 300ms ease;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 9px;
-  border: 1px solid var(--border);
-  border-radius: calc(var(--card-radius) - 5px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Invisible click target covering the whole card */
-.cardHit {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: transparent;
-  border: 0;
-  border-radius: inherit;
-  cursor: pointer;
-}
-
-.cardHit:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -4px;
-}
-
-.cardBody {
-  position: relative;
-  z-index: 1;
-  display: block;
-  padding: 24px 64px 24px 28px;
-}
-
-.kicker {
-  display: block;
-  font-family: var(--font-mono);
-  color: var(--accent);
-  font-size: 11px;
-  letter-spacing: 2px;
-  margin: 0;
-}
-
-.title {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text);
-  margin: 8px 0 14px;
-  line-height: 1.2;
-}
-
-.chevron {
-  position: absolute;
-  top: 22px;
-  right: 22px;
-  z-index: 1;
-  width: 32px;
-  height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 20px;
-  line-height: 1;
-  color: var(--accent);
-  background-color: var(--accent-soft);
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  transition: background-color 200ms ease, border-color 200ms ease;
-}
-
-.card:hover .chevron {
-  border-color: var(--accent);
-}
-
-/* Metric chips / sepia badges */
-.chipRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0;
-}
-
-.chip {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  color: var(--accent);
-  background-color: var(--accent-soft);
-  border: 1px solid var(--border-strong);
-  white-space: nowrap;
-}
-
-.eraPanel {
-  padding: 18px 20px;
-  background-color: var(--bg-inset);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: calc(var(--card-radius) - 6px);
-  transition: background-color 300ms ease, border-color 300ms ease;
-}
-
-.eraLabel {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--accent);
-  margin: 0 0 8px;
-}
-
-.eraHeadline {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--text);
-  margin: 0 0 8px;
-  line-height: 1.3;
-}
-
-.eraDetails {
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.65;
-  margin: 0;
-}
-
-.eraRole {
-  font-size: 13px;
-  color: var(--text-faint);
-  font-style: italic;
-  margin: 10px 0 0;
-  line-height: 1.5;
-}
-
-/* Price index (card 04) */
-.priceIndex {
-  margin-top: 16px;
-  padding: 14px 16px;
-  background-color: var(--bg-inset);
-  border: 1px dashed var(--border-strong);
-  border-radius: calc(var(--card-radius) - 6px);
-}
-
-.priceTitle {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--text-faint);
-  margin: 0 0 10px;
-}
-
-.priceRow {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 8px 24px;
-  align-items: baseline;
-  padding: 6px 0;
-  border-top: 1px solid var(--border);
-  font-size: 13px;
-}
-
-.priceItem {
-  color: var(--text);
-}
-
-.pricePast {
-  font-family: var(--font-mono);
-  color: var(--text-muted);
-  font-size: 12px;
-}
-
-.pricePresent {
-  font-family: var(--font-mono);
-  color: var(--accent);
-  font-size: 12px;
-}
-
-/* Photo gallery placeholder — infinite left/right */
-.gallery {
-  margin-top: 16px;
-  padding: 18px;
-  background-color: var(--bg-inset);
-  border: 1px dashed var(--border-strong);
-  border-radius: calc(var(--card-radius) - 6px);
-}
-
-.slide {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  padding: 16px;
-  text-align: center;
-  background: repeating-linear-gradient(
-    45deg,
-    var(--accent-soft) 0 12px,
-    transparent 12px 24px
-  );
-  border: 1px solid var(--border);
-  border-radius: calc(var(--card-radius) - 10px);
-  color: var(--text);
-}
-
-.slideMark {
-  font-size: 28px;
-  line-height: 1;
-}
-
-.slideLabel {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--accent);
-}
-
-.slideCaption {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.4;
-  max-width: 36ch;
-}
-
-.galleryNav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.galleryBtn {
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 18px;
-  color: var(--accent);
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background-color 200ms ease, border-color 200ms ease,
-    color 200ms ease;
-}
-
-.galleryBtn:hover {
-  background-color: var(--accent-soft);
-  border-color: var(--accent);
-}
-
-.galleryBtn:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.galleryCount {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  color: var(--text-muted);
-}
-
-/* Entry popup — opens above the page, closed via X / Esc / backdrop */
-.modalOverlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-.modal {
-  position: relative;
-  width: 100%;
-  max-width: 680px;
-  max-height: 85vh;
-  overflow-y: auto;
-  padding: 28px;
-  background-color: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--card-radius);
-  box-shadow: var(--card-shadow), 0 0 60px rgba(0, 0, 0, 0.4);
-  backdrop-filter: var(--card-backdrop);
-  -webkit-backdrop-filter: var(--card-backdrop);
-}
-
-.modal::before {
-  content: "";
-  position: absolute;
-  inset: 9px;
-  border: 1px solid var(--border);
-  border-radius: calc(var(--card-radius) - 5px);
-  pointer-events: none;
-}
-
-.modal > * {
-  position: relative;
-}
-
-.modal .title {
-  margin: 10px 0 16px;
-}
-
-.modalClose {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  z-index: 2;
-  width: 34px;
-  height: 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  color: var(--text-muted);
-  background-color: var(--bg-inset);
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  cursor: pointer;
-  transition: color 200ms ease, border-color 200ms ease;
-}
-
-.modalClose:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-}
-
-.modalClose:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.count {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: var(--accent);
-  margin: 40px 0 0;
-}
-
-.empty {
-  margin-top: 24px;
-  padding: 28px;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: var(--text-muted);
-  background-color: var(--bg-inset);
-  border: 1px dashed var(--border-strong);
-  border-radius: var(--card-radius);
-}
-
-/* ---- Time Warp v2 — in-popup rebuild choreography --------------------
-   fwd = past→future: arrow sweeps left→right, contents blur-skew out,
-        then wipe-rebuild left→right behind a traveling edge.
-   back = future→past: arrow sweeps right→left, modern blue outlines
-        fall down, then wipe-rebuild right→left.
-   Reduced motion never reaches these classes — ArchiveApp
-   short-circuits to an instant swap before any phase starts. */
-
-.modalBody {
-  position: relative;
-}
-
-/* Phase "dis" — deconstruct */
-.disFwd {
-  animation: disFwd 260ms ease-in forwards;
-}
-
-@keyframes disFwd {
-  from {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-28px) skewX(-4deg);
-    filter: blur(8px);
-  }
-}
-
-.disBack {
-  animation: disBack 300ms ease-in forwards;
-}
-
-@keyframes disBack {
-  from {
-    opacity: 1;
-    transform: none;
-  }
-  to {
-    opacity: 0;
-    transform: translateY(64px);
-  }
-}
-
-/* Phase "reb" — rebuild wipe (clip edge follows the arrow direction) */
-.rebFwd {
-  animation: rebFwd 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes rebFwd {
-  from {
-    opacity: 0.4;
-    transform: translateY(12px);
-    clip-path: inset(0 100% 0 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-.rebBack {
-  animation: rebBack 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-@keyframes rebBack {
-  from {
-    opacity: 0.4;
-    transform: translateY(12px);
-    clip-path: inset(0 0 0 100%);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-/* Traveling edge light along the rebuild wipe */
-.rebEdge {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 2px;
-  z-index: 3;
-  background: var(--accent);
-  opacity: 0;
-  pointer-events: none;
-  animation: rebEdgeFwd 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.rebEdgeBack {
-  left: auto;
-  right: 0;
-  animation-name: rebEdgeBack;
-}
-
-@keyframes rebEdgeFwd {
-  from {
-    left: 0;
-    opacity: 1;
-  }
-  to {
-    left: 100%;
-    opacity: 0;
-  }
-}
-
-@keyframes rebEdgeBack {
-  from {
-    right: 0;
-    opacity: 1;
-  }
-  to {
-    right: 100%;
-    opacity: 0;
-  }
-}
-
-/* Falling blue outlines — only rendered while leaving the modern era */
-.warpFall {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.warpFall span {
-  position: absolute;
-  border: 1px solid var(--accent);
-  border-radius: 10px;
-  opacity: 0;
-  animation: fallOut 300ms ease-in forwards;
-}
-
-.warpFall span:nth-child(1) {
-  left: 6%;
-  right: 55%;
-  top: 10%;
-  height: 46px;
-  animation-delay: 0ms;
-}
-
-.warpFall span:nth-child(2) {
-  left: 34%;
-  right: 8%;
-  top: 30%;
-  height: 70px;
-  animation-delay: 60ms;
-}
-
-.warpFall span:nth-child(3) {
-  left: 12%;
-  right: 32%;
-  top: 58%;
-  height: 92px;
-  animation-delay: 130ms;
-}
-
-@keyframes fallOut {
-  from {
-    transform: translateY(-6px) rotate(0deg);
-    opacity: 0.9;
-  }
-  to {
-    transform: translateY(140px) rotate(5deg);
-    opacity: 0;
-  }
-}
-
-/* Warp button — arrow idles at the left, sweeps across while running */
-.warpBtn {
-  position: relative;
-}
-
-.warpArrow {
-  position: absolute;
-  top: 50%;
-  left: 14px;
-  transform: translateY(-50%);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1;
-  color: var(--accent);
-  pointer-events: none;
-}
-
-.warpLabel {
-  flex: 1;
-  padding-left: 38px;
-}
-
-.warpArrowRunFwd {
-  animation: arrowFwd 600ms linear forwards;
-}
-
-@keyframes arrowFwd {
-  0% {
-    left: 14px;
-    opacity: 1;
-  }
-  70% {
-    left: calc(100% - 22px);
-    opacity: 1;
-  }
-  100% {
-    left: calc(100% - 22px);
-    opacity: 0;
-  }
-}
-
-.warpArrowRunBack {
-  animation: arrowBack 600ms linear forwards;
-}
-
-@keyframes arrowBack {
-  0% {
-    left: calc(100% - 22px);
-    opacity: 1;
-  }
-  70% {
-    left: 14px;
-    opacity: 1;
-  }
-  100% {
-    left: 14px;
-    opacity: 0;
-  }
-}
-
-/* Trail wash trailing behind the arrow */
-.warpTrail {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  background: linear-gradient(90deg, transparent, var(--accent-soft));
-  pointer-events: none;
-  animation: trailFwd 600ms linear forwards;
-}
-
-@keyframes trailFwd {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-.warpTrailBack {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 0;
-  background: linear-gradient(270deg, transparent, var(--accent-soft));
-  pointer-events: none;
-  animation: trailBack 600ms linear forwards;
-}
-
-@keyframes trailBack {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; margin-top: 23px; align-items: stretch; }
+.count { margin: 18px 0 0; color: var(--text-faint); font: 10px/1.7 var(--font-mono); }
+.card { position: relative; display: flex; flex-direction: column; min-width: 0; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 5px; box-shadow: var(--card-shadow); transition: transform 280ms ease, border-color 280ms ease, box-shadow 280ms ease; }
+.card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 22px 40px #0003; }
+.cardHit { position: absolute; inset: 0; z-index: 3; border: 0; border-radius: inherit; background: transparent; cursor: pointer; }
+.cardHit:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+.cardHit:disabled { cursor: wait; }
+.cardScene { position: relative; padding: 18px 18px 0; overflow: hidden; border-radius: 4px 4px 0 0; background: radial-gradient(ellipse at 55% 80%, #43897b1f, transparent 65%), linear-gradient(135deg, #a6d6c30b, transparent 55%); border-bottom: 1px solid var(--border-strong); }
+.cardScene::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(90deg, transparent 0 37px, #92dcc907 37px 38px); }
+.cardMeta { display: flex; justify-content: space-between; align-items: center; color: var(--text-faint); font: 9px var(--font-mono); letter-spacing: 1.3px; }
+.cardScene :global(.architecture) { margin: -2px auto -4px; width: 100%; transition: transform 500ms ease; }
+.card:hover .cardScene :global(.architecture) { transform: translateY(-3px); }
+.sceneTag { display: block; margin: 3px 0 12px; color: var(--text-faint); font: 8px var(--font-mono); letter-spacing: 1.5px; text-align: center; }
+.cardBody { flex: 1; display: flex; flex-direction: column; padding: 23px 23px 0; position: relative; min-height: 260px; background: linear-gradient(110deg, #a0d2c305, transparent); }
+.cardBody::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent-2), transparent); opacity: .35; }
+.kicker { display: block; margin: 0; font: 8px/1.7 var(--font-mono); letter-spacing: 1.2px; color: var(--accent); }
+.title { display: block; margin: 10px 0; font: 500 23px/1.25 var(--font-display); letter-spacing: -.6px; color: var(--text); }
+.cardDescription { margin: 0 0 18px; font-size: 11px; line-height: 1.8; color: var(--text-muted); }
+.chipRow { display: flex; flex-wrap: wrap; gap: 6px; margin: auto 0 20px; }
+.chip { display: inline-block; padding: 5px 7px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); font: 9px/1.4 var(--font-mono); }
+.cardFooter { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding: 16px 0; font-size: 10px; color: var(--accent); }
+.cardFooter > span:last-child { font-size: 18px; transition: transform 250ms ease; }
+.card:hover .cardFooter > span:last-child { transform: translate(2px, -2px); }
+
+/* The heritage facade has a timber cornice, planks and exposed foundation posts. */
+.card[data-era="heritage"] { border-radius: 2px; border-color: #96714f88; box-shadow: 5px 7px 0 #130e0938, 0 15px 30px #0002; }
+.card[data-era="heritage"] .cardScene { border-radius: 1px; background: radial-gradient(ellipse at 50% 65%, #b5833e18, transparent 70%), #2a2018; border-bottom: 5px solid #755033; }
+.card[data-era="heritage"] .cardScene::after { background: repeating-linear-gradient(0deg, transparent 0 3px, #ebbb8503 3px 4px); }
+.card[data-era="heritage"] .cardBody { background: repeating-linear-gradient(0deg, transparent 0 30px, #140b0540 30px 31px, #deb8870a 31px 32px), repeating-linear-gradient(2deg, transparent 0 6px, #edc69903 6px 7px), linear-gradient(90deg, #4a32244d, transparent 20%, transparent 80%, #140b0533); border-inline: 7px solid #69482f66; }
+.card[data-era="heritage"]::after { content: ""; position: absolute; top: 100%; height: 12px; left: 18px; right: 18px; background: linear-gradient(90deg, #795539 0 8px, transparent 8px calc(100% - 8px), #795539 calc(100% - 8px)); }
+.card[data-era="heritage"] .cardBody::before { background: #d5a57633; height: 1px; opacity: 1; }
+.card[data-era="heritage"] .title { font-size: 23px; }
+.card[data-era="heritage"] .chip { background: #281b1255; border-color: #bb916338; }
+
+/* Build the visible facade before revealing its story. */
+:global([data-phase="dis"]) .card { animation: depart 420ms ease-in both; }
+:global([data-phase="reb"]) .card { animation: facade 1000ms ease both; animation-delay: var(--entry-delay); }
+:global([data-phase="reb"]) .cardBody > * { animation: reveal 650ms ease both; animation-delay: calc(400ms + var(--entry-delay)); }
+:global([data-phase="reb"]) .cardBody > :nth-child(n+3) { animation-delay: calc(550ms + var(--entry-delay)); }
+@keyframes depart { to { opacity: .12; transform: translateY(-5px); } }
+@keyframes facade { from { border-color: transparent; background-color: transparent; box-shadow: none; } }
+@keyframes reveal { from { opacity: 0; transform: translateY(8px); clip-path: inset(0 0 100% 0); } to { opacity: 1; transform: none; clip-path: inset(0); } }
+
+.empty { text-align: center; padding: 64px 24px; margin-top: 24px; border: 1px dashed var(--border-strong); background: var(--bg-inset); color: var(--text-muted); }
+.empty h3 { color: var(--text); font: 26px var(--font-display); margin: 0 0 12px; }
+.empty p { font-size: 13px; line-height: 1.8; }
+.empty button { margin-top: 12px; min-height: 44px; padding: 10px 18px; color: var(--bg); background: var(--accent); border: 0; border-radius: 3px; cursor: pointer; }
+
+/* A focused reading room, with era comparison kept inside the dialog. */
+.modalOverlay { position: fixed; inset: 0; z-index: 10000; display: flex; padding: 24px; background: #050b0bd9; backdrop-filter: blur(8px); overflow: auto; }
+.modal { position: relative; width: 100%; max-width: 720px; max-height: calc(100dvh - 48px); margin: auto; padding: 32px; overflow: auto; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 6px; box-shadow: 0 30px 100px #0008; overscroll-behavior: contain; scrollbar-color: var(--border-strong) transparent; }
+.modal[data-era="heritage"] { background: repeating-linear-gradient(0deg, transparent 0 39px, #ebbb8505 39px 40px), var(--bg-card); border-top: 5px solid #88603f; }
+.modal[data-era="modern"] { border-top: 3px solid var(--accent-2); }
+.modalClose { position: absolute; top: 18px; right: 18px; z-index: 10; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--border-strong); border-radius: 50%; color: var(--text-muted); background: var(--bg-inset); cursor: pointer; }
+.modalClose:hover { border-color: var(--accent); color: var(--accent); }
+.modalBody { position: relative; min-height: 530px; }
+.modal .kicker { padding-right: 45px; font-size: 9px; }
+.modal .title { font-size: 30px; margin: 13px 50px 14px 0; }
+.modalArchitecture { position: relative; margin-bottom: 20px; border-block: 1px solid var(--border); background: radial-gradient(ellipse at 50% 80%, var(--accent-soft), transparent 70%); }
+.modalArchitecture :global(.architecture) { height: 200px; }
+.modalArchitecture > span { position: absolute; bottom: 9px; right: 10px; color: var(--text-faint); font: 7px var(--font-mono); letter-spacing: 1px; }
+.modal .chipRow { margin: 16px 0; }
+.modal .chip { padding: 6px 9px; font-size: 10px; }
+.eraPanel { padding: 19px 20px; background: var(--bg-inset); border: 1px solid var(--border); border-left: 2px solid var(--accent); border-radius: 2px; min-height: 180px; }
+.eraLabel { margin: 0 0 9px; color: var(--accent); font: 9px var(--font-mono); letter-spacing: 1.5px; }
+.eraHeadline { margin: 0 0 10px; color: var(--text); font: 500 19px/1.4 var(--font-display); }
+.eraDetails { margin: 0; font-size: 13px; color: var(--text-muted); line-height: 1.8; }
+.eraRole { margin: 10px 0 0; color: var(--text-muted); font-size: 12px; font-style: italic; line-height: 1.7; }
+.priceIndex { margin-top: 18px; border: 1px solid var(--border); padding: 16px; }
+.priceTitle { margin: 0 0 10px; font: 9px/1.6 var(--font-mono); letter-spacing: 1.2px; color: var(--accent); }
+.priceRow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 11px; line-height: 1.6; }
+.priceItem { color: var(--text); }
+.pricePast { color: var(--text-muted); }
+.pricePresent { color: var(--accent); }
+.warpBtn { position: sticky; bottom: 0; z-index: 6; display: flex; align-items: center; justify-content: space-between; gap: 12px; overflow: hidden; width: 100%; min-height: 50px; margin: 23px 0 0; padding: 13px 18px; border: 1px solid var(--accent); border-radius: 3px; color: var(--bg); background: var(--accent); cursor: pointer; box-shadow: 0 -8px 25px var(--bg-card); }
+.warpBtn:hover:not(:disabled) { filter: brightness(1.08); }
+.warpLabel { flex: 1; text-align: left; font: 10px/1.6 var(--font-mono); letter-spacing: 1px; }
+.warpArrow { display: inline-flex; font-size: 20px; }
+.warpBtnRunning { cursor: wait; }
+.disFwd, .disBack { animation: modal-depart 320ms ease-in both; }
+.rebFwd > :not(.modalArchitecture), .rebBack > :not(.modalArchitecture) { animation: reveal 750ms ease both; animation-delay: 160ms; }
+.rebFwd .eraPanel, .rebBack .eraPanel { animation-delay: 350ms; }
+@keyframes modal-depart { to { opacity: .12; transform: translateX(6px); } }
+.rebEdge { position: absolute; top: 0; bottom: 0; width: 1px; z-index: 5; pointer-events: none; background: var(--accent); box-shadow: 0 0 16px var(--accent); }
+.rebEdgeFwd { animation: edge-forward 1200ms ease-in-out both; }
+.rebEdgeBack { animation: edge-back 1200ms ease-in-out both; }
+@keyframes edge-forward { from { left: 0; opacity: 0; } 25% { opacity: .5; } to { left: 100%; opacity: 0; } }
+@keyframes edge-back { from { right: 0; opacity: 0; } 25% { opacity: .5; } to { right: 100%; opacity: 0; } }
+.warpTrailFwd, .warpTrailBack { position: absolute; inset: 0; background: linear-gradient(90deg, transparent, #fff4, transparent); animation: trail 1700ms ease both; pointer-events: none; }
+.warpTrailBack { animation-direction: reverse; }
+@keyframes trail { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@media (max-width: 1050px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; } }
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; gap: 30px; margin-top: 20px; }
+  .cardScene { padding: 18px 22px 0; }
+  .cardScene :global(.architecture) { max-width: 390px; }
+  .cardBody { padding: 23px 23px 0; min-height: 240px; }
+  .title { font-size: 24px; }
+  .cardDescription { font-size: 12px; }
+  .chip { font-size: 10px; }
+  .modalOverlay { padding: 12px; }
+  .modal { padding: 22px 18px; max-height: calc(100dvh - 24px); }
+  .modal .title { font-size: 25px; margin-right: 42px; }
+  .modalArchitecture :global(.architecture) { height: 170px; }
+  .modalClose { right: 12px; top: 12px; }
+  .modalBody { min-height: 540px; }
+  .priceRow { grid-template-columns: 1fr 1fr; gap: 5px 12px; }
+  .priceItem { grid-column: 1 / -1; }
+  .warpLabel { font-size: 9px; }
+  .eraPanel { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .card:hover { transform: none; } .card:hover .cardScene :global(.architecture) { transform: none; } }
