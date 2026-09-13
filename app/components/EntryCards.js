@@ -4,198 +4,19 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./entry-cards.module.css";
 import StoryIllustration, { illustrationCaption } from "./StoryIllustration";
+import {
+  translations,
+  rawCardsData as cards,
+  getTranslatedCard,
+  searchTerms,
+  scoreCard,
+  filterCardsByTerms,
+} from "../lib/translations";
 
-export const cards = [
-  {
-    num: "01",
-    slug: "commute-and-mobility",
-    topic: "Commute & Mobility",
-    imageConfig: {
-      folder: "commute-and-mobility",
-      pastPrefix: "past",
-      presentPrefix: "present",
-      pastCount: 2,
-      presentCount: 2,
-      ext: "png",
-    },
-    modern: {
-      label: "MODERN · 2020s",
-      headline: "Smart Keys, Sleek Scooters & Traffic Boulevards",
-      details:
-        "Dominant use of automatic scooters (Honda Scoopy, PCX, Click, Zoomer-X); ride-hailing apps (Grab); paved roads.",
-      role: "Daily commute doubles as personal style and status.",
-      chips: ["⚡ Grab 24/7", "🛴 PCX & Click", "🗺️ Paved boulevards"],
-    },
-    heritage: {
-      label: "HERITAGE · 1980s–90s",
-      headline: "Steel Frames, Cyclos & Early Two-Strokes",
-      details:
-        "Single-gear heavy steel bicycles, Cyclos, and early step-through motorbikes (Suzuki Viva 110, Honda Chaly, Honda C70/Dame).",
-      role: "Manual kick-starts and long pedals on dirt roads; high value placed on a first family bike.",
-      chips: ["🚲 Cyclo era", "🛞 Dirt roads", "🔑 Kick-start only"],
-    },
-    photos: [
-      "Sleek PCX scooter at a Phnom Penh intersection",
-      "Grab driver with helmet + phone mount",
-      "Aeon mall parking deck of scooters",
-    ],
-  },
-  {
-    num: "02",
-    slug: "morning-routine",
-    topic: "Morning Routine & School Prep",
-    imageConfig: {
-      folder: "morning-routine",
-      pastPrefix: "past",
-      presentPrefix: "present",
-      pastCount: 2,
-      presentCount: 2,
-      ext: "png",
-    },
-    modern: {
-      label: "MODERN · 2020s",
-      headline: "Frictionless Mornings & Digital Schedules",
-      details:
-        "Smartphone alarms; Telegram class announcements; 15-minute routine with indoor running water and electric heaters; instant street breakfast or delivery.",
-      chips: ["🔴 Live Telegram", "⏰ 15-min routine"],
-    },
-    heritage: {
-      label: "HERITAGE · 1980s–90s",
-      headline: "Dawn Labor, Heavy Buckets & Wood Stoves",
-      details:
-        "5:00 AM start hauling water buckets from the river/pond on shoulder poles to fill clay jars (Pneang); lighting charcoal/wood stoves (Changkran) to reheat rice and fry fish before a long bike commute.",
-      chips: ["🪣 River dawn", "🔥 Changkran stove"],
-    },
-    photos: [
-      "Phone alarm and Telegram notification stack",
-      "Electric kettle + instant noodles on a small counter",
-      "Street breakfast cart before school",
-    ],
-  },
-  {
-    num: "03",
-    slug: "free-time-and-entertainment",
-    topic: "Free Time, Entertainment & Side Hustles",
-    imageConfig: {
-      folder: "free-time-and-entertainment",
-      pastPrefix: "past",
-      presentPrefix: "present",
-      pastCount: 2,
-      presentCount: 2,
-      ext: "png",
-    },
-    modern: {
-      label: "MODERN · 2020s",
-      headline: "Screen Connectivity, Digital Escapes & Malls",
-      details:
-        "YouTube, Netflix, mobile gaming (MLBB/PUBG), coding projects; hanging out in air-conditioned malls (Aeon) and cafes; digital freelance side hustles.",
-      chips: ["📺 Netflix+", "🎮 MLBB / PUBG", "💻 Digital hustles"],
-    },
-    heritage: {
-      label: "HERITAGE · 1980s–90s",
-      headline: "Open-Air Games, Pagoda Hangouts & Community Labor",
-      details:
-        "Folk games (Sey, Chhoung, street soccer), transistor radios, cassette tapes; pocket money earned through local errands, elder massage (Chap Sos), and copying school notes.",
-      chips: ["📻 Transistor radio", "🎖️ Folk games"],
-    },
-    photos: [
-      "Mobile gaming setup — phone + earbuds",
-      "Aeon mall food court hangout",
-      "Laptop freelance grind in a coffee shop",
-    ],
-  },
-  {
-    num: "04",
-    slug: "street-food-and-cost",
-    topic: "Street Food & Cost of Living",
-    imageConfig: {
-      folder: "street-food-and-cost",
-      pastPrefix: "past",
-      presentPrefix: "present",
-      pastCount: 2,
-      presentCount: 2,
-      ext: "png",
-    },
-    modern: {
-      label: "MODERN · 2020s",
-      headline: "Global Palates, Boba & On-Demand Delivery",
-      details:
-        "Base street snacks start around 4,000 KHR ($1.00); unlimited access to Korean BBQ, Japanese sushi, milk tea, and app delivery (Nham24/Foodpanda).",
-      chips: ["🚴 Foodpanda Now", "🍜 Nham24", "🧋 Boba culture"],
-    },
-    heritage: {
-      label: "HERITAGE · 1980s–90s",
-      headline: "Cart Bells, Chive Cakes & Post-War Scarcity",
-      details:
-        "100–500 Riel snacks; hyper-local staples only (Num Kchay, Num Krouk, Num Banh Chok, hand-pulled Skor Teanh, uncle-pushed ice cream carts); reliant on morning market hours.",
-      chips: ["🔔 Cart bells", "🪙 100–500 Riel"],
-    },
-    priceIndex: [
-      { item: "Street snack", past: "100–500 Riel", present: "≈4,000 KHR ($1.00)" },
-      { item: "Num Banh Chok bowl", past: "~200 Riel", present: "~5,000 KHR" },
-      { item: "Iced drink", past: "Skor Teanh ~100 Riel", present: "Boba ~8,000 KHR ($2.00)" },
-    ],
-    photos: [
-      "Boba row on a modern Phnom Penh street",
-      "Nham24 delivery rider at a noodle stall",
-      "Korean BBQ plate on a tabletop",
-    ],
-  },
-  {
-    num: "05",
-    slug: "romance-and-date-culture",
-    topic: "Romance & Dating Culture",
-    imageConfig: {
-      folder: "romance-and-date-culture",
-      pastPrefix: "past",
-      presentPrefix: "present",
-      pastCount: 2,
-      presentCount: 2,
-      ext: "png",
-    },
-    modern: {
-      label: "MODERN · 2020s",
-      headline: "Curated Feeds, Talking Stages & Ambiguity",
-      details:
-        "Romance filtered through Instagram stories and messaging rules; high fear of direct confession; ambiguous labels (situationships, breadcrumbing, FWB).",
-      chips: ["💬 IG Stories", "🐍 Breadcrumbing"],
-    },
-    heritage: {
-      label: "HERITAGE · 1980s–90s",
-      headline: "Direct Confessions, Paper Notes & Clear Intentions",
-      details:
-        "No multi-month guessing games; \"I love you\" carried genuine weight; courtship happened through folded paper notes and sharing bicycle rides home.",
-      chips: ["✉️ Paper notes", "🚲 Rides home"],
-    },
-    photos: [
-      "Folded paper note in a school pencil case",
-      "Two bicycles parked under a mango tree",
-      "Old photograph — couple by a radio",
-    ],
-  },
-];
+export { cards, searchTerms };
 
-// Search — case-insensitive, every whitespace-separated term must hit
 export function matches(c, terms) {
-  if (terms.length === 0) return true;
-  const hay = [
-    c.num,
-    c.topic,
-    c.modern?.label, c.modern?.headline, c.modern?.details, c.modern?.role,
-    c.heritage?.label, c.heritage?.headline, c.heritage?.details, c.heritage?.role,
-    ...(c.modern?.chips ?? []),
-    ...(c.heritage?.chips ?? []),
-    ...(c.photos ?? []),
-    ...(c.priceIndex ?? []).flatMap((r) => [r.item, r.past, r.present]),
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-  return terms.every((t) => hay.includes(t));
-}
-
-export function searchTerms(query) {
-  return query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  return scoreCard(c, terms) > 0;
 }
 
 function ChipRow({ chips }) {
@@ -211,11 +32,11 @@ function ChipRow({ chips }) {
   );
 }
 
-function PriceIndex({ rows }) {
+function PriceIndex({ rows, title }) {
   if (!rows?.length) return null;
   return (
     <div className={styles.priceIndex}>
-      <p className={styles.priceTitle}>PRICE INDEX — 1980s ⇄ 2020s</p>
+      <p className={styles.priceTitle}>{title || "PRICE INDEX — 1980s ⇄ 2020s"}</p>
       {rows.map((r) => (
         <div key={r.item} className={styles.priceRow}>
           <span className={styles.priceItem}>{r.item}</span>
@@ -252,7 +73,8 @@ export function getCardImages(card, era) {
   return list;
 }
 
-function ArchivePhotoGallery({ card, era }) {
+function ArchivePhotoGallery({ card, era, lang = "en" }) {
+  const t = translations[lang] || translations.en;
   const initialPhotos = useMemo(() => getCardImages(card, era), [card, era]);
   const [photos, setPhotos] = useState(initialPhotos);
   const [index, setIndex] = useState(0);
@@ -290,20 +112,14 @@ function ArchivePhotoGallery({ card, era }) {
 
   // Render placeholder if no pictures exist for this era
   if (total === 0) {
-    const isHeritage = era === "heritage";
-    const expectedPrefix = isHeritage
-      ? card.imageConfig?.pastPrefix || "past"
-      : card.imageConfig?.presentPrefix || "present";
-    const folder = card.imageConfig?.folder || card.slug;
-
     return (
       <div className={styles.photoGallery}>
         <div className={styles.photoGalleryHeader}>
           <span className={styles.photoGalleryTitle}>
-            ARCHIVE PHOTOGRAPHS · {isHeritage ? "1980s–90s (HERITAGE)" : "2020s (MODERN)"}
+            {t.archivePhotosTitle(isHeritage)}
           </span>
           <span className={styles.photoGalleryCounter}>
-            0 PHOTOGRAPHS
+            {lang === "km" ? "០ រូបថត" : "0 PHOTOGRAPHS"}
           </span>
         </div>
 
@@ -324,13 +140,13 @@ function ArchivePhotoGallery({ card, era }) {
               <path d="M21 15l-5-5L5 21" />
             </svg>
             <p className={styles.placeholderTitle}>
-              NO {isHeritage ? "HERITAGE" : "MODERN"} PHOTOGRAPHS ARCHIVED
+              {t.noPhotosTitle(isHeritage)}
             </p>
             <p className={styles.placeholderText}>
-              There are currently no {isHeritage ? "past" : "present"} photos added for {card.topic}.
+              {t.noPhotosDesc(isHeritage, card.topic)}
             </p>
             <span className={styles.placeholderBadge}>
-              PATTERN: {expectedPrefix}1.png, {expectedPrefix}2.png… in /assets/images/{folder}/
+              {t.photoPatternBadge(prefix, folder)}
             </span>
           </div>
         </div>
@@ -349,10 +165,10 @@ function ArchivePhotoGallery({ card, era }) {
     <div className={styles.photoGallery}>
       <div className={styles.photoGalleryHeader}>
         <span className={styles.photoGalleryTitle}>
-          ARCHIVE PHOTOGRAPHS · {era === "heritage" ? "1980s–90s" : "2020s"}
+          {t.archivePhotosTitle(isHeritage)}
         </span>
         <span className={styles.photoGalleryCounter}>
-          PHOTO {(index % total) + 1} OF {total} · {current.name}
+          {t.photoCounter((index % total) + 1, total, current.name)}
         </span>
       </div>
 
@@ -370,17 +186,17 @@ function ArchivePhotoGallery({ card, era }) {
               type="button"
               className={styles.photoNavBtn}
               onClick={prev}
-              aria-label="Previous photo (infinite scroll)"
+              aria-label={t.prevPhoto}
             >
-              ← Prev
+              {t.prevPhoto}
             </button>
             <button
               type="button"
               className={`${styles.photoNavBtn} ${styles.photoNavBtnPrimary}`}
               onClick={next}
-              aria-label="Next photo (infinite scroll)"
+              aria-label={t.nextPhoto}
             >
-              Next Photo ↻
+              {t.nextPhoto}
             </button>
           </div>
         )}
@@ -400,7 +216,7 @@ function ArchivePhotoGallery({ card, era }) {
             ))}
           </div>
           <span className={styles.photoInfiniteNote}>
-            Infinite scroll active (loops 1 ⇄ {total})
+            {t.infiniteScrollNote(total)}
           </span>
         </div>
       )}
@@ -408,14 +224,15 @@ function ArchivePhotoGallery({ card, era }) {
   );
 }
 
-function EntryModal({ card, era, warping, warpPhase, warpDir, onTimeWarp, onClose }) {
+function EntryModal({ card, era, lang = "en", warping, warpPhase, warpDir, onTimeWarp, onClose }) {
+  const t = translations[lang] || translations.en;
   const [mounted, setMounted] = useState(false);
   const dialogRef = useRef(null);
   const closeRef = useRef(onClose);
   closeRef.current = onClose;
   const data = card[era] ?? {};
   const other = era === "heritage" ? "modern" : "heritage";
-  const otherDecade = other === "heritage" ? "1980s" : "2020s";
+  const otherDecade = other === "heritage" ? (lang === "km" ? "ទសវត្សរ៍ ៨០" : "1980s") : (lang === "km" ? "ទសវត្សរ៍ ២០២០" : "2020s");
   const running = warpPhase !== "idle";
   // back = target is heritage (moving left); fwd = target is modern (moving right)
   const back = running ? warpDir === "back" : other === "heritage";
@@ -470,6 +287,8 @@ function EntryModal({ card, era, warping, warpPhase, warpDir, onTimeWarp, onClos
 
   if (!mounted) return null;
 
+  const rawStoryNum = card.rawNum || card.num;
+
   const modalContent = (
     <div className={styles.modalOverlay} onClick={() => onClose?.()}>
       <div
@@ -486,7 +305,7 @@ function EntryModal({ card, era, warping, warpPhase, warpDir, onTimeWarp, onClos
           type="button"
           className={styles.modalClose}
           onClick={() => onClose?.()}
-          aria-label="Close entry"
+          aria-label={t.closeEntry}
         >
           <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
             <path
@@ -508,10 +327,13 @@ function EntryModal({ card, era, warping, warpPhase, warpDir, onTimeWarp, onClos
 
         <div className={bodyClass} key={era}>
           <p className={styles.kicker}>
-            STORY {card.num} / {data.label}
+            {t.storyLabel} {card.num} / {data.label}
           </p>
           <h2 className={styles.title}>{card.topic}</h2>
-          <div className={styles.modalArchitecture}><StoryIllustration era={era} story={card.num} /><span>{illustrationCaption(era, card.num)}</span></div>
+          <div className={styles.modalArchitecture}>
+            <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
+            <span>{illustrationCaption(era, rawStoryNum, lang)}</span>
+          </div>
           <ChipRow chips={data.chips} />
 
           <div className={styles.eraPanel}>
@@ -521,9 +343,9 @@ function EntryModal({ card, era, warping, warpPhase, warpDir, onTimeWarp, onClos
             {data.role ? <p className={styles.eraRole}>{data.role}</p> : null}
           </div>
 
-          <ArchivePhotoGallery card={card} era={era} />
+          <ArchivePhotoGallery card={card} era={era} lang={lang} />
 
-          <PriceIndex rows={card.priceIndex} />
+          <PriceIndex rows={card.priceIndex} title={t.priceIndexTitle} />
         </div>
 
         {/* Compare in place: warp the popup to the other era */}
@@ -555,8 +377,8 @@ function EntryModal({ card, era, warping, warpPhase, warpDir, onTimeWarp, onClos
 
             <span className={styles.warpLabel}>
               {running
-                ? (back ? "RECONSTRUCTING 1980s…" : "MATERIALIZING 2020s…")
-                : `TIME WARP · ${otherDecade} · ${other === "heritage" ? "HERITAGE" : "MODERN"}`}
+                ? (back ? t.warpingToPast : t.warpingToPresent)
+                : (back ? t.warpToPast : t.warpToPresent)}
             </span>
 
             {/* Forward arrow on right when target is 2020s */}
@@ -579,6 +401,7 @@ function EntryModal({ card, era, warping, warpPhase, warpDir, onTimeWarp, onClos
 
 export default function EntryCards({
   era = "modern",
+  lang = "en",
   count = 5,
   query = "",
   selected = null,
@@ -591,44 +414,72 @@ export default function EntryCards({
   onClose,
   onClearSearch,
 }) {
+  const t = translations[lang] || translations.en;
   const terms = useMemo(() => searchTerms(query), [query]);
-  const visible = useMemo(() => cards.filter((c) => matches(c, terms)), [terms]);
+
+  // Keyword-based search matching:
+  // "romance food" matches both "romance" and "food" cards without missing results!
+  const visibleRaw = useMemo(() => filterCardsByTerms(cards, terms, query), [terms, query]);
+  const visible = useMemo(
+    () => visibleRaw.map((c) => getTranslatedCard(c, lang)),
+    [visibleRaw, lang]
+  );
+
+  const translatedSelected = useMemo(
+    () => (selected ? getTranslatedCard(selected, lang) : null),
+    [selected, lang]
+  );
 
   return (
     <section aria-label="Lifestyle categories">
       <p className={styles.count} role="status">
         {terms.length
-          ? `${visible.length} of ${cards.length} stories matching “${query}”`
-          : `${cards.length} stories to explore · Choose an illustration to step inside`}
+          ? t.storiesCountMatch(visible.length, cards.length)
+          : t.storiesCountAll}
       </p>
 
       {visible.length === 0 ? (
         <div className={styles.empty}>
-          <h3>No stories found</h3><p>Try “food”, “school” or “bicycle”, or return to the full collection.</p>
-          <button type="button" onClick={onClearSearch}>Show all stories <span aria-hidden="true">↗</span></button>
+          <h3>{t.noStoriesFound}</h3>
+          <p>{t.noStoriesHint}</p>
+          <button type="button" onClick={onClearSearch}>
+            {t.showAllStories} <span aria-hidden="true">↗</span>
+          </button>
         </div>
       ) : (
         <div className={styles.grid}>
           {visible.map((c, index) => {
             const data = c[era] ?? {};
+            const rawStoryNum = c.rawNum || c.num;
             return (
-              <article key={`${c.num}-${era}`} className={styles.card} data-era={era} style={{ "--entry-delay": `${index * 90}ms` }}>
+              <article
+                key={`${c.rawNum || c.num}-${era}`}
+                className={styles.card}
+                data-era={era}
+                style={{ "--entry-delay": `${index * 90}ms` }}
+              >
                 <button
                   type="button"
                   className={styles.cardHit}
-                  onClick={() => onSelect?.(c)}
+                  onClick={() => {
+                    const raw = cards.find((r) => r.num === c.rawNum || r.num === c.num) || c;
+                    onSelect?.(raw);
+                  }}
                   aria-haspopup="dialog"
                   aria-label={`Open entry: ${c.topic}`}
                   disabled={warping}
                 />
                 <div className={styles.cardScene}>
-                  <div className={styles.cardMeta}><span>STORY / {c.num}</span><span>{era === "heritage" ? "1980s–90s" : "2020s"}</span></div>
-                  <StoryIllustration era={era} story={c.num} />
-                  <span className={styles.sceneTag}>{illustrationCaption(era, c.num)}</span>
+                  <div className={styles.cardMeta}>
+                    <span>{t.storyLabel} / {c.num}</span>
+                    <span>{era === "heritage" ? (lang === "km" ? "ទសវត្សរ៍ ៨០–៩០" : "1980s–90s") : (lang === "km" ? "ទសវត្សរ៍ ២០២០" : "2020s")}</span>
+                  </div>
+                  <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
+                  <span className={styles.sceneTag}>{illustrationCaption(era, rawStoryNum, lang)}</span>
                 </div>
                 <div className={styles.cardBody}>
                   <span className={styles.kicker}>
-                    {era === "heritage" ? "LIFE BEFORE THE CITY LIGHTS" : "LIFE IN A CONNECTED CAMBODIA"}
+                    {era === "heritage" ? t.kickerHeritage : t.kickerModern}
                   </span>
                   <h3 className={styles.title}>{c.topic}</h3>
                   <p className={styles.cardDescription}>{data.headline}</p>
@@ -639,7 +490,10 @@ export default function EntryCards({
                       </span>
                     ))}
                   </div>
-                  <div className={styles.cardFooter}><span>Step into the story</span><span aria-hidden="true">↗</span></div>
+                  <div className={styles.cardFooter}>
+                    <span>{t.stepIntoStory}</span>
+                    <span aria-hidden="true">↗</span>
+                  </div>
                 </div>
               </article>
             );
@@ -647,10 +501,11 @@ export default function EntryCards({
         </div>
       )}
 
-      {selected ? (
+      {translatedSelected ? (
         <EntryModal
-          card={selected}
+          card={translatedSelected}
           era={modalEra ?? era}
+          lang={lang}
           warping={warping}
           warpPhase={warpPhase}
           warpDir={warpDir}

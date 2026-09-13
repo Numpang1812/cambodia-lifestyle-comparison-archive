@@ -1,12 +1,20 @@
 import { useId } from "react";
 
 const captions = {
-  modern: ["SMART KEYS & CITY STREETS", "ALARMS, CLASS CHATS & BREAKFAST", "PLAY, STREAM & CREATE", "BOBA & DOORSTEP DELIVERY", "STORIES, HEARTS & TYPING DOTS"],
-  heritage: ["PEDALS & CYCLO RIDES", "WATER JARS & WOOD-FIRED MORNINGS", "SEY, CASSETTES & OPEN AIR", "CHIVE CAKES & CART BELLS", "PAPER NOTES & RIDES HOME"],
+  modern: {
+    en: ["SMART KEYS & CITY STREETS", "ALARMS, CLASS CHATS & BREAKFAST", "PLAY, STREAM & CREATE", "BOBA & DOORSTEP DELIVERY", "STORIES, HEARTS & TYPING DOTS"],
+    km: ["សោស្មាតឃី និងដងវិថីក្រុង", "ម៉ោងរោទិ៍ គ្រុបតេឡេក្រាម និងអាហារពេលព្រឹក", "លេងហ្គេម មើលវីដេអូ និងធ្វើការងារឌីជីថល", "តែគុជ និងសេវាដឹកដល់កន្លែង", "ស្ទូរី បេះដូង និងសារជជែក"],
+  },
+  heritage: {
+    en: ["PEDALS & CYCLO RIDES", "WATER JARS & WOOD-FIRED MORNINGS", "SEY, CASSETTES & OPEN AIR", "CHIVE CAKES & CART BELLS", "PAPER NOTES & RIDES HOME"],
+    km: ["ការធាក់កង់ និងជិះស៊ីក្លូ", "ពាងទឹក និងចង្ក្រានអុសពេលព្រឹក", "ការទាត់សី កាសែតចម្រៀង និងទីវាល", "នំកាឆាយ និងកណ្តឹងរទេះលក់ដូរ", "សំបុត្រក្រដាស និងការជូនទៅផ្ទះ"],
+  },
 };
 
-export function illustrationCaption(era, story) {
-  return captions[era]?.[Number(story) - 1] ?? "CAMBODIAN EVERYDAY LIFE";
+export function illustrationCaption(era, story, lang = "en") {
+  const l = lang === "km" ? "km" : "en";
+  const list = captions[era]?.[l] || captions[era]?.en;
+  return list?.[Number(story) - 1] ?? (l === "km" ? "ជីវិតប្រចាំថ្ងៃរបស់កម្ពុជា" : "CAMBODIAN EVERYDAY LIFE");
 }
 
 function Line({ d, ...props }) {
@@ -143,14 +151,17 @@ const scenes = {
   heritage: [HeritageCommute, HeritageMorning, HeritageLeisure, HeritageFood, HeritageRomance],
 };
 
-export default function StoryIllustration({ era = "modern", story = "01" }) {
+export default function StoryIllustration({ era = "modern", story = "01", lang = "en" }) {
   const id = useId().replace(/:/g, "");
   const past = era === "heritage";
   const Scene = scenes[era]?.[Number(story) - 1];
   if (!Scene) return null;
+  const isKm = lang === "km";
+  const eraText = past ? (isKm ? "ទសវត្សរ៍ ៨០–៩០" : "1980s–90s") : (isKm ? "ទសវត្សរ៍ ២០២០" : "2020s");
+  const countryText = isKm ? "កម្ពុជា" : "Cambodia";
   return (
     <svg className="architecture story-illustration" viewBox="0 0 500 300" fill="none" role="img" aria-labelledby={`${id}-title`} style={{ "--scene-dark": past ? "#30231c" : "#102e32", "--scene-fill": past ? "#78543b" : "#235b60", "--scene-pop": past ? "#e7b779" : "#c8dc96", color: past ? "#e2b686" : "#9de2d7" }}>
-      <title id={`${id}-title`}>{`${illustrationCaption(era, story)} — ${past ? "1980s–90s" : "2020s"} Cambodia`}</title>
+      <title id={`${id}-title`}>{`${illustrationCaption(era, story, lang)} — ${eraText} ${countryText}`}</title>
       <defs><radialGradient id={`${id}-glow`}><stop stopColor={past ? "#e7b779" : "#82ddce"} stopOpacity=".13" /><stop offset="1" stopColor={past ? "#e7b779" : "#82ddce"} stopOpacity="0" /></radialGradient></defs>
       <ellipse cx="250" cy="157" rx="224" ry="138" fill={`url(#${id}-glow)`} />
       <ellipse cx="250" cy="260" rx="172" ry="12" fill="var(--scene-dark)" opacity=".5" />

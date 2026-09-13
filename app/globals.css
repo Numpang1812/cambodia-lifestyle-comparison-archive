@@ -11,9 +11,10 @@
   --accent-soft: #b8e4cf12;
   --border: #a0d2c323;
   --border-strong: #a0d2c34d;
-  --font-body: var(--font-grotesk), Arial, sans-serif;
-  --font-display: var(--font-grotesk), Arial, sans-serif;
-  --font-mono: var(--font-courier), monospace;
+  --font-unified: var(--font-kantumruy), "Kantumruy Pro", sans-serif;
+  --font-body: var(--font-unified);
+  --font-display: var(--font-unified);
+  --font-mono: var(--font-unified);
   --card-radius: 4px;
   --card-shadow: 0 16px 40px #0002;
   --card-backdrop: none;
@@ -31,30 +32,89 @@
   --accent-soft: #ebbb8512;
   --border: #dbb1832b;
   --border-strong: #dbb18360;
-  --font-display: var(--font-playfair), Georgia, serif;
+  --font-unified: var(--font-moulpali), "Moulpali", var(--font-kantumruy), sans-serif;
+  --font-body: var(--font-unified);
+  --font-display: var(--font-unified);
+  --font-mono: var(--font-unified);
   --card-radius: 2px;
 }
+
+/* When switched to past (heritage era), use Moulpali for EVERYTHING */
+html[data-era="heritage"],
+html[data-era="heritage"] body,
+html[data-era="heritage"] *,
+[data-era="heritage"],
+[data-era="heritage"] * {
+  font-family: var(--font-moulpali), "Moulpali", var(--font-kantumruy), sans-serif !important;
+}
+
+[data-era="heritage"] .title,
+[data-era="heritage"] h1,
+[data-era="heritage"] h2,
+[data-era="heritage"] h3 {
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+[data-era="heritage"] .kicker {
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 24px; }
-body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: var(--font-body); transition: background-color 900ms ease, color 600ms ease; }
-button, input, a { -webkit-tap-highlight-color: transparent; }
-button, input { font: inherit; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; font-family: var(--font-unified); }
+body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: var(--font-unified); transition: background-color 900ms ease, color 600ms ease; }
+button, input, a { -webkit-tap-highlight-color: transparent; font-family: inherit; }
+button, input { font: inherit; font-family: inherit; }
 button, a { touch-action: manipulation; }
 a { color: inherit; text-decoration: none; }
 button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 button:disabled { cursor: wait; }
 ::selection { background: var(--accent); color: var(--bg); }
 .wrap { position: relative; z-index: 1; max-width: 1380px; margin: 0 auto; padding: 0 64px; }
-.skip-link { position: fixed; left: 16px; top: -100px; z-index: 20000; padding: 16px; background: var(--bg-card); }
+.skip-link { position: fixed; left: 16px; top: -100px; z-index: 20000; padding: 16px; background: var(--bg-card); font-family: var(--font-unified); }
 .skip-link:focus { top: 16px; }
 .topbar { display: flex; align-items: center; gap: 40px; min-height: 105px; border-bottom: 1px solid var(--border); }
-.brand { display: flex; align-items: center; gap: 13px; color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: 2px; }
-.brand-sub { display: block; margin-top: 5px; font: 9px var(--font-mono); letter-spacing: 1.8px; color: var(--text-muted); }
-.nav-links { display: flex; margin-left: auto; gap: 32px; font-size: 12px; color: var(--text-muted); }
+.brand { display: flex; align-items: center; gap: 13px; color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: 2px; font-family: var(--font-unified); }
+.brand-sub { display: block; margin-top: 5px; font-size: 10px; font-weight: 500; letter-spacing: 1.5px; color: var(--text-muted); font-family: var(--font-unified); }
+.nav-links { display: flex; margin-left: auto; gap: 32px; font-size: 12px; color: var(--text-muted); font-family: var(--font-unified); }
 .nav-links a:hover { color: var(--accent); }
 .nav-links a span { margin-left: 8px; }
-.motion-toggle { display: flex; gap: 9px; align-items: center; padding: 10px 12px; min-height: 44px; border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); background: var(--bg-inset); font-size: 11px; cursor: pointer; }
+.motion-toggle { display: flex; gap: 9px; align-items: center; padding: 10px 12px; min-height: 44px; border: 1px solid var(--border); border-radius: 4px; color: var(--text-muted); background: var(--bg-inset); font-size: 11px; font-family: var(--font-unified); cursor: pointer; }
 .motion-toggle > span:first-child { color: var(--accent); font-size: 17px; }
+.lang-toggle { display: inline-flex; align-items: center; padding: 3px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg-inset); }
+.lang-btn { padding: 8px 12px; border: 0; border-radius: 3px; background: transparent; color: var(--text-muted); font-size: 11px; font-weight: 600; font-family: var(--font-unified); cursor: pointer; transition: all 180ms ease; }
+.lang-btn.active { background: var(--accent); color: var(--bg); font-weight: 700; box-shadow: 0 2px 8px #0004; }
+.lang-btn:hover:not(.active) { color: var(--text); }
+html[lang="km"]:not([data-era="heritage"]) {
+  --font-unified: var(--font-kantumruy), "Kantumruy Pro", sans-serif;
+  --font-body: var(--font-unified);
+  --font-display: var(--font-unified);
+  --font-mono: var(--font-unified);
+}
+html[lang="km"], html[lang="km"] * {
+  letter-spacing: normal !important;
+}
+html[lang="km"] .title {
+  letter-spacing: -0.2px !important;
+  line-height: 1.35 !important;
+}
+html[lang="km"] .kicker,
+html[lang="km"] .brand-sub,
+html[lang="km"] .eraLabel,
+html[lang="km"] .scene-caption,
+html[lang="km"] .scene-coordinate,
+html[lang="km"] .timeline-status,
+html[lang="km"] .hero-caption,
+html[lang="km"] .footer {
+  font-size: 11px !important;
+  letter-spacing: 0 !important;
+  line-height: 1.6 !important;
+}
+html[data-era="heritage"][lang="km"],
+html[data-era="heritage"][lang="km"] * {
+  font-family: var(--font-moulpali), "Moulpali", var(--font-kantumruy), sans-serif !important;
+}
 .siteHeader { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 28px; min-height: 490px; padding: 48px 0 56px; }
 .kicker { display: flex; align-items: center; gap: 9px; font: 10px var(--font-mono); line-height: 1.6; letter-spacing: 1.8px; color: var(--accent); margin: 0; }
 .status-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; box-shadow: 0 0 10px var(--accent-soft); }

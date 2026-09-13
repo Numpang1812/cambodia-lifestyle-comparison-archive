@@ -1,5 +1,5 @@
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; margin-top: 23px; align-items: stretch; }
-.count { margin: 18px 0 0; color: var(--text-faint); font: 10px/1.7 var(--font-mono); }
+.count { margin: 18px 0 0; color: var(--text-faint); font-size: 11px; line-height: 1.7; font-family: var(--font-unified); }
 .card { position: relative; display: flex; flex-direction: column; min-width: 0; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 5px; box-shadow: var(--card-shadow); transition: transform 280ms ease, border-color 280ms ease, box-shadow 280ms ease; }
 .card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: 0 22px 40px #0003; }
 .cardHit { position: absolute; inset: 0; z-index: 3; border: 0; border-radius: inherit; background: transparent; cursor: pointer; }
@@ -7,18 +7,18 @@
 .cardHit:disabled { cursor: wait; }
 .cardScene { position: relative; padding: 18px 18px 0; overflow: hidden; border-radius: 4px 4px 0 0; background: radial-gradient(ellipse at 55% 80%, #43897b1f, transparent 65%), linear-gradient(135deg, #a6d6c30b, transparent 55%); border-bottom: 1px solid var(--border-strong); }
 .cardScene::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(90deg, transparent 0 37px, #92dcc907 37px 38px); }
-.cardMeta { display: flex; justify-content: space-between; align-items: center; color: var(--text-faint); font: 9px var(--font-mono); letter-spacing: 1.3px; }
+.cardMeta { display: flex; justify-content: space-between; align-items: center; color: var(--text-faint); font-size: 11px; font-weight: 500; font-family: var(--font-unified); letter-spacing: 0.5px; }
 .cardScene :global(.architecture) { margin: -2px auto -4px; width: 100%; transition: transform 500ms ease; }
 .card:hover .cardScene :global(.architecture) { transform: translateY(-3px); }
-.sceneTag { display: block; margin: 3px 0 12px; color: var(--text-faint); font: 8px var(--font-mono); letter-spacing: 1.5px; text-align: center; }
+.sceneTag { display: block; margin: 3px 0 12px; color: var(--text-faint); font-size: 10px; font-family: var(--font-unified); letter-spacing: 0.5px; text-align: center; }
 .cardBody { flex: 1; display: flex; flex-direction: column; padding: 23px 23px 0; position: relative; min-height: 260px; background: linear-gradient(110deg, #a0d2c305, transparent); }
 .cardBody::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent-2), transparent); opacity: .35; }
-.kicker { display: block; margin: 0; font: 8px/1.7 var(--font-mono); letter-spacing: 1.2px; color: var(--accent); }
-.title { display: block; margin: 10px 0; font: 500 23px/1.25 var(--font-display); letter-spacing: -.6px; color: var(--text); }
-.cardDescription { margin: 0 0 18px; font-size: 11px; line-height: 1.8; color: var(--text-muted); }
+.kicker { display: block; margin: 0; font-size: 10px; line-height: 1.7; font-family: var(--font-unified); font-weight: 600; letter-spacing: 0.8px; color: var(--accent); }
+.title { display: block; margin: 10px 0; font-size: 23px; line-height: 1.3; font-weight: 600; font-family: var(--font-unified); letter-spacing: -.4px; color: var(--text); }
+.cardDescription { margin: 0 0 18px; font-size: 12px; line-height: 1.8; color: var(--text-muted); font-family: var(--font-unified); }
 .chipRow { display: flex; flex-wrap: wrap; gap: 6px; margin: auto 0 20px; }
-.chip { display: inline-block; padding: 5px 7px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); font: 9px/1.4 var(--font-mono); }
-.cardFooter { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding: 16px 0; font-size: 10px; color: var(--accent); }
+.chip { display: inline-block; padding: 5px 8px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); font-size: 11px; line-height: 1.4; font-family: var(--font-unified); }
+.cardFooter { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding: 16px 0; font-size: 11px; font-weight: 600; font-family: var(--font-unified); color: var(--accent); }
 .cardFooter > span:last-child { font-size: 18px; transition: transform 250ms ease; }
 .card:hover .cardFooter > span:last-child { transform: translate(2px, -2px); }
 
@@ -54,21 +54,21 @@
 .modalClose { position: absolute; top: 18px; right: 18px; z-index: 10; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--border-strong); border-radius: 50%; color: var(--text-muted); background: var(--bg-inset); cursor: pointer; }
 .modalClose:hover { border-color: var(--accent); color: var(--accent); }
 .modalBody { position: relative; min-height: 530px; }
-.modal .kicker { padding-right: 45px; font-size: 9px; }
-.modal .title { font-size: 30px; margin: 13px 50px 14px 0; }
+.modal .kicker { padding-right: 45px; font-size: 11px; font-weight: 600; font-family: var(--font-unified); }
+.modal .title { font-size: 30px; margin: 13px 50px 14px 0; font-family: var(--font-unified); }
 .modalArchitecture { position: relative; margin-bottom: 20px; border-block: 1px solid var(--border); background: radial-gradient(ellipse at 50% 80%, var(--accent-soft), transparent 70%); }
 .modalArchitecture :global(.architecture) { height: 200px; }
-.modalArchitecture > span { position: absolute; bottom: 9px; right: 10px; color: var(--text-faint); font: 7px var(--font-mono); letter-spacing: 1px; }
+.modalArchitecture > span { position: absolute; bottom: 9px; right: 10px; color: var(--text-faint); font-size: 10px; font-family: var(--font-unified); letter-spacing: 0.5px; }
 .modal .chipRow { margin: 16px 0; }
-.modal .chip { padding: 6px 9px; font-size: 10px; }
+.modal .chip { padding: 6px 9px; font-size: 11px; font-family: var(--font-unified); }
 .eraPanel { padding: 19px 20px; background: var(--bg-inset); border: 1px solid var(--border); border-left: 2px solid var(--accent); border-radius: 2px; min-height: 180px; }
-.eraLabel { margin: 0 0 9px; color: var(--accent); font: 9px var(--font-mono); letter-spacing: 1.5px; }
-.eraHeadline { margin: 0 0 10px; color: var(--text); font: 500 19px/1.4 var(--font-display); }
-.eraDetails { margin: 0; font-size: 13px; color: var(--text-muted); line-height: 1.8; }
-.eraRole { margin: 10px 0 0; color: var(--text-muted); font-size: 12px; font-style: italic; line-height: 1.7; }
+.eraLabel { margin: 0 0 9px; color: var(--accent); font-size: 11px; font-weight: 600; font-family: var(--font-unified); letter-spacing: 0.8px; }
+.eraHeadline { margin: 0 0 10px; color: var(--text); font-size: 19px; line-height: 1.4; font-weight: 600; font-family: var(--font-unified); }
+.eraDetails { margin: 0; font-size: 13px; color: var(--text-muted); line-height: 1.8; font-family: var(--font-unified); }
+.eraRole { margin: 10px 0 0; color: var(--text-muted); font-size: 12px; font-style: italic; line-height: 1.7; font-family: var(--font-unified); }
 .priceIndex { margin-top: 18px; border: 1px solid var(--border); padding: 16px; }
-.priceTitle { margin: 0 0 10px; font: 9px/1.6 var(--font-mono); letter-spacing: 1.2px; color: var(--accent); }
-.priceRow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 11px; line-height: 1.6; }
+.priceTitle { margin: 0 0 10px; font-size: 11px; line-height: 1.6; font-weight: 600; font-family: var(--font-unified); letter-spacing: 0.8px; color: var(--accent); }
+.priceRow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 12px; line-height: 1.6; font-family: var(--font-unified); }
 .priceItem { color: var(--text); }
 .pricePast { color: var(--text-muted); }
 .pricePresent { color: var(--accent); }
@@ -228,7 +228,10 @@
   color: var(--text);
   border: 1px solid var(--border-strong);
   border-radius: 3px;
-  font: 10px/1 var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  font-family: var(--font-unified);
+  font-weight: 600;
   letter-spacing: 0.6px;
   cursor: pointer;
   box-shadow: 0 4px 12px #0006;
@@ -292,9 +295,10 @@
 }
 
 .photoInfiniteNote {
-  font: 8px var(--font-mono);
+  font-size: 10px;
+  font-family: var(--font-unified);
   color: var(--text-faint);
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
 }
 
 @media (max-width: 600px) {
@@ -340,14 +344,19 @@
 
 .placeholderTitle {
   margin: 0 0 6px;
-  font: 500 13px/1.4 var(--font-display);
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 600;
+  font-family: var(--font-unified);
   letter-spacing: 0.5px;
   color: var(--text);
 }
 
 .placeholderText {
   margin: 0 0 12px;
-  font: 11px/1.6 var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  font-family: var(--font-unified);
   color: var(--text-muted);
   max-width: 420px;
 }
@@ -359,8 +368,10 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   color: var(--accent);
-  font: 9px/1.4 var(--font-mono);
-  letter-spacing: 0.8px;
+  font-size: 10px;
+  line-height: 1.4;
+  font-family: var(--font-unified);
+  letter-spacing: 0.6px;
 }
 
 
