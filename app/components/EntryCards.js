@@ -168,7 +168,7 @@ function ArchivePhotoGallery({ card, era, lang = "en" }) {
           {t.archivePhotosTitle(isHeritage)}
         </span>
         <span className={styles.photoGalleryCounter}>
-          {t.photoCounter((index % total) + 1, total, current.name)}
+          {t.photoCounter((index % total) + 1, total)}
         </span>
       </div>
 
