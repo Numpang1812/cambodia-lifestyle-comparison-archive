@@ -8,7 +8,16 @@ import StoryIllustration, { illustrationCaption } from "./StoryIllustration";
 export const cards = [
   {
     num: "01",
+    slug: "commute-and-mobility",
     topic: "Commute & Mobility",
+    imageConfig: {
+      folder: "commute-and-mobility",
+      pastPrefix: "past",
+      presentPrefix: "present",
+      pastCount: 2,
+      presentCount: 2,
+      ext: "png",
+    },
     modern: {
       label: "MODERN · 2020s",
       headline: "Smart Keys, Sleek Scooters & Traffic Boulevards",
@@ -33,7 +42,16 @@ export const cards = [
   },
   {
     num: "02",
+    slug: "morning-routine",
     topic: "Morning Routine & School Prep",
+    imageConfig: {
+      folder: "morning-routine",
+      pastPrefix: "past",
+      presentPrefix: "present",
+      pastCount: 2,
+      presentCount: 2,
+      ext: "png",
+    },
     modern: {
       label: "MODERN · 2020s",
       headline: "Frictionless Mornings & Digital Schedules",
@@ -56,7 +74,16 @@ export const cards = [
   },
   {
     num: "03",
+    slug: "free-time-and-entertainment",
     topic: "Free Time, Entertainment & Side Hustles",
+    imageConfig: {
+      folder: "free-time-and-entertainment",
+      pastPrefix: "past",
+      presentPrefix: "present",
+      pastCount: 2,
+      presentCount: 2,
+      ext: "png",
+    },
     modern: {
       label: "MODERN · 2020s",
       headline: "Screen Connectivity, Digital Escapes & Malls",
@@ -79,7 +106,16 @@ export const cards = [
   },
   {
     num: "04",
+    slug: "street-food-and-cost",
     topic: "Street Food & Cost of Living",
+    imageConfig: {
+      folder: "street-food-and-cost",
+      pastPrefix: "past",
+      presentPrefix: "present",
+      pastCount: 2,
+      presentCount: 2,
+      ext: "png",
+    },
     modern: {
       label: "MODERN · 2020s",
       headline: "Global Palates, Boba & On-Demand Delivery",
@@ -107,7 +143,16 @@ export const cards = [
   },
   {
     num: "05",
+    slug: "romance-and-date-culture",
     topic: "Romance & Dating Culture",
+    imageConfig: {
+      folder: "romance-and-date-culture",
+      pastPrefix: "past",
+      presentPrefix: "present",
+      pastCount: 2,
+      presentCount: 2,
+      ext: "png",
+    },
     modern: {
       label: "MODERN · 2020s",
       headline: "Curated Feeds, Talking Stages & Ambiguity",
@@ -182,42 +227,183 @@ function PriceIndex({ rows }) {
   );
 }
 
-function MiniGallery({ photos, topic }) {
-  const list = photos?.length ? photos : ["Photo placeholder — add images in EntryCards.js"];
-  const n = list.length;
-  const [i, setI] = useState(0);
-  const step = (d) => setI((p) => (p + d + n) % n);
+export function getCardImages(card, era) {
+  if (!card) return [];
+  const cfg = card.imageConfig || {};
+  const folder = cfg.folder || card.slug;
+  if (!folder) return [];
+
+  // Strictly separate eras: past(n) for heritage, present(n) for modern
+  const isHeritage = era === "heritage";
+  const prefix = isHeritage ? (cfg.pastPrefix || "past") : (cfg.presentPrefix || "present");
+  const count = isHeritage ? (cfg.pastCount ?? 0) : (cfg.presentCount ?? 0);
+  const ext = cfg.ext || "png";
+
+  if (count <= 0) return [];
+
+  const list = [];
+  for (let i = 1; i <= count; i++) {
+    list.push({
+      src: `/assets/images/${folder}/${prefix}${i}.${ext}`,
+      name: `${prefix}${i}.${ext}`,
+      caption: `${card.topic} · ${prefix.toUpperCase()} ${i}`,
+    });
+  }
+  return list;
+}
+
+function ArchivePhotoGallery({ card, era }) {
+  const initialPhotos = useMemo(() => getCardImages(card, era), [card, era]);
+  const [photos, setPhotos] = useState(initialPhotos);
+  const [index, setIndex] = useState(0);
+
+  const isHeritage = era === "heritage";
+  const prefix = isHeritage
+    ? card.imageConfig?.pastPrefix || "past"
+    : card.imageConfig?.presentPrefix || "present";
+  const folder = card.imageConfig?.folder || card.slug;
+
+  // Auto-discover pictures directly from filesystem via /api/gallery
+  useEffect(() => {
+    const base = getCardImages(card, era);
+    setPhotos(base);
+    setIndex(0);
+
+    let active = true;
+    if (folder) {
+      fetch(`/api/gallery?folder=${folder}&prefix=${prefix}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (active && Array.isArray(data?.images) && data.images.length > 0) {
+            setPhotos(data.images);
+          }
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [card, era, folder, prefix]);
+
+  const total = photos.length;
+
+  // Render placeholder if no pictures exist for this era
+  if (total === 0) {
+    const isHeritage = era === "heritage";
+    const expectedPrefix = isHeritage
+      ? card.imageConfig?.pastPrefix || "past"
+      : card.imageConfig?.presentPrefix || "present";
+    const folder = card.imageConfig?.folder || card.slug;
+
+    return (
+      <div className={styles.photoGallery}>
+        <div className={styles.photoGalleryHeader}>
+          <span className={styles.photoGalleryTitle}>
+            ARCHIVE PHOTOGRAPHS · {isHeritage ? "1980s–90s (HERITAGE)" : "2020s (MODERN)"}
+          </span>
+          <span className={styles.photoGalleryCounter}>
+            0 PHOTOGRAPHS
+          </span>
+        </div>
+
+        <div className={styles.photoFrame}>
+          <div className={styles.photoPlaceholder}>
+            <svg
+              className={styles.placeholderIcon}
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              aria-hidden="true"
+            >
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <circle cx="8.5" cy="10" r="1.5" />
+              <path d="M21 15l-5-5L5 21" />
+            </svg>
+            <p className={styles.placeholderTitle}>
+              NO {isHeritage ? "HERITAGE" : "MODERN"} PHOTOGRAPHS ARCHIVED
+            </p>
+            <p className={styles.placeholderText}>
+              There are currently no {isHeritage ? "past" : "present"} photos added for {card.topic}.
+            </p>
+            <span className={styles.placeholderBadge}>
+              PATTERN: {expectedPrefix}1.png, {expectedPrefix}2.png… in /assets/images/{folder}/
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Infinite scroll handlers — loops seamlessly from end to beginning
+  const next = () => setIndex((prev) => (prev + 1) % total);
+  const prev = () => setIndex((prev) => (prev - 1 + total) % total);
+
+  const current = photos[index % total];
+  if (!current) return null;
 
   return (
-    <div className={styles.gallery}>
-      <div className={styles.slide} role="img" aria-label={`${topic} photo ${i + 1} of ${n}`}>
-        <span className={styles.slideMark} aria-hidden="true">📷</span>
-        <span className={styles.slideLabel}>
-          PHOTO {i + 1} / {n}
+    <div className={styles.photoGallery}>
+      <div className={styles.photoGalleryHeader}>
+        <span className={styles.photoGalleryTitle}>
+          ARCHIVE PHOTOGRAPHS · {era === "heritage" ? "1980s–90s" : "2020s"}
         </span>
-        <span className={styles.slideCaption}>{list[i]}</span>
-      </div>
-      <div className={styles.galleryNav}>
-        <button
-          type="button"
-          className={styles.galleryBtn}
-          onClick={() => step(-1)}
-          aria-label={`Previous photo in ${topic}`}
-        >
-          ←
-        </button>
-        <span className={styles.galleryCount} aria-live="polite">
-          {i + 1} / {n}
+        <span className={styles.photoGalleryCounter}>
+          PHOTO {(index % total) + 1} OF {total} · {current.name}
         </span>
-        <button
-          type="button"
-          className={styles.galleryBtn}
-          onClick={() => step(1)}
-          aria-label={`Next photo in ${topic}`}
-        >
-          →
-        </button>
       </div>
+
+      <div className={styles.photoFrame}>
+        <img
+          key={current.src}
+          src={current.src}
+          alt={current.caption}
+          className={styles.photoImage}
+        />
+
+        {total > 1 && (
+          <div className={styles.photoControls}>
+            <button
+              type="button"
+              className={styles.photoNavBtn}
+              onClick={prev}
+              aria-label="Previous photo (infinite scroll)"
+            >
+              ← Prev
+            </button>
+            <button
+              type="button"
+              className={`${styles.photoNavBtn} ${styles.photoNavBtnPrimary}`}
+              onClick={next}
+              aria-label="Next photo (infinite scroll)"
+            >
+              Next Photo ↻
+            </button>
+          </div>
+        )}
+      </div>
+
+      {total > 1 && (
+        <div className={styles.photoPagination}>
+          <div className={styles.photoDots}>
+            {photos.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`${styles.photoDot} ${i === index % total ? styles.photoDotActive : ""}`}
+                onClick={() => setIndex(i)}
+                aria-label={`Go to photo ${i + 1}`}
+              />
+            ))}
+          </div>
+          <span className={styles.photoInfiniteNote}>
+            Infinite scroll active (loops 1 ⇄ {total})
+          </span>
+        </div>
+      )}
     </div>
   );
 }
@@ -335,51 +521,55 @@ function EntryModal({ card, era, warping, warpPhase, warpDir, onTimeWarp, onClos
             {data.role ? <p className={styles.eraRole}>{data.role}</p> : null}
           </div>
 
+          <ArchivePhotoGallery card={card} era={era} />
+
           <PriceIndex rows={card.priceIndex} />
         </div>
 
         {/* Compare in place: warp the popup to the other era */}
-        <button
-          type="button"
-          className={`${styles.warpBtn} ${back ? styles.warpBtnBack : styles.warpBtnFwd} ${running ? styles.warpBtnRunning : ""}`}
-          onClick={() => onTimeWarp?.()}
-          disabled={warping}
-          aria-label={`Time warp to the ${otherDecade} version of ${card.topic}`}
-        >
-          {/* Back arrow on left when target is 1980s */}
-          {back && (
-            <span
-              className={`${styles.warpArrow} ${styles.warpArrowLeft} ${running ? styles.warpArrowRunBack : ""}`}
-              aria-hidden="true"
-            >
-              ←
+        <div className={styles.modalFooter}>
+          <button
+            type="button"
+            className={`${styles.warpBtn} ${back ? styles.warpBtnBack : styles.warpBtnFwd} ${running ? styles.warpBtnRunning : ""}`}
+            onClick={() => onTimeWarp?.()}
+            disabled={warping}
+            aria-label={`Time warp to the ${otherDecade} version of ${card.topic}`}
+          >
+            {/* Back arrow on left when target is 1980s */}
+            {back && (
+              <span
+                className={`${styles.warpArrow} ${styles.warpArrowLeft} ${running ? styles.warpArrowRunBack : ""}`}
+                aria-hidden="true"
+              >
+                ←
+              </span>
+            )}
+
+            {/* Energy trail */}
+            {running && (
+              <span
+                className={back ? styles.warpTrailBack : styles.warpTrailFwd}
+                aria-hidden="true"
+              />
+            )}
+
+            <span className={styles.warpLabel}>
+              {running
+                ? (back ? "RECONSTRUCTING 1980s…" : "MATERIALIZING 2020s…")
+                : `TIME WARP · ${otherDecade} · ${other === "heritage" ? "HERITAGE" : "MODERN"}`}
             </span>
-          )}
 
-          {/* Energy trail */}
-          {running && (
-            <span
-              className={back ? styles.warpTrailBack : styles.warpTrailFwd}
-              aria-hidden="true"
-            />
-          )}
-
-          <span className={styles.warpLabel}>
-            {running
-              ? (back ? "RECONSTRUCTING 1980s…" : "MATERIALIZING 2020s…")
-              : `TIME WARP · ${otherDecade} · ${other === "heritage" ? "HERITAGE" : "MODERN"}`}
-          </span>
-
-          {/* Forward arrow on right when target is 2020s */}
-          {!back && (
-            <span
-              className={`${styles.warpArrow} ${styles.warpArrowRight} ${running ? styles.warpArrowRunFwd : ""}`}
-              aria-hidden="true"
-            >
-              →
-            </span>
-          )}
-        </button>
+            {/* Forward arrow on right when target is 2020s */}
+            {!back && (
+              <span
+                className={`${styles.warpArrow} ${styles.warpArrowRight} ${running ? styles.warpArrowRunFwd : ""}`}
+                aria-hidden="true"
+              >
+                →
+              </span>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );

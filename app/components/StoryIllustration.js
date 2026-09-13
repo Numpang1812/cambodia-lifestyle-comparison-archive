@@ -150,7 +150,7 @@ export default function StoryIllustration({ era = "modern", story = "01" }) {
   if (!Scene) return null;
   return (
     <svg className="architecture story-illustration" viewBox="0 0 500 300" fill="none" role="img" aria-labelledby={`${id}-title`} style={{ "--scene-dark": past ? "#30231c" : "#102e32", "--scene-fill": past ? "#78543b" : "#235b60", "--scene-pop": past ? "#e7b779" : "#c8dc96", color: past ? "#e2b686" : "#9de2d7" }}>
-      <title id={`${id}-title`}>{illustrationCaption(era, story)} — {past ? "1980s–90s" : "2020s"} Cambodia</title>
+      <title id={`${id}-title`}>{`${illustrationCaption(era, story)} — ${past ? "1980s–90s" : "2020s"} Cambodia`}</title>
       <defs><radialGradient id={`${id}-glow`}><stop stopColor={past ? "#e7b779" : "#82ddce"} stopOpacity=".13" /><stop offset="1" stopColor={past ? "#e7b779" : "#82ddce"} stopOpacity="0" /></radialGradient></defs>
       <ellipse cx="250" cy="157" rx="224" ry="138" fill={`url(#${id}-glow)`} />
       <ellipse cx="250" cy="260" rx="172" ry="12" fill="var(--scene-dark)" opacity=".5" />
