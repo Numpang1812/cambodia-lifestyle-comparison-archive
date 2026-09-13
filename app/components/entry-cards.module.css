@@ -18,6 +18,8 @@
 .cardDescription { margin: 0 0 18px; font-size: 12px; line-height: 1.8; color: var(--text-muted); font-family: var(--font-unified); }
 .chipRow { display: flex; flex-wrap: wrap; gap: 6px; margin: auto 0 20px; }
 .chip { display: inline-block; padding: 5px 8px; border: 1px solid var(--border); border-radius: 2px; color: var(--text-muted); font-size: 11px; line-height: 1.4; font-family: var(--font-unified); }
+.cardSource { margin: 0 0 16px; padding: 6px 10px; background: var(--bg-inset); border: 1px solid var(--border); border-left: 2px solid var(--accent); border-radius: 2px; font-size: 11px; line-height: 1.5; color: var(--text-muted); font-family: var(--font-unified); }
+.cardSourceLabel { color: var(--accent); font-weight: 600; margin-right: 5px; }
 .cardFooter { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding: 16px 0; font-size: 11px; font-weight: 600; font-family: var(--font-unified); color: var(--accent); }
 .cardFooter > span:last-child { font-size: 18px; transition: transform 250ms ease; }
 .card:hover .cardFooter > span:last-child { transform: translate(2px, -2px); }
@@ -31,6 +33,7 @@
 .card[data-era="heritage"] .cardBody::before { background: #d5a57633; height: 1px; opacity: 1; }
 .card[data-era="heritage"] .title { font-size: 23px; }
 .card[data-era="heritage"] .chip { background: #281b1255; border-color: #bb916338; }
+.card[data-era="heritage"] .cardSource { background: #281b1288; border-color: #bb916344; border-left-color: #d5a576; }
 
 /* Build the visible facade before revealing its story. */
 :global([data-phase="dis"]) .card { animation: depart 420ms ease-in both; }
@@ -66,6 +69,8 @@
 .eraHeadline { margin: 0 0 10px; color: var(--text); font-size: 19px; line-height: 1.4; font-weight: 600; font-family: var(--font-unified); }
 .eraDetails { margin: 0; font-size: 13px; color: var(--text-muted); line-height: 1.8; font-family: var(--font-unified); }
 .eraRole { margin: 10px 0 0; color: var(--text-muted); font-size: 12px; font-style: italic; line-height: 1.7; font-family: var(--font-unified); }
+.eraSource { margin-top: 14px; padding: 9px 12px; background: var(--bg-card); border: 1px solid var(--border); border-left: 2px solid var(--accent); border-radius: 2px; font-size: 11px; line-height: 1.6; color: var(--text-muted); font-family: var(--font-unified); }
+.sourceTag { color: var(--accent); font-weight: 600; margin-right: 6px; }
 .priceIndex { margin-top: 18px; border: 1px solid var(--border); padding: 16px; }
 .priceTitle { margin: 0 0 10px; font-size: 11px; line-height: 1.6; font-weight: 600; font-family: var(--font-unified); letter-spacing: 0.8px; color: var(--accent); }
 .priceRow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 12px; line-height: 1.6; font-family: var(--font-unified); }

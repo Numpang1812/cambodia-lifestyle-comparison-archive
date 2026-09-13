@@ -17,7 +17,7 @@ const collection = {
   curator: "Tyvirakpoung Piseth",
 
   // Where does your knowledge come from? A person, a place, a community.
-  source: "To be gathered from my father and uncles.",
+  source: "Oral histories from my father and uncle (1980s heritage) & firsthand observations by Tyvirakpoung Piseth (2020s present).",
 };
 
 export default collection;

@@ -80,11 +80,13 @@ export const translations = {
     aboutTitle: "A changing country.",
     aboutTitleSub: "A connection that stays.",
     aboutDesc: "A comparison between Cambodia lifestyle in the 1980s and the current era, built for Vibe Coding Course Final Project.",
-    aboutNote: "An evolving student archive, with family stories and source material still being gathered.",
+    aboutNote: "An authentic living archive documenting 10 generational realities across 5 dual-timeline facets.",
     curatedBy: "CURATED BY",
-    source: "SOURCE",
+    source: "SOURCES & ORAL HISTORY",
+    cardSourceLabel: "Source",
     curatorName: "Tyvirakpoung Piseth",
-    sourceDesc: "To be gathered from my father and uncles.",
+    sourceDesc: "1980s Heritage: Oral history shared by My Father (Soy Piseth) & My Uncle (Leang Phally). 2020s Present: Firsthand lifestyle observations by Tyvirakpoung Piseth.",
+    entrySourceLabel: "SOURCE & ATTRIBUTION",
     
     // Footer
     footerBrand: "Khmer Living Archive / Cambodia Lifestyle",
@@ -170,11 +172,13 @@ export const translations = {
     aboutTitle: "ប្រទេសមួយដែលផ្លាស់ប្តូរ។",
     aboutTitleSub: "ទំនាក់ទំនងដែលនៅគង់វង្ស។",
     aboutDesc: "ការប្រៀបធៀបរបៀបរស់នៅរបស់ប្រជាជនកម្ពុជាក្នុងទសវត្សរ៍ឆ្នាំ១៩៨០ និងសម័យបច្ចុប្បន្ន រៀបចំសម្រាប់គម្រោងបញ្ចប់ការសិក្សាវគ្គ Vibe Coding។",
-    aboutNote: "បណ្ណសារនិស្សិតដែលកំពុងអភិវឌ្ឍ ដោយសាច់រឿងគ្រួសារ និងប្រភពឯកសារនៅតែបន្តប្រមូលបន្ថែម។",
+    aboutNote: "បណ្ណសាររស់នៅដែលកត់ត្រាការពិតជាក់ស្តែងចំនួន ១០ នៃមនុស្សពីរជំនាន់ ឆ្លងកាត់ ៥ ទិដ្ឋភាពនៃជីវិតប្រចាំថ្ងៃ។",
     curatedBy: "រៀបចំចងក្រងដោយ",
-    source: "ប្រភពព័ត៌មាន",
-    curatorName: "ទីវីរៈពង្ស ពិសិដ្ឋ",
-    sourceDesc: "ប្រមូលផ្ទាល់ពីឪពុក និងឪពុកមារបស់ខ្ញុំ។",
+    source: "ប្រភព និងប្រវត្តិផ្ទាល់មាត់",
+    cardSourceLabel: "ប្រភព",
+    curatorName: "ពិសិដ្ឋ​ ទីវីរៈពង្ស ",
+    sourceDesc: "សម័យដើមទសវត្សរ៍ ៨០: ប្រវត្តិផ្ទាល់មាត់ពី ឪពុករបស់ខ្ញុំ (សយ ពិសិដ្ឋ) និងអ៊ុំបង្កើតរបស់ខ្ញុំ (លាង ផល្លី)។ សម័យបច្ចុប្បន្ន ២០២០: ការកត់ត្រាសង្កេតផ្ទាល់ជាក់ស្តែងដោយ ពិសិដ្ឋ​​ ទីវីរៈពង្ស។",
+    entrySourceLabel: "ប្រភព និងការចងក្រង",
     
     // Footer
     footerBrand: "បណ្ណសាររស់នៅបែបខ្មែរ / របៀបរស់នៅកម្ពុជា",
@@ -218,6 +222,10 @@ export const rawCardsData = [
         en: ["⚡ Grab 24/7", "🛴 PCX & Click", "🗺️ Paved boulevards"],
         km: ["⚡ Grab ២៤ម៉ោង", "🛴 ម៉ូតូ PCX & Click", "🗺️ មហាវិថីកៅស៊ូ"],
       },
+      source: {
+        en: "Firsthand observation by Tyvirakpoung Piseth (Phnom Penh 2020s)",
+        km: "ការកត់ត្រាសង្កេតផ្ទាល់ដោយ ពិសិដ្ឋ​ ទីវីរៈពង្ស  (រាជធានីភ្នំពេញ ទសវត្សរ៍ ២០២០)",
+      },
     },
     heritage: {
       label: { en: "HERITAGE · 1980s–90s", km: "សម័យដើម · ទសវត្សរ៍ ៨០–៩០" },
@@ -236,6 +244,10 @@ export const rawCardsData = [
       chips: {
         en: ["🚲 Cyclo era", "🛞 Dirt roads", "🔑 Kick-start only"],
         km: ["🚲 សម័យស៊ីក្លូ", "🛞 ផ្លូវដីហុយ", "🔑 បញ្ឆេះដោយជើង"],
+      },
+      source: {
+        en: "My Father (Soy Piseth) & My Uncle (Leang Phally)",
+        km: "ឪពុករបស់ខ្ញុំ (សយ ពិសិដ្ឋ) និងអ៊ុំបង្កើតរបស់ខ្ញុំ (លាង ផល្លី)",
       },
     },
     caption: {
@@ -277,6 +289,10 @@ export const rawCardsData = [
         en: ["🔴 Live Telegram", "⏰ 15-min routine"],
         km: ["🔴 តេឡេក្រាមថ្នាក់រៀន", "⏰ រៀបចំខ្លួន១៥នាទី"],
       },
+      source: {
+        en: "Firsthand observation by Tyvirakpoung Piseth (student routine, Phnom Penh 2020s)",
+        km: "ការកត់ត្រាសង្កេតផ្ទាល់ដោយ ពិសិដ្ឋ​ ទីវីរៈពង្ស  (ទម្លាប់និស្សិត រាជធានីភ្នំពេញ ទសវត្សរ៍ ២០២០)",
+      },
     },
     heritage: {
       label: { en: "HERITAGE · 1980s–90s", km: "សម័យដើម · ទសវត្សរ៍ ៨០–៩០" },
@@ -285,12 +301,16 @@ export const rawCardsData = [
         km: "ការងារទាបភ្លឺ យោងធុងទឹក និងដុតចង្ក្រានអុស",
       },
       details: {
-        en: "5:00 AM start hauling water buckets from the river/pond on shoulder poles to fill clay jars (Pneang); lighting charcoal/wood stoves (Changkran) to reheat rice and fry fish before a long bike commute.",
+        en: "5:00 AM start hauling water buckets from the river/pond on shoulder poles to fill clay jars (Peang); lighting charcoal/wood stoves (Changkran) to reheat rice and fry fish before a long bike commute.",
         km: "ក្រោកម៉ោង ៥ ព្រឹកយោងទឹកពីទន្លេ ឬស្រះដោយរែកអម្រែកដាក់ពាងធំៗ ដុតចង្ក្រានអុស ឬធ្យូងកម្តៅបាយកក និងបំពងត្រី មុនធាក់កង់ទៅរៀនយ៉ាងឆ្ងាយ។",
       },
       chips: {
         en: ["🪣 River dawn", "🔥 Changkran stove"],
         km: ["🪣 រែកទឹកទាបភ្លឺ", "🔥 ចង្ក្រានអុសជើងក្រាន"],
+      },
+      source: {
+        en: "My Father (Soy Piseth) & My Uncle (Leang Phally)",
+        km: "ឪពុករបស់ខ្ញុំ (សយ ពិសិដ្ឋ) និងអ៊ុំបង្កើតរបស់ខ្ញុំ (លាង ផល្លី)",
       },
     },
     caption: {
@@ -298,7 +318,7 @@ export const rawCardsData = [
       modern: { en: "ALARMS, CLASS CHATS & BREAKFAST", km: "ម៉ោងរោទិ៍ គ្រុបតេឡេក្រាម និងអាហារពេលព្រឹក" },
     },
     keywords: [
-      "morning", "routine", "school", "wake", "alarm", "telegram", "water", "stove", "river", "pond", "bucket", "breakfast", "changkran", "pneang", "haul", "rice",
+      "morning", "routine", "school", "wake", "alarm", "telegram", "water", "stove", "river", "pond", "bucket", "breakfast", "changkran", "Peang", "haul", "rice",
       "ពេលព្រឹក", "រៀន", "សាលា", "ម៉ោងរោទិ៍", "រែកទឹក", "ពាងទឹក", "ចង្ក្រានអុស", "បាយកក", "ត្រីងៀត", "អាហារពេលព្រឹក", "តេឡេក្រាម"
     ],
   },
@@ -332,6 +352,10 @@ export const rawCardsData = [
         en: ["📺 Netflix+", "🎮 MLBB / PUBG", "💻 Digital hustles"],
         km: ["📺 មើល Netflix+", "🎮 ហ្គេម MLBB / PUBG", "💻 ការងារឌីជីថល"],
       },
+      source: {
+        en: "Firsthand observation by Tyvirakpoung Piseth (youth entertainment, Phnom Penh 2020s)",
+        km: "ការកត់ត្រាសង្កេតផ្ទាល់ដោយ ពិសិដ្ឋ​ ទីវីរៈពង្ស  (ការកម្សាន្តយុវជន រាជធានីភ្នំពេញ ទសវត្សរ៍ ២០២០)",
+      },
     },
     heritage: {
       label: { en: "HERITAGE · 1980s–90s", km: "សម័យដើម · ទសវត្សរ៍ ៨០–៩០" },
@@ -340,12 +364,16 @@ export const rawCardsData = [
         km: "ល្បែងប្រជាប្រិយ ជួបជុំនៅវត្ត និងការងារជួយសហគមន៍",
       },
       details: {
-        en: "Folk games (Sey, Chhoung, street soccer), transistor radios, cassette tapes; pocket money earned through local errands, elder massage (Chap Sos), and copying school notes.",
+        en: "Folk games (Sey, Chhoung, street soccer), transistor radios, cassette tapes; pocket money earned through local errands, elder massage, and copying school notes.",
         km: "ល្បែងប្រជាប្រិយ (ទាត់សី ចោលឈូង បាល់ទាត់លើដីខ្សាច់) វិទ្យុត្រង់ស៊ីស្ទ័រ កាសែតចម្រៀង រកលុយចាយតាមរយៈការរត់ការទិញអីវ៉ាន់ ច្របាច់កំភួនជើងឱ្យចាស់ៗ និងចម្លងមេរៀន។",
       },
       chips: {
         en: ["📻 Transistor radio", "🎖️ Folk games"],
         km: ["📻 វិទ្យុកាសែត", "🎖️ ល្បែងប្រជាប្រិយ"],
+      },
+      source: {
+        en: "My Father (Soy Piseth) & My Uncle (Leang Phally)",
+        km: "ឪពុករបស់ខ្ញុំ (សយ ពិសិដ្ឋ) និងអ៊ុំបង្កើតរបស់ខ្ញុំ (លាង ផល្លី)",
       },
     },
     caption: {
@@ -387,6 +415,10 @@ export const rawCardsData = [
         en: ["🚴 Foodpanda Now", "🍜 Nham24", "🧋 Boba culture"],
         km: ["🚴 ដឹកជញ្ជូន Foodpanda", "🍜 អេប Nham24", "🧋 វប្បធម៌តែគុជ"],
       },
+      source: {
+        en: "Firsthand observation by Tyvirakpoung Piseth (app delivery & modern food scene, 2020s)",
+        km: "ការកត់ត្រាសង្កេតផ្ទាល់ដោយ ពិសិដ្ឋ​ ទីវីរៈពង្ស  (សេវាដឹកជញ្ជូន និងម្ហូបសម័យថ្មី ទសវត្សរ៍ ២០២០)",
+      },
     },
     heritage: {
       label: { en: "HERITAGE · 1980s–90s", km: "សម័យដើម · ទសវត្សរ៍ ៨០–៩០" },
@@ -395,12 +427,16 @@ export const rawCardsData = [
         km: "កណ្តឹងរទេះ នំកាឆាយ និងជីវិតខ្វះខាតក្រោយសង្គ្រាម",
       },
       details: {
-        en: "100–500 Riel snacks; hyper-local staples only (Num Kchay, Num Krouk, Num Banh Chok, hand-pulled Skor Teanh, uncle-pushed ice cream carts); reliant on morning market hours.",
+        en: "100–500 Riel snacks; hyper-local staples only (Num Kchay, Num Krouk, Num Banh Chok, hand-pulled sticky candies, uncle-pushed ice cream carts); reliant on morning market hours.",
         km: "ចំណីញ៉ាំតម្លៃត្រឹម ១០០–៥០០ រៀល មានតែម្ហូបប្រពៃណីខ្មែរ (នំកាឆាយ នំគ្រក់ នំបញ្ចុក ស្ករទាញ ការ៉េមកោសរុញដោយកង់) និងពឹងផ្អែកលើម៉ោងផ្សារព្រឹក។",
       },
       chips: {
         en: ["🔔 Cart bells", "🪙 100–500 Riel"],
         km: ["🔔 កណ្តឹងរទេះលក់ដូរ", "🪙 តម្លៃ ១០០–៥០០ រៀល"],
+      },
+      source: {
+        en: "My Father (Soy Piseth) & My Uncle (Leang Phally)",
+        km: "ឪពុករបស់ខ្ញុំ (សយ ពិសិដ្ឋ) និងអ៊ុំបង្កើតរបស់ខ្ញុំ (លាង ផល្លី)",
       },
     },
     priceIndex: [
@@ -416,7 +452,7 @@ export const rawCardsData = [
       },
       {
         item: { en: "Iced drink", km: "ភេសជ្ជៈត្រជាក់" },
-        past: { en: "Skor Teanh ~100 Riel", km: "ស្ករទាញ ~ ១០០ រៀល" },
+        past: { en: "Iced Syrup ~100 Riel", km: "ទឹកសេរ៉ូ ~ ១០០ រៀល" },
         present: { en: "Boba ~8,000 KHR ($2.00)", km: "តែគុជ ~ ៨,០០០ រៀល ($២.០០)" },
       },
     ],
@@ -459,6 +495,10 @@ export const rawCardsData = [
         en: ["💬 IG Stories", "🐍 Breadcrumbing"],
         km: ["💬 សារ IG Stories", "🐍 ទំនាក់ទំនងមិនច្បាស់លាស់"],
       },
+      source: {
+        en: "Firsthand observation by Tyvirakpoung Piseth (contemporary dating culture, 2020s)",
+        km: "ការកត់ត្រាសង្កេតផ្ទាល់ដោយ ពិសិដ្ឋ​ ទីវីរៈពង្ស  (វប្បធម៌ណាត់ជួបយុវជន ទសវត្សរ៍ ២០២០)",
+      },
     },
     heritage: {
       label: { en: "HERITAGE · 1980s–90s", km: "សម័យដើម · ទសវត្សរ៍ ៨០–៩០" },
@@ -473,6 +513,10 @@ export const rawCardsData = [
       chips: {
         en: ["✉️ Paper notes", "🚲 Rides home"],
         km: ["✉️ សំបុត្របត់", "🚲 ជូនជិះកង់ទៅផ្ទះ"],
+      },
+      source: {
+        en: "My Father (Soy Piseth) & My Uncle (Leang Phally)",
+        km: "ឪពុករបស់ខ្ញុំ (សយ ពិសិដ្ឋ) និងអ៊ុំបង្កើតរបស់ខ្ញុំ (លាង ផល្លី)",
       },
     },
     caption: {
@@ -501,6 +545,7 @@ export function getTranslatedCard(rawCard, lang = "en") {
       details: rawCard.modern.details[l] || rawCard.modern.details.en,
       role: rawCard.modern.role?.[l] || rawCard.modern.role?.en,
       chips: rawCard.modern.chips[l] || rawCard.modern.chips.en,
+      source: rawCard.modern.source?.[l] || rawCard.modern.source?.en,
     },
     heritage: {
       label: rawCard.heritage.label[l] || rawCard.heritage.label.en,
@@ -508,6 +553,7 @@ export function getTranslatedCard(rawCard, lang = "en") {
       details: rawCard.heritage.details[l] || rawCard.heritage.details.en,
       role: rawCard.heritage.role?.[l] || rawCard.heritage.role?.en,
       chips: rawCard.heritage.chips[l] || rawCard.heritage.chips.en,
+      source: rawCard.heritage.source?.[l] || rawCard.heritage.source?.en,
     },
     priceIndex: rawCard.priceIndex?.map((row) => ({
       item: row.item[l] || row.item.en,
@@ -551,6 +597,10 @@ export function getCardHaystack(rawCard) {
     ...(rawCard.heritage?.chips?.en || []),
     ...(rawCard.heritage?.chips?.km || []),
     ...(rawCard.keywords || []),
+    rawCard.modern?.source?.en,
+    rawCard.modern?.source?.km,
+    rawCard.heritage?.source?.en,
+    rawCard.heritage?.source?.km,
     ...(rawCard.priceIndex || []).flatMap((r) => [
       r.item?.en, r.item?.km,
       r.past?.en, r.past?.km,

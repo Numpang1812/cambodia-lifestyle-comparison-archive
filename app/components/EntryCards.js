@@ -341,6 +341,11 @@ function EntryModal({ card, era, lang = "en", warping, warpPhase, warpDir, onTim
             <h3 className={styles.eraHeadline}>{data.headline}</h3>
             <p className={styles.eraDetails}>{data.details}</p>
             {data.role ? <p className={styles.eraRole}>{data.role}</p> : null}
+            {data.source ? (
+              <div className={styles.eraSource}>
+                <span className={styles.sourceTag}>{t.cardSourceLabel || t.source || "SOURCE"}:</span> {data.source}
+              </div>
+            ) : null}
           </div>
 
           <ArchivePhotoGallery card={card} era={era} lang={lang} />
@@ -490,6 +495,11 @@ export default function EntryCards({
                       </span>
                     ))}
                   </div>
+                  {data.source ? (
+                    <div className={styles.cardSource}>
+                      <span className={styles.cardSourceLabel}>{t.cardSourceLabel || "Source"}:</span> {data.source}
+                    </div>
+                  ) : null}
                   <div className={styles.cardFooter}>
                     <span>{t.stepIntoStory}</span>
                     <span aria-hidden="true">↗</span>
