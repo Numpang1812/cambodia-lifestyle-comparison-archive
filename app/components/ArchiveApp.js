@@ -7,9 +7,9 @@ import Architecture from "./Architecture";
 import Atmosphere from "./Atmosphere";
 import {
   translations,
-  filterCardsByTerms,
   getTranslatedCard,
 } from "../lib/translations";
+import { filterCardsByTerms } from "../lib/search";
 
 export default function ArchiveApp() {
   const [lang, setLang] = useState("en");
@@ -140,9 +140,9 @@ export default function ArchiveApp() {
   const suggestions = useMemo(
     () =>
       draft.trim().length
-        ? filterCardsByTerms(cards, suggestTerms, draft).slice(0, 6)
+        ? filterCardsByTerms(cards, suggestTerms, draft, era).slice(0, 6)
         : [],
-    [suggestTerms, draft]
+    [suggestTerms, draft, era]
   );
 
   const showDropdown = showSuggest && draft.trim().length > 0;

@@ -8,15 +8,17 @@ import {
   translations,
   rawCardsData as cards,
   getTranslatedCard,
+} from "../lib/translations";
+import {
   searchTerms,
   scoreCard,
   filterCardsByTerms,
-} from "../lib/translations";
+} from "../lib/search";
 
 export { cards, searchTerms };
 
-export function matches(c, terms) {
-  return scoreCard(c, terms) > 0;
+export function matches(c, terms, era = null) {
+  return scoreCard(c, terms, "", era) > 0;
 }
 
 function ChipRow({ chips }) {
@@ -422,9 +424,13 @@ export default function EntryCards({
   const t = translations[lang] || translations.en;
   const terms = useMemo(() => searchTerms(query), [query]);
 
-  // Keyword-based search matching:
-  // "romance food" matches both "romance" and "food" cards without missing results!
-  const visibleRaw = useMemo(() => filterCardsByTerms(cards, terms, query), [terms, query]);
+  // Keyword-based search matching scoped to the active era (past vs present):
+  // When browsing 1980s Heritage, queries search only past entries and keywords;
+  // when browsing 2020s Modern, queries search only present entries and keywords.
+  const visibleRaw = useMemo(
+    () => filterCardsByTerms(cards, terms, query, era),
+    [terms, query, era]
+  );
   const visible = useMemo(
     () => visibleRaw.map((c) => getTranslatedCard(c, lang)),
     [visibleRaw, lang]

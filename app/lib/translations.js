@@ -254,9 +254,17 @@ export const rawCardsData = [
       heritage: { en: "PEDALS & CYCLO RIDES", km: "ការធាក់កង់ និងជិះស៊ីក្លូ" },
       modern: { en: "SMART KEYS & CITY STREETS", km: "សោស្មាតឃី និងដងវិថីក្រុង" },
     },
-    keywords: [
-      "commute", "mobility", "transport", "traffic", "scooter", "honda", "pcx", "click", "grab", "boulevard", "bicycle", "cyclo", "bike", "dirt", "road", "viva", "chaly", "c70", "dame", "wheel", "ride",
-      "ធ្វើដំណើរ", "មធ្យោបាយ", "ជិះកង់", "កង់", "ស៊ីក្លូ", "ម៉ូតូ", "ឡាន", "ផ្លូវ", "ហ្គ្រេប", "ផ្លូវដី", "ចរាចរណ៍", "មហាវិថី"
+    commonKeywords: [
+      "commute", "mobility", "transport", "traffic", "road", "wheel", "ride",
+      "ធ្វើដំណើរ", "មធ្យោបាយ", "ផ្លូវ", "ចរាចរណ៍"
+    ],
+    heritageKeywords: [
+      "bicycle", "cyclo", "bike", "dirt", "viva", "chaly", "c70", "dame", "steel", "kick-start", "suzuki",
+      "ជិះកង់", "កង់", "ស៊ីក្លូ", "ផ្លូវដី", "អាសង់", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+    ],
+    modernKeywords: [
+      "scooter", "honda", "pcx", "click", "grab", "boulevard", "smart key", "zoomer", "automatic",
+      "ហ្គ្រេប", "មហាវិថី", "ម៉ូតូ", "ឡាន", "ស្កូតទ័រ", "ពិសិដ្ឋ ទីវីរៈពង្ស"
     ],
   },
   {
@@ -317,9 +325,17 @@ export const rawCardsData = [
       heritage: { en: "WATER JARS & WOOD-FIRED MORNINGS", km: "ពាងទឹក និងចង្ក្រានអុសពេលព្រឹក" },
       modern: { en: "ALARMS, CLASS CHATS & BREAKFAST", km: "ម៉ោងរោទិ៍ គ្រុបតេឡេក្រាម និងអាហារពេលព្រឹក" },
     },
-    keywords: [
-      "morning", "routine", "school", "wake", "alarm", "telegram", "water", "stove", "river", "pond", "bucket", "breakfast", "changkran", "Peang", "haul", "rice",
-      "ពេលព្រឹក", "រៀន", "សាលា", "ម៉ោងរោទិ៍", "រែកទឹក", "ពាងទឹក", "ចង្ក្រានអុស", "បាយកក", "ត្រីងៀត", "អាហារពេលព្រឹក", "តេឡេក្រាម"
+    commonKeywords: [
+      "morning", "routine", "school", "wake", "breakfast", "rice",
+      "ពេលព្រឹក", "រៀន", "សាលា", "អាហារពេលព្រឹក"
+    ],
+    heritageKeywords: [
+      "water", "stove", "river", "pond", "bucket", "changkran", "peang", "pneang", "haul", "charcoal", "fish", "firewood", "clay jar", "shoulder pole",
+      "រែកទឹក", "ពាងទឹក", "ចង្ក្រានអុស", "បាយកក", "ត្រីងៀត", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+    ],
+    modernKeywords: [
+      "alarm", "telegram", "smartphone", "heater", "running water", "instant", "chat", "delivery", "class", "15-minute",
+      "ម៉ោងរោទិ៍", "តេឡេក្រាម", "ងូតទឹក", "ពិសិដ្ឋ ទីវីរៈពង្ស"
     ],
   },
   {
@@ -380,9 +396,17 @@ export const rawCardsData = [
       heritage: { en: "SEY, CASSETTES & OPEN AIR", km: "ការទាត់សី កាសែតចម្រៀង និងទីវាល" },
       modern: { en: "PLAY, STREAM & CREATE", km: "លេងហ្គេម មើលវីដេអូ និងធ្វើការងារឌីជីថល" },
     },
-    keywords: [
-      "free time", "entertainment", "hobby", "games", "leisure", "side hustle", "freelance", "youtube", "netflix", "pubg", "mlbb", "aeon", "mall", "cafe", "sey", "chhoung", "radio", "cassette", "pagoda", "soccer", "music",
-      "ពេលទំនេរ", "កម្សាន្ត", "ហ្គេម", "លេង", "ទាត់សី", "ចោលឈូង", "វិទ្យុ", "កាសែត", "អ៊ីអន", "ហាងកាហ្វេ", "វត្តអារាម", "ច្របាច់ជើង", "ចម្រៀង"
+    commonKeywords: [
+      "free time", "entertainment", "hobby", "games", "leisure", "music", "play", "hustle",
+      "ពេលទំនេរ", "កម្សាន្ត", "ហ្គេម", "លេង", "ចម្រៀង"
+    ],
+    heritageKeywords: [
+      "sey", "chhoung", "radio", "cassette", "pagoda", "soccer", "errands", "massage", "chap sos", "copy", "notes", "transistor", "pocket money",
+      "ទាត់សី", "ចោលឈូង", "វិទ្យុ", "កាសែត", "វត្តអារាម", "ច្របាច់ជើង", "ចម្លងមេរៀន", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+    ],
+    modernKeywords: [
+      "youtube", "netflix", "pubg", "mlbb", "aeon", "mall", "cafe", "freelance", "side hustle", "coding", "mobile gaming", "streaming", "screen",
+      "អ៊ីអន", "ផ្សារទំនើប", "ហាងកាហ្វេ", "សរសេរកូដ", "ពិសិដ្ឋ ទីវីរៈពង្ស"
     ],
   },
   {
@@ -460,9 +484,17 @@ export const rawCardsData = [
       heritage: { en: "CHIVE CAKES & CART BELLS", km: "នំកាឆាយ និងកណ្តឹងរទេះលក់ដូរ" },
       modern: { en: "BOBA & DOORSTEP DELIVERY", km: "តែគុជ និងសេវាដឹកដល់កន្លែង" },
     },
-    keywords: [
-      "street food", "cost living", "food", "snack", "riel", "boba", "nham24", "foodpanda", "delivery", "num kchay", "num krouk", "banh chok", "skor teanh", "ice cream", "market", "bbq", "price", "eat",
-      "ម្ហូប", "អាហារ", "ចំណី", "នំកាឆាយ", "នំគ្រក់", "នំបញ្ចុក", "ស្ករទាញ", "តែគុជ", "សាច់អាំង", "តម្លៃ", "លុយរៀល", "ផ្សារព្រឹក", "ញ៉ាំ", "ឆ្ងាញ់"
+    commonKeywords: [
+      "street food", "cost living", "food", "snack", "riel", "market", "price", "eat", "drink",
+      "ម្ហូប", "អាហារ", "ចំណី", "តម្លៃ", "លុយរៀល", "ញ៉ាំ", "ឆ្ងាញ់"
+    ],
+    heritageKeywords: [
+      "num kchay", "num krouk", "banh chok", "skor teanh", "ice cream", "cart", "bell", "scarcity", "post-war", "morning market", "syrup", "iced syrup", "100 riel", "500 riel",
+      "នំកាឆាយ", "នំគ្រក់", "នំបញ្ចុក", "ស្ករទាញ", "ទឹកសេរ៉ូ", "ការ៉េមកោស", "កណ្តឹង", "ផ្សារព្រឹក", "រទេះ", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+    ],
+    modernKeywords: [
+      "boba", "nham24", "foodpanda", "delivery", "korean", "bbq", "sushi", "japanese", "milk tea", "khr", "dollar", "app", "on-demand",
+      "តែគុជ", "សាច់អាំង", "ស៊ូស៊ី", "ដឹកជញ្ជូន", "ពិសិដ្ឋ ទីវីរៈពង្ស"
     ],
   },
   {
@@ -523,9 +555,17 @@ export const rawCardsData = [
       heritage: { en: "PAPER NOTES & RIDES HOME", km: "សំបុត្រក្រដាស និងការជូនទៅផ្ទះ" },
       modern: { en: "STORIES, HEARTS & TYPING DOTS", km: "ស្ទូរី បេះដូង និងសារជជែក" },
     },
-    keywords: [
-      "romance", "dating", "love", "couple", "paper note", "folded", "bicycle ride", "ig", "instagram", "story", "confession", "relationship", "fwb", "situationship", "heart", "date",
-      "ស្នេហា", "សង្សារ", "ណាត់ជួប", "សំបុត្រ", "ស្រឡាញ់", "ជិះកង់ជូន", "ជជែកស្នេហ៍", "បេះដូង", "គូស្នេហ៍"
+    commonKeywords: [
+      "romance", "dating", "love", "couple", "date", "heart", "confession",
+      "ស្នេហា", "សង្សារ", "ណាត់ជួប", "ស្រឡាញ់", "បេះដូង", "គូស្នេហ៍"
+    ],
+    heritageKeywords: [
+      "paper note", "folded", "bicycle ride", "intentions", "genuine", "ride home", "escort", "letters", "honest",
+      "សំបុត្រ", "សំបុត្របត់", "ជិះកង់ជូន", "សំបុត្រស្នេហ៍", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+    ],
+    modernKeywords: [
+      "ig", "instagram", "story", "relationship", "fwb", "situationship", "breadcrumbing", "talking stage", "chat", "dm", "filter", "feed", "typing", "stories",
+      "ជជែកស្នេហ៍", "សារ", "ស្ទូរី", "ពិសិដ្ឋ ទីវីរៈពង្ស"
     ],
   },
 ];
@@ -564,139 +604,23 @@ export function getTranslatedCard(rawCard, lang = "en") {
       heritage: rawCard.caption?.heritage?.[l] || rawCard.caption?.heritage?.en,
       modern: rawCard.caption?.modern?.[l] || rawCard.caption?.modern?.en,
     },
-    keywords: rawCard.keywords || [],
+    commonKeywords: rawCard.commonKeywords || [],
+    heritageKeywords: rawCard.heritageKeywords || [],
+    modernKeywords: rawCard.modernKeywords || [],
+    keywords: [
+      ...(rawCard.commonKeywords || []),
+      ...(rawCard.heritageKeywords || []),
+      ...(rawCard.modernKeywords || []),
+    ],
   };
 }
 
-// Build comprehensive searchable haystack for each card
-export function getCardHaystack(rawCard) {
-  const items = [
-    rawCard.num,
-    rawCard.numKm,
-    rawCard.slug,
-    rawCard.topic?.en,
-    rawCard.topic?.km,
-    rawCard.modern?.label?.en,
-    rawCard.modern?.label?.km,
-    rawCard.modern?.headline?.en,
-    rawCard.modern?.headline?.km,
-    rawCard.modern?.details?.en,
-    rawCard.modern?.details?.km,
-    rawCard.modern?.role?.en,
-    rawCard.modern?.role?.km,
-    ...(rawCard.modern?.chips?.en || []),
-    ...(rawCard.modern?.chips?.km || []),
-    rawCard.heritage?.label?.en,
-    rawCard.heritage?.label?.km,
-    rawCard.heritage?.headline?.en,
-    rawCard.heritage?.headline?.km,
-    rawCard.heritage?.details?.en,
-    rawCard.heritage?.details?.km,
-    rawCard.heritage?.role?.en,
-    rawCard.heritage?.role?.km,
-    ...(rawCard.heritage?.chips?.en || []),
-    ...(rawCard.heritage?.chips?.km || []),
-    ...(rawCard.keywords || []),
-    rawCard.modern?.source?.en,
-    rawCard.modern?.source?.km,
-    rawCard.heritage?.source?.en,
-    rawCard.heritage?.source?.km,
-    ...(rawCard.priceIndex || []).flatMap((r) => [
-      r.item?.en, r.item?.km,
-      r.past?.en, r.past?.km,
-      r.present?.en, r.present?.km
-    ]),
-  ];
+// Re-export modular search functions from dedicated search module
+export {
+  getCardHaystack,
+  getActiveKeywords,
+  searchTerms,
+  scoreCard,
+  filterCardsByTerms,
+} from "./search.js";
 
-  return items.filter(Boolean).join(" ").toLowerCase();
-}
-
-// Parse search input into clean keywords
-export function searchTerms(query) {
-  if (!query) return [];
-  const stopWords = new Set([
-    "and", "or", "the", "in", "of", "to", "for", "with", "a", "an",
-    "&", "+", "vs", "versus",
-    "និង", "ឬ", "នៃ", "របស់", "ការ", "ដើម្បី", "ជាមួយ", "ឯ", "ក្នុង"
-  ]);
-
-  const rawTokens = query
-    .trim()
-    .toLowerCase()
-    .split(/[\s,+/|&]+/)
-    .map((t) => t.trim())
-    .filter(Boolean);
-
-  const filtered = rawTokens.filter((t) => !stopWords.has(t));
-  return filtered.length > 0 ? filtered : rawTokens;
-}
-
-// Keyword-based score matching:
-// - Matches if ANY keyword hits the card's haystack
-// - Gives higher score when multiple keywords hit the same card
-// - "romance food" matches both "romance" and "food" without missing either result
-// - Supports compound / unspaced Khmer phrases (e.g. "ស្នេហាម្ហូប" matches both Card 04 and Card 05)
-export function scoreCard(rawCard, terms, rawQuery = "") {
-  if ((!terms || terms.length === 0) && !rawQuery) return 1;
-  const hay = getCardHaystack(rawCard);
-  const q = (rawQuery || "").trim().toLowerCase();
-  let score = 0;
-
-  // 1. Direct term hits in the haystack
-  for (const term of terms || []) {
-    if (!term) continue;
-    if (hay.includes(term)) {
-      score += 4;
-      // Topic match gets a large boost
-      if (
-        rawCard.topic?.en?.toLowerCase().includes(term) ||
-        rawCard.topic?.km?.includes(term)
-      ) {
-        score += 8;
-      }
-      // Exact keyword match gets a boost
-      if (rawCard.keywords?.some((k) => k.toLowerCase() === term)) {
-        score += 6;
-      }
-    } else {
-      // Substring check: if a card's keyword is contained within the search term
-      // (e.g. user typed Khmer phrase "រឿងស្នេហា" or "ម្ហូបឆ្ងាញ់")
-      const matchedKw = rawCard.keywords?.find(
-        (kw) => kw.length >= 2 && term.includes(kw.toLowerCase())
-      );
-      if (matchedKw) {
-        score += 4;
-      }
-    }
-  }
-
-  // 2. Query-level matching for non-spaced scripts (Khmer) or full phrase match
-  if (q.length >= 2) {
-    // If the entire query matches the topic directly
-    if (
-      rawCard.topic?.en?.toLowerCase().includes(q) ||
-      rawCard.topic?.km?.includes(q)
-    ) {
-      score += 10;
-    }
-
-    // Check if the query contains any of this card's keywords (handles "ស្នេហាម្ហូប")
-    for (const kw of rawCard.keywords || []) {
-      if (kw.length >= 2 && q.includes(kw.toLowerCase())) {
-        score += 4;
-        break;
-      }
-    }
-  }
-
-  return score;
-}
-
-export function filterCardsByTerms(rawCards, terms, rawQuery = "") {
-  if ((!terms || terms.length === 0) && !rawQuery) return rawCards;
-  return rawCards
-    .map((c) => ({ card: c, score: scoreCard(c, terms, rawQuery) }))
-    .filter((item) => item.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .map((item) => item.card);
-}
