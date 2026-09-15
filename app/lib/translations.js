@@ -211,8 +211,8 @@ export const rawCardsData = [
         km: "សោស្មាតឃី ម៉ូតូស្កូតទ័រទំនើប និងមហាវិថីអ៊ូអរ",
       },
       details: {
-        en: "Dominant use of automatic scooters (Honda Scoopy, PCX, Click, Zoomer-X); ride-hailing apps (Grab); paved roads.",
-        km: "ការប្រើប្រាស់ម៉ូតូអូតូជាទូទៅ (Honda Scoopy, PCX, Click, Zoomer-X) កម្មវិធីកក់ការធ្វើដំណើរ (Grab) និងផ្លូវកៅស៊ូខ្វាត់ខ្វែង។",
+        en: "Today I ride a 2016 red Honda Scoopy. Depending on distance I also walk a lot, or take ride-hailing apps — Grab, TADA, PassApp — and the City Bus. Since I was twelve, my daily commute has exceeded 10 km, so travel is simply a normal part of the day.\n\nMy father's stories and my routine cover the same distance; the difference is the surface and the machine. He covered comparable ground on a small bicycle over dirt roads, while I do it on a scooter over paved streets.\n\nA modern motorcycle now costs about $600–$1,500 depending on brand and type. Back then my father's bicycle was worth roughly $20–$30, a purchase families measured against gold.",
+        km: "សព្វថ្ងៃខ្ញុំបើក Honda Scoopy ពណ៌ក្រហម ឆ្នាំ ២០១៦។ អាស្រ័យលើចម្ងាយ ខ្ញុំក៏ដើរច្រើន ឬជិះកម្មវិធី Grab, TADA, PassApp និងឡានក្រុង។ តាំងពីអាយុ ១២ ឆ្នាំ ការធ្វើដំណើរប្រចាំថ្ងៃរបស់ខ្ញុំលើសពី ១០ គីឡូម៉ែត្រ ដូច្នេះការធ្វើដំណើរជាផ្នែកធម្មតានៃថ្ងៃ។\n\nរឿងរបស់ឪពុកខ្ញុំ និងទម្លាប់ខ្ញុំ គឺចម្ងាយដូចគ្នា ភាពខុសគ្នាគឺផ្ទៃផ្លូវ និងម៉ាស៊ីន។ គាត់ធ្វើដំណើរចម្ងាយស្មើគ្នាដោយកង់តូចលើផ្លូវដី ខណៈខ្ញុំធ្វើវាដោយម៉ូតូលើផ្លូវកៅស៊ូ។\n\nម៉ូតូសម័យថ្មីមានតម្លៃពី ៦០០ ដុល្លារ ដល់ ១,៥០០ ដុល្លារ អាស្រ័យលើម៉ាក និងប្រភេទ។ សម័យនោះកង់របស់ឪពុកខ្ញុំមានតម្លៃប្រហែល ២០–៣០ ដុល្លារ ដែលគ្រួសារវាស់ធៀបនឹងមាស។",
       },
       role: {
         en: "Daily commute doubles as personal style and status.",
@@ -234,8 +234,8 @@ export const rawCardsData = [
         km: "កង់តួដែកធ្ងន់ ស៊ីក្លូ និងម៉ូតូកន្ត្រាក់ជំនាន់ដំបូង",
       },
       details: {
-        en: "Single-gear heavy steel bicycles, Cyclos, and early step-through motorbikes (Suzuki Viva 110, Honda Chaly, Honda C70/Dame).",
-        km: "កង់ដែកធ្ងន់លេខទោល ស៊ីក្លូ និងម៉ូតូចាស់ៗសម័យមុន (Suzuki Viva 110, Honda Chaly, អាសង់កូរ៉េ C70/ដេម)។",
+        en: "In the 1980s and 90s, most people moved on foot or on small-framed bicycles. In the countryside where my father lived, the routes were dirt and gravel; he only met paved roads after moving into the city. Walking was the default, and every errand was measured in distance and daylight.\n\nLater came motorcycles, cyclos, tuk-tuks and moto-taxis, but cars stayed out of reach — the family was not wealthy enough to own one. My father grew up with only my grandmother, so no one formally taught him to ride; he learned on his own.\n\nHis first bicycle was not bought by him. My grandmother and his aunts pooled their savings to buy it. In that era large purchases were measured against gold, and a bicycle like his was worth roughly $20–$30.",
+        km: "ក្នុងទសវត្សរ៍ ៨០ និង ៩០ មនុស្សភាគច្រើនធ្វើដំណើរដោយថ្មើរជើង ឬកង់តូចៗ។ នៅជនបទដែលឪពុកខ្ញុំរស់នៅ ផ្លូវជាដី និងក្រួស គាត់បានឃើញផ្លូវកៅស៊ូតែពេលផ្លាស់មកទីក្រុង។ ការដើរជាមធ្យោបាយធម្មតា ហើយរាល់ការងារត្រូវគិតតាមចម្ងាយ និងពន្លឺថ្ងៃ។\n\nបន្ទាប់មកមានម៉ូតូ ស៊ីក្លូ ទុកទុក និងម៉ូតូឌុប ប៉ុន្តែឡាននៅតែក្រៅសមត្ថភាព — គ្រួសារមិនអាចទិញបាន។ ឪពុកខ្ញុំរស់នៅតែជាមួយយាយ ដូច្នេះគ្មាននរណាបង្រៀនគាត់បើកបរទេ គាត់រៀនដោយខ្លួនឯង។\n\nកង់ដំបូងរបស់គាត់មិនមែនគាត់ទិញទេ។ យាយ និងមីងៗរបស់គាត់ប្រមូលលុយទិញឱ្យ។ សម័យនោះ ការទិញធំៗគេវាស់ធៀបនឹងមាស ហើយកង់របស់គាត់មានតម្លៃប្រហែល ២០–៣០ ដុល្លារ។",
       },
       role: {
         en: "Manual kick-starts and long pedals on dirt roads; high value placed on a first family bike.",
@@ -290,8 +290,8 @@ export const rawCardsData = [
         km: "ពេលព្រឹកងាយស្រួល និងកាលវិភាគឌីជីថល",
       },
       details: {
-        en: "Smartphone alarms; Telegram class announcements; 15-minute routine with indoor running water and electric heaters; instant street breakfast or delivery.",
-        km: "ម៉ោងរោទិ៍ទូរស័ព្ទដៃ ការជូនដំណឹងថ្នាក់រៀនតាមតេឡេក្រាម ងូតទឹកក្តៅក្នុងផ្ទះត្រឹម១៥នាទី និងអាហារពេលព្រឹកតាមផ្លូវ ឬកុម្ម៉ង់ដឹកជញ្ជូន។",
+        en: "I am in university now and wake at seven, either to my alarm or to my father calling me. Water runs directly at home, and getting ready takes about ten minutes, while it took my father close to an hour.\n\nMy mother and aunt cook breakfast for me every morning, so I am lucky there. I rely heavily on my phone and iPad from the moment I wake, checking notifications from my class and friends.\n\nThe contrast sits in the morning itself: my father rose into physical reality — exercise, labor, then the ride to school. I rise, reach for my phone, and stay absorbed in electronics for nearly twelve hours a day.",
+        km: "ខ្ញុំកំពុងរៀននៅសាកលវិទ្យាល័យ ហើយក្រោកពីគេងម៉ោង ៧ ដោយម៉ោងរោទិ៍ ឬដោយឪពុកហៅ។ ទឹកមានប្រើដោយផ្ទាល់នៅផ្ទះ ហើយការរៀបចំខ្លួនចំណាយត្រឹម ១០ នាទី ខណៈឪពុកខ្ញុំចំណាយជិតមួយម៉ោង។\n\nម្តាយ និងមីងរបស់ខ្ញុំចម្អិនអាហារពេលព្រឹកឱ្យខ្ញុំរាល់ថ្ងៃ ដូច្នេះខ្ញុំក៏មានសំណាងដែរ។ ខ្ញុំពឹងផ្អែកយ៉ាងខ្លាំងលើទូរស័ព្ទ និង iPad តាំងពីក្រោកពីគេង ដើម្បីពិនិត្យការជូនដំណឹងពីថ្នាក់រៀន និងមិត្តភក្តិ។\n\nភាពខុសគ្នាស្ថិតនៅក្នុងពេលព្រឹកខ្លួនឯង៖ ឪពុកខ្ញុំក្រោកចូលការពិតរូបវន្ត — ហាត់ប្រាណ ធ្វើការងារ បន្ទាប់មកបើកបរទៅសាលា។ ខ្ញុំក្រោក ចាប់ទូរស័ព្ទ និងនៅជាប់នឹងឧបករណ៍អេឡិចត្រូនិកជិត ១២ ម៉ោងក្នុងមួយថ្ងៃ។",
       },
       chips: {
         en: ["🔴 Live Telegram", "⏰ 15-min routine"],
@@ -309,8 +309,8 @@ export const rawCardsData = [
         km: "ការងារទាបភ្លឺ យោងធុងទឹក និងដុតចង្ក្រានអុស",
       },
       details: {
-        en: "5:00 AM start hauling water buckets from the river/pond on shoulder poles to fill clay jars (Peang); lighting charcoal/wood stoves (Changkran) to reheat rice and fry fish before a long bike commute.",
-        km: "ក្រោកម៉ោង ៥ ព្រឹកយោងទឹកពីទន្លេ ឬស្រះដោយរែកអម្រែកដាក់ពាងធំៗ ដុតចង្ក្រានអុស ឬធ្យូងកម្តៅបាយកក និងបំពងត្រី មុនធាក់កង់ទៅរៀនយ៉ាងឆ្ងាយ។",
+        en: "My father usually woke at four or five in the morning, woken by his uncle, to fetch water from a nearby river or well and fill the Peang (clay water jars). It was the first task of the day, and the whole household depended on it.\n\nMy uncle usually cooked the rice; the food was fish, eggs, and sometimes pork or beef jerky when they were lucky. They ate simply, with soy sauce and fish sauce. School started at seven, so my father had to leave home by six to arrive on time.",
+        km: "ឪពុកខ្ញុំតែងតែក្រោកពីគេងម៉ោង ៤–៥ ព្រឹក ដោយពូរបស់គាត់ហៅ ដើម្បីទៅយកទឹកពីទន្លេ ឬអណ្តូងក្បែរផ្ទះ មកបំពេញពាង។ វាជាកិច្ចការដំបូងនៃថ្ងៃ ហើយគ្រួសារទាំងមូលពឹងផ្អែកលើវា។\n\nមីងរបស់ខ្ញុំតែងតែចម្អិនបាយ ម្ហូបមានត្រី ពងមាន់ ពេលខ្លះសាច់ជ្រូក ឬសាច់គោស្ងួត បើមានសំណាង។ ពួកគាត់ញ៉ាំសាមញ្ញៗ ជាមួយទឹកស៊ីអ៊ីវ និងទឹកត្រី។ សាលាចាប់ផ្តើមម៉ោង ៧ ដូច្នេះឪពុកខ្ញុំត្រូវចាកចេញពីផ្ទះម៉ោង ៦ ដើម្បីទាន់ពេល។",
       },
       chips: {
         en: ["🪣 River dawn", "🔥 Changkran stove"],
@@ -361,8 +361,8 @@ export const rawCardsData = [
         km: "ការតភ្ជាប់អេក្រង់ ការកម្សាន្តឌីជីថល និងផ្សារទំនើប",
       },
       details: {
-        en: "YouTube, Netflix, mobile gaming (MLBB/PUBG), coding projects; hanging out in air-conditioned malls (Aeon) and cafes; digital freelance side hustles.",
-        km: "មើល YouTube, Netflix, លេងហ្គេមទូរស័ព្ទ (MLBB, PUBG), សរសេរកូដ ដើរលេងផ្សារទំនើបត្រជាក់ៗ (Aeon) និងហាងកាហ្វេ ព្រមទាំងការងារហ្វ្រីឡេនឌីជីថល។",
+        en: "In my free time I play games like Mobile Legends, EAFC, PUBG and Minecraft, and I watch a lot of podcasts, movies and YouTube on my iPad. Entertainment today is mostly on a screen, and I can move between playing, watching and chatting without ever leaving my room.\n\nI hang out with my friends at cafes and at the Aeon shopping mall almost every day after school. Air-conditioned cafes and malls have become the default meeting places — the modern equivalent of the rice fields and pagodas in my father's time.\n\nOn top of that, I hold an internship and run my own YouTube channel. Free time and work now overlap; the same phone and iPad I relax with also carry my content and side income.",
+        km: "ក្នុងពេលទំនេរ ខ្ញុំលេងហ្គេមដូចជា Mobile Legends, EAFC, PUBG និង Minecraft ហើយមើលផតខាស ខ្សែភាពយន្ត និង YouTube ច្រើនតាម iPad។ ការកម្សាន្តសព្វថ្ងៃភាគច្រើននៅលើអេក្រង់ ហើយខ្ញុំអាចប្តូរពីលេង មើល ទៅជជែក ដោយមិនចាំបាច់ចាកចេញពីបន្ទប់។\n\nខ្ញុំទៅលេងជាមួយមិត្តភក្តិនៅហាងកាហ្វេ និងផ្សារទំនើប Aeon ស្ទើរតែរាល់ថ្ងៃបន្ទាប់ពីសាលា។ ហាងកាហ្វេ និងផ្សារដែលមានម៉ាស៊ីនត្រជាក់ក្លាយជាកន្លែងជួបជុំធម្មតា — ជំនួសវាលស្រែ និងវត្តអារាមក្នុងសម័យឪពុកខ្ញុំ។\n\nលើសពីនេះ ខ្ញុំក៏មានការហាត់ការ (internship) និងឆានែល YouTube ផ្ទាល់ខ្លួន។ ពេលទំនេរ និងការងារឥឡូវលាយឡំគ្នា ទូរស័ព្ទ និង iPad ដែលខ្ញុំសម្រាកក៏ជាឧបករណ៍បង្កើតខ្លឹមសារ និងចំណូលបន្ថែមដែរ។",
       },
       chips: {
         en: ["📺 Netflix+", "🎮 MLBB / PUBG", "💻 Digital hustles"],
@@ -380,8 +380,8 @@ export const rawCardsData = [
         km: "ល្បែងប្រជាប្រិយ ជួបជុំនៅវត្ត និងការងារជួយសហគមន៍",
       },
       details: {
-        en: "Folk games (Sey, Chhoung, street soccer), transistor radios, cassette tapes; pocket money earned through local errands, elder massage, and copying school notes.",
-        km: "ល្បែងប្រជាប្រិយ (ទាត់សី ចោលឈូង បាល់ទាត់លើដីខ្សាច់) វិទ្យុត្រង់ស៊ីស្ទ័រ កាសែតចម្រៀង រកលុយចាយតាមរយៈការរត់ការទិញអីវ៉ាន់ ច្របាច់កំភួនជើងឱ្យចាស់ៗ និងចម្លងមេរៀន។",
+        en: "After school and chores, my father usually hung out with his friends. Their activities were simple — they mostly sat, talked and joked around. When they did play, it was real-world games: Sey, jumping, swimming in the river, volleyball and the like.\n\nThey listened to radio music, and gathered at rice fields, schools and pagodas; most community events back then were held at the pagoda anyway.\n\nMy father earned his pocket money by massaging older people, tutoring, running errands and coining — a traditional healing act of applying balm to the skin and scratching it with a coin until it turns red.",
+        km: "បន្ទាប់ពីសាលា និងការងារផ្ទះ ឪពុកខ្ញុំតែងតែទៅលេងជាមួយមិត្តភក្តិ។ សកម្មភាពពួកគាត់សាមញ្ញណាស់ — ភាគច្រើនអង្គុយ និយាយ និងលេងសើចគ្នា។ ពេលលេងវិញ ជាល្បែងក្នុងជីវិតពិត៖ ទាត់សី លោតហាត់ ហែលទឹកក្នុងទន្លេ បាល់ទាត់ និងផ្សេងទៀត។\n\nពួកគាត់ស្តាប់ចម្រៀងតាមវិទ្យុ ហើយជួបជុំគ្នានៅវាលស្រែ សាលា និងវត្តអារាម ដោយកម្មវិធីសហគមន៍សម័យនោះភាគច្រើនរៀបចំនៅវត្ត។\n\nឪពុកខ្ញុំរកលុយចាយដោយការច្របាច់កំភួនជើងចាស់ៗ បង្រៀនមេរៀន រត់ការ និងកូនកាក់ — វិធីព្យាបាលប្រពៃណី ដោយលាបថ្នាំបន្ទោប រួចកោសស្បែកដោយកាក់ រហូតឡើងក្រហម។",
       },
       chips: {
         en: ["📻 Transistor radio", "🎖️ Folk games"],
@@ -432,8 +432,8 @@ export const rawCardsData = [
         km: "រសជាតិចម្រុះជាតិសាសន៍ តែគុជ និងសេវាដឹកជញ្ជូនរហ័ស",
       },
       details: {
-        en: "Base street snacks start around 4,000 KHR ($1.00); unlimited access to Korean BBQ, Japanese sushi, milk tea, and app delivery (Nham24/Foodpanda).",
-        km: "ចំណីតាមផ្លូវចាប់ពី ៤,០០០ រៀល ($១.០០) ឡើងទៅ មានទាំងសាច់អាំងកូរ៉េ ស៊ូស៊ីជប៉ុន តែគុជ និងកុម្ម៉ង់តាមអេប (Nham24, Foodpanda)។",
+        en: "Now I can eat almost anything I crave — Korean, Japanese, fast food, traditional Cambodian, Chinese cuisine, hotpot and buffets, plus coffees and cakes. Convenience has no real limit.\n\nBut it comes with a price. Even the cheapest candy or ice-cream stick starts from 500 Riel; a bowl meal typically runs 4,000–5,000 Riel. Air-conditioned stores start around $3–$4, and buffets from $7–$8. Food is far more expensive than in my father's era.\n\nI do use delivery apps, something that did not exist back then. I don't rely on them much, though — only when I need food at home, and since I'm rarely home, that is not often.",
+        km: "ឥឡូវនេះ ខ្ញុំអាចញ៉ាំស្ទើរតែអ្វីៗដែលខ្ញុំចង់៖ ម្ហូបកូរ៉េ ជប៉ុន អាហាររហ័ស ម្ហូបខ្មែរប្រពៃណី ម្ហូបចិន ស៊ុបហតផត ប៊ូហ្វេ ព្រមទាំងកាហ្វេ និងនំ។ ភាពងាយស្រួលគ្មានដែនកំណត់ពិតៗ។\n\nប៉ុន្តែវាមកជាមួយតម្លៃ។ សូម្បីស្ករ ឬការ៉េមដើមថោកបំផុតក៏ចាប់ផ្តើមពី ៥០០ រៀលឡើងទៅ ហើយអាហារមួយចានមានតម្លៃធម្មតា ៤,០០០–៥,០០០ រៀល។ ហាងមានម៉ាស៊ីនត្រជាក់ចាប់ផ្តើមពី ៣–៤ ដុល្លារ ហើយប៊ូហ្វេចាប់ផ្តើមពី ៧–៨ ដុល្លារ។ អាហារថ្លៃជាងសម័យឪពុកខ្ញុំច្រើនណាស់។\n\nខ្ញុំប្រើកម្មវិធីដឹកជញ្ជូន ដែលសម័យនោះមិនមានទេ។ ប៉ុន្តែខ្ញុំមិនសូវពឹងផ្អែកលើវាខ្លាំងទេ — តែពេលខ្ញុំត្រូវការអាហារនៅផ្ទះ ហើយដោយសារខ្ញុំមិនសូវនៅផ្ទះ ក៏មិនសូវប្រើដែរ។",
       },
       chips: {
         en: ["🚴 Foodpanda Now", "🍜 Nham24", "🧋 Boba culture"],
@@ -451,8 +451,8 @@ export const rawCardsData = [
         km: "កណ្តឹងរទេះ នំកាឆាយ និងជីវិតខ្វះខាតក្រោយសង្គ្រាម",
       },
       details: {
-        en: "100–500 Riel snacks; hyper-local staples only (Num Kchay, Num Krouk, Num Banh Chok, hand-pulled sticky candies, uncle-pushed ice cream carts); reliant on morning market hours.",
-        km: "ចំណីញ៉ាំតម្លៃត្រឹម ១០០–៥០០ រៀល មានតែម្ហូបប្រពៃណីខ្មែរ (នំកាឆាយ នំគ្រក់ នំបញ្ចុក ស្ករទាញ ការ៉េមកោសរុញដោយកង់) និងពឹងផ្អែកលើម៉ោងផ្សារព្រឹក។",
+        en: "My father ate whatever was around. His street snacks were Num Pum (Cambodian waffles), Num Kchay, Num Krouk, Num Banh Chok, hand-pulled sticky candies and fruit ice cream. An ice-cream stick cost roughly 100 Riel.\n\nVendors sold from carts at random times, usually during the day. Because it was post-war, not much was available — there were few shops, and people ate what they could find.\n\nAs for drinks, there were Pepsi and Coke bottles, but the popular choices were shaved ice with syrup, Terk Sero, sugar-cane juice and iced water. Ice itself was very rare then, which made a cold drink a small luxury.",
+        km: "ឪពុកខ្ញុំញ៉ាំអ្វីដែលមាន។ ចំណីតាមផ្លូវរបស់គាត់មាន នំពុម (នំដូនតីខ្មែរ), នំកាឆាយ, នំគ្រក់, នំបញ្ចុក, ស្ករទាញ និងការ៉េមផ្លែឈើ។ ការ៉េមដើមមួយមានតម្លៃប្រហែល ១០០ រៀល។\n\nអ្នកលក់លក់តាមរទេះក្នុងពេលវេលាមិនកំណត់ ភាគច្រើនពេលថ្ងៃ។ ដោយសារជាសម័យក្រោយសង្គ្រាម ទំនិញមិនសូវមាន — ហាងច្រើនមិនមាន ហើយមនុស្សញ៉ាំអ្វីដែលរកបាន។\n\nចំណែកភេសជ្ជៈ មានដបកូកា និងប៉េបស៊ី ប៉ុន្តែពេញនិយមគឺ ទឹកកកដាក់សេរ៉ូ, ទឹកសេរ៉ូ, ទឹកអំពៅ និងទឹកត្រជាក់។ តាមពិត ទឹកកកនៅកម្រខ្លាំងណាស់ ដែលធ្វើឱ្យភេសជ្ជៈត្រជាក់ក្លាយជាភាពប្រណីតតូចមួយ។",
       },
       chips: {
         en: ["🔔 Cart bells", "🪙 100–500 Riel"],
@@ -520,8 +520,8 @@ export const rawCardsData = [
         km: "រូបភាពលើបណ្តាញសង្គម ដំណាក់កាលជជែក និងភាពមិនច្បាស់លាស់",
       },
       details: {
-        en: "Romance filtered through Instagram stories and messaging rules; high fear of direct confession; ambiguous labels (situationships, breadcrumbing, FWB).",
-        km: "ស្នេហាតាមរយៈ Instagram stories និងច្បាប់ឆ្លើយឆ្លងសារ ការខ្លាចមិនហ៊ានសារភាពត្រង់ៗ ទំនាក់ទំនងមិនច្បាស់លាស់ (situationship, talking stage)។",
+        en: "Dating today starts through many routes — random events, classmates, Instagram, dating apps and even video games.\n\nIt is complicated because social media defines a long set of stages, like the three-month talking stage and similar unwritten rules. People hesitate to confess their feelings because they never believe the timing is right.\n\nSome use a new partner as a rebound to heal, which is messy. Cheating existed before too, but now it also counts when you are not officially dating — when you are caught in an undefined stage whose boundaries neither person has set.",
+        km: "ការណាត់ជួបសព្វថ្ងៃចាប់ផ្តើមតាមវិធីច្រើន — ជួបដោយចៃដន្យ មិត្តរួមថ្នាក់ Instagram កម្មវិធីណាត់ជួប និងសូម្បីហ្គេមវីដេអូ។\n\nវាស្មុគស្មាញ ព្រោះបណ្តាញសង្គមកំណត់ដំណាក់កាលជាច្រើន ដូចជាច្បាប់ \"talking stage\" ៣ ខែ និងវិធានមិនសរសេរផ្សេងទៀត។ មនុស្សស្ទាក់ស្ទើរក្នុងការសារភាពចិត្ត ព្រោះពួកគេគិតថាពេលវេលាមិនដែលត្រឹមត្រូវ។\n\nអ្នកខ្លះប្រើដៃគូថ្មីជា rebound ដើម្បីព្យាបាលចិត្ត ដែលវាច្របូកច្របល់ណាស់។ ការក្បត់ចិត្តមានតាំងពីមុនដែរ ប៉ុន្តែឥឡូវត្រូវបានរាប់បញ្ចូលទៀត ទោះបីអ្នកមិនទាន់កំពុងណាត់ជួបផ្លូវការ — ពេលអ្នកជាប់នៅក្នុងដំណាក់កាលមិនច្បាស់លាស់ ដែលគ្មានភាគីណាមួយកំណត់ព្រំដែន។",
       },
       chips: {
         en: ["💬 IG Stories", "🐍 Breadcrumbing"],
@@ -539,8 +539,8 @@ export const rawCardsData = [
         km: "ការសារភាពត្រង់ៗ សំបុត្រក្រដាស និងចិត្តស្មោះពិតប្រាកដ",
       },
       details: {
-        en: "No multi-month guessing games; \"I love you\" carried genuine weight; courtship happened through folded paper notes and sharing bicycle rides home.",
-        km: "គ្មានការទាយចិត្តរាប់ខែ ពាក្យថា \"ស្រឡាញ់\" មានទម្ងន់ពិតប្រាកដ ការស្រឡាញ់គ្នាតាមរយៈសំបុត្រក្រដាសបត់ និងការជូនគ្នាជិះកង់ទៅផ្ទះ។",
+        en: "My father courted my mother by flirting and calling her on a cheap mobile phone, and he asked for her house address so he could drive over and see her. Folded paper notes and shared bicycle rides were part of the era too.\n\nMarriages back then were usually arranged, but my father and uncle were an exception — they were allowed to choose their own wives. My father met my mother at Kirirom, and they married quickly, within eight or nine months.\n\nSaying \"I love you\" carried real weight for my father; he would devote his heart to that person before he ever said it.",
+        km: "ឪពុកខ្ញុំស្រលាញ់ម្តាយខ្ញុំដោយលេងសើចផ្អែម និងទូរស័ព្ទរកគាត់តាមទូរស័ព្ទចល័តថោកៗ ហើយគាត់បានសួរអាសយដ្ឋានផ្ទះរបស់គាត់ ដើម្បីបើកបរទៅជួប។ សំបុត្រក្រដាសបត់ និងការជិះកង់ជូនគ្នាក៏ជាផ្នែកនៃសម័យនោះដែរ។\n\nការរៀបការសម័យនោះភាគច្រើនជាការរៀបចំចាត់ចែង ប៉ុន្តែឪពុក និងពូរបស់ខ្ញុំជាករណីលើកលែង — ពួកគាត់អាចជ្រើសរើសប្រពន្ធដោយខ្លួនឯង។ ឪពុកខ្ញុំជួបម្តាយខ្ញុំនៅគិរីរម្យ ហើយពួកគាត់រៀបការយ៉ាងលឿន ក្នុងរយៈពេល ៨–៩ ខែ។\n\nការនិយាយថា \"ខ្ញុំស្រឡាញ់អ្នក\" មានអត្ថន័យខ្លាំងណាស់សម្រាប់ឪពុកខ្ញុំ — គាត់ត្រូវយកចិត្តទុកដាក់ចំពោះមនុស្សនោះពេញលេញ មុនពេលនិយាយ។",
       },
       chips: {
         en: ["✉️ Paper notes", "🚲 Rides home"],

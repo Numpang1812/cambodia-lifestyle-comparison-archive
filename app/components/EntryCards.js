@@ -341,7 +341,7 @@ function EntryModal({ card, era, lang = "en", warping, warpPhase, warpDir, onTim
           <div className={styles.eraPanel}>
             <p className={styles.eraLabel}>{data.label}</p>
             <h3 className={styles.eraHeadline}>{data.headline}</h3>
-            <p className={styles.eraDetails}>{data.details}</p>
+            <p className={styles.eraDetails} style={{ whiteSpace: "pre-line" }}>{data.details}</p>
             {data.role ? <p className={styles.eraRole}>{data.role}</p> : null}
             {data.source ? (
               <div className={styles.eraSource}>
