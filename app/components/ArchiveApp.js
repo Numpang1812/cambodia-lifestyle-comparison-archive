@@ -13,23 +13,6 @@ import {
 } from "../lib/translations";
 import { filterCardsByTerms } from "../lib/search";
 
-const authGroup = { display: "inline-flex", alignItems: "center", gap: "12px" };
-const authEmail = {
-  maxWidth: "180px",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-  color: "var(--text-faint)",
-};
-const authButton = {
-  padding: 0,
-  border: 0,
-  background: "transparent",
-  color: "var(--text-muted)",
-  fontSize: "12px",
-  cursor: "pointer",
-};
-
 export default function ArchiveApp() {
   const [lang, setLang] = useState("en");
   const [era, setEra] = useState("modern");
@@ -53,6 +36,8 @@ export default function ArchiveApp() {
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
   const [userEmail, setUserEmail] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -65,6 +50,24 @@ export default function ArchiveApp() {
     );
     return () => authListener.subscription.unsubscribe();
   }, [supabase]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onDocClick(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    }
+    function onKey(event) {
+      if (event.key === "Escape") setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -234,16 +237,7 @@ export default function ArchiveApp() {
               {t.navExplore} <span aria-hidden="true">↗</span>
             </a>
             <a href="#about">{t.navAbout}</a>
-            {userEmail ? (
-              <span style={authGroup}>
-                <span style={authEmail} title={userEmail}>
-                  {userEmail}
-                </span>
-                <button type="button" style={authButton} onClick={handleLogout}>
-                  Log out
-                </button>
-              </span>
-            ) : (
+            {userEmail ? null : (
               <>
                 <a href="/login">Log in</a>
                 <a href="/signup">Sign up</a>
@@ -251,36 +245,109 @@ export default function ArchiveApp() {
             )}
           </div>
 
-          {/* Language Switcher (EN / ខ្មែរ) */}
-          <div className="lang-toggle" role="group" aria-label="Language selection">
-            <button
-              type="button"
-              className={`lang-btn ${lang === "en" ? "active" : ""}`}
-              onClick={() => setLang("en")}
-              aria-pressed={lang === "en"}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              className={`lang-btn ${lang === "km" ? "active" : ""}`}
-              onClick={() => setLang("km")}
-              aria-pressed={lang === "km"}
-            >
-              ខ្មែរ
-            </button>
-          </div>
+          {userEmail ? (
+            <div className="profile" ref={menuRef}>
+              <button
+                type="button"
+                className="profile-btn"
+                onClick={() => setMenuOpen((value) => !value)}
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                aria-label="Account menu"
+              >
+                {userEmail.charAt(0).toUpperCase()}
+              </button>
+              {menuOpen ? (
+                <div className="profile-menu" role="menu">
+                  <p className="profile-menu-email" title={userEmail}>
+                    {userEmail}
+                  </p>
+                  <div className="profile-menu-row">
+                    <span className="profile-menu-label">
+                      {lang === "km" ? "ភាសា" : "Language"}
+                    </span>
+                    <div
+                      className="lang-toggle"
+                      role="group"
+                      aria-label="Language selection"
+                    >
+                      <button
+                        type="button"
+                        className={`lang-btn ${lang === "en" ? "active" : ""}`}
+                        onClick={() => setLang("en")}
+                        aria-pressed={lang === "en"}
+                      >
+                        EN
+                      </button>
+                      <button
+                        type="button"
+                        className={`lang-btn ${lang === "km" ? "active" : ""}`}
+                        onClick={() => setLang("km")}
+                        aria-pressed={lang === "km"}
+                      >
+                        ខ្មែរ
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="profile-menu-item"
+                    onClick={() => setMotionPaused((value) => !value)}
+                    aria-pressed={motionPaused}
+                  >
+                    <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
+                    {motionPaused ? t.motionOff : t.motionOn}
+                  </button>
+                  <button
+                    type="button"
+                    className="profile-menu-item"
+                    onClick={handleLogout}
+                  >
+                    Log out
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <>
+              {/* Language Switcher (EN / ខ្មែរ) */}
+              <div
+                className="lang-toggle"
+                role="group"
+                aria-label="Language selection"
+              >
+                <button
+                  type="button"
+                  className={`lang-btn ${lang === "en" ? "active" : ""}`}
+                  onClick={() => setLang("en")}
+                  aria-pressed={lang === "en"}
+                >
+                  EN
+                </button>
+                <button
+                  type="button"
+                  className={`lang-btn ${lang === "km" ? "active" : ""}`}
+                  onClick={() => setLang("km")}
+                  aria-pressed={lang === "km"}
+                >
+                  ខ្មែរ
+                </button>
+              </div>
 
-          <button
-            className="motion-toggle"
-            type="button"
-            aria-pressed={motionPaused}
-            onClick={() => setMotionPaused((value) => !value)}
-            aria-label={motionPaused ? "Enable animations" : "Pause animations"}
-          >
-            <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
-            <span>{motionPaused ? t.motionOff : t.motionOn}</span>
-          </button>
+              <button
+                className="motion-toggle"
+                type="button"
+                aria-pressed={motionPaused}
+                onClick={() => setMotionPaused((value) => !value)}
+                aria-label={
+                  motionPaused ? "Enable animations" : "Pause animations"
+                }
+              >
+                <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
+                <span>{motionPaused ? t.motionOff : t.motionOn}</span>
+              </button>
+            </>
+          )}
         </nav>
 
         <header className="siteHeader">
