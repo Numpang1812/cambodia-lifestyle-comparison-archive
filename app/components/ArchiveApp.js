@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "../lib/supabase/client";
 import EntryCards, { cards, matches, searchTerms } from "./EntryCards";
 import TimeWarp from "./TimeWarp";
 import Architecture from "./Architecture";
@@ -10,6 +12,23 @@ import {
   getTranslatedCard,
 } from "../lib/translations";
 import { filterCardsByTerms } from "../lib/search";
+
+const authGroup = { display: "inline-flex", alignItems: "center", gap: "12px" };
+const authEmail = {
+  maxWidth: "180px",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  color: "var(--text-faint)",
+};
+const authButton = {
+  padding: 0,
+  border: 0,
+  background: "transparent",
+  color: "var(--text-muted)",
+  fontSize: "12px",
+  cursor: "pointer",
+};
 
 export default function ArchiveApp() {
   const [lang, setLang] = useState("en");
@@ -30,6 +49,27 @@ export default function ArchiveApp() {
   const warpKindRef = useRef("page");
 
   const t = translations[lang] || translations.en;
+
+  const router = useRouter();
+  const supabase = useMemo(() => createClient(), []);
+  const [userEmail, setUserEmail] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUserEmail(data.session?.user?.email ?? null);
+    });
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUserEmail(session?.user?.email ?? null);
+      }
+    );
+    return () => authListener.subscription.unsubscribe();
+  }, [supabase]);
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.push("/");
+  }
 
   const ERAS = useMemo(
     () => [
@@ -194,6 +234,21 @@ export default function ArchiveApp() {
               {t.navExplore} <span aria-hidden="true">↗</span>
             </a>
             <a href="#about">{t.navAbout}</a>
+            {userEmail ? (
+              <span style={authGroup}>
+                <span style={authEmail} title={userEmail}>
+                  {userEmail}
+                </span>
+                <button type="button" style={authButton} onClick={handleLogout}>
+                  Log out
+                </button>
+              </span>
+            ) : (
+              <>
+                <a href="/login">Log in</a>
+                <a href="/signup">Sign up</a>
+              </>
+            )}
           </div>
 
           {/* Language Switcher (EN / ខ្មែរ) */}
