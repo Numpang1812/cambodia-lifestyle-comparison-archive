@@ -6,7 +6,6 @@ import styles from "./entry-cards.module.css";
 import StoryIllustration, { illustrationCaption } from "./StoryIllustration";
 import {
   translations,
-  rawCardsData as cards,
   getTranslatedCard,
 } from "../lib/translations";
 import {
@@ -15,7 +14,7 @@ import {
   filterCardsByTerms,
 } from "../lib/search";
 
-export { cards, searchTerms };
+export { searchTerms };
 
 export function matches(c, terms, era = null) {
   return scoreCard(c, terms, "", era) > 0;
@@ -407,6 +406,8 @@ function EntryModal({ card, era, lang = "en", warping, warpPhase, warpDir, onTim
 }
 
 export default function EntryCards({
+  cards = [],
+  loading = false,
   era = "modern",
   lang = "en",
   count = 5,
@@ -429,7 +430,7 @@ export default function EntryCards({
   // when browsing 2020s Modern, queries search only present entries and keywords.
   const visibleRaw = useMemo(
     () => filterCardsByTerms(cards, terms, query, era),
-    [terms, query, era]
+    [cards, terms, query, era]
   );
   const visible = useMemo(
     () => visibleRaw.map((c) => getTranslatedCard(c, lang)),
@@ -444,12 +445,36 @@ export default function EntryCards({
   return (
     <section aria-label="Lifestyle categories">
       <p className={styles.count} role="status">
-        {terms.length
+        {loading
+          ? (lang === "km" ? "កំពុងផ្ទុកទិន្នន័យបណ្ណសារ..." : "Loading archive entries...")
+          : terms.length
           ? t.storiesCountMatch(visible.length, cards.length)
           : t.storiesCountAll}
       </p>
 
-      {visible.length === 0 ? (
+      {loading ? (
+        <div className={styles.loadingState} role="status">
+          <div className={styles.loadingSpinner} aria-hidden="true" />
+          <p>
+            {lang === "km"
+              ? "កំពុងទាញយកទិន្នន័យពី Supabase..."
+              : "Loading entries from Supabase..."}
+          </p>
+        </div>
+      ) : cards.length === 0 ? (
+        <div className={styles.empty} role="status">
+          <h3>
+            {lang === "km"
+              ? "មិនទាន់មានទិន្នន័យនៅក្នុងបណ្ណសារនៅឡើយទេ"
+              : "No entries in the archive yet"}
+          </h3>
+          <p>
+            {lang === "km"
+              ? "មិនទាន់មានទិន្នន័យនៅក្នុង Supabase នៅឡើយទេ។ សូមបញ្ចូលទិន្នន័យដំបូង។"
+              : "The archive database has 0 entries. Run the migration script in Supabase to seed entries."}
+          </p>
+        </div>
+      ) : visible.length === 0 ? (
         <div className={styles.empty}>
           <h3>{t.noStoriesFound}</h3>
           <p>{t.noStoriesHint}</p>

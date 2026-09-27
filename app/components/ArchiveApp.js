@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "../lib/supabase/client";
-import EntryCards, { cards, matches, searchTerms } from "./EntryCards";
+import { fetchEntries } from "../lib/supabase/entries";
+import EntryCards, { searchTerms } from "./EntryCards";
 import TimeWarp from "./TimeWarp";
 import Architecture from "./Architecture";
 import Atmosphere from "./Atmosphere";
@@ -38,6 +39,24 @@ export default function ArchiveApp() {
   const [userEmail, setUserEmail] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    async function loadEntries() {
+      setLoading(true);
+      const data = await fetchEntries(supabase);
+      if (active) {
+        setCards(data);
+        setLoading(false);
+      }
+    }
+    loadEntries();
+    return () => {
+      active = false;
+    };
+  }, [supabase]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -185,7 +204,7 @@ export default function ArchiveApp() {
       draft.trim().length
         ? filterCardsByTerms(cards, suggestTerms, draft, era).slice(0, 6)
         : [],
-    [suggestTerms, draft, era]
+    [cards, suggestTerms, draft, era]
   );
 
   const showDropdown = showSuggest && draft.trim().length > 0;
@@ -569,6 +588,8 @@ export default function ArchiveApp() {
           </div>
 
           <EntryCards
+            cards={cards}
+            loading={loading}
             era={era}
             lang={lang}
             query={query}
