@@ -31,8 +31,9 @@ export async function middleware(request) {
 
   const { pathname } = request.nextUrl;
   const isAuthPage = pathname === "/login" || pathname === "/signup";
+  const isPublicPage = isAuthPage || pathname === "/" || pathname === "/contribute";
 
-  if (!user && !isAuthPage) {
+  if (!user && !isPublicPage) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = "";

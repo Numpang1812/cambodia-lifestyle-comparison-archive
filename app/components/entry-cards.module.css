@@ -11,6 +11,8 @@
 .cardScene :global(.architecture) { margin: -2px auto -4px; width: 100%; transition: transform 500ms ease; }
 .card:hover .cardScene :global(.architecture) { transform: translateY(-3px); }
 .sceneTag { display: block; margin: 3px 0 12px; color: var(--text-faint); font-size: 10px; font-family: var(--font-unified); letter-spacing: 0.5px; text-align: center; }
+.cardScenePhoto { width: 100%; height: 180px; object-fit: cover; border-radius: 3px; margin: 8px 0; display: block; border: 1px solid var(--border-strong); }
+.modalPhotoBanner { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; display: block; }
 .cardBody { flex: 1; display: flex; flex-direction: column; padding: 23px 23px 0; position: relative; min-height: 260px; background: linear-gradient(110deg, #a0d2c305, transparent); }
 .cardBody::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--accent-2), transparent); opacity: .35; }
 .kicker { display: block; margin: 0; font-size: 10px; line-height: 1.7; font-family: var(--font-unified); font-weight: 600; letter-spacing: 0.8px; color: var(--accent); }

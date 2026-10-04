@@ -595,11 +595,13 @@ export function getTranslatedCard(rawCard, lang = "en") {
       chips: rawCard.heritage.chips[l] || rawCard.heritage.chips.en,
       source: rawCard.heritage.source?.[l] || rawCard.heritage.source?.en,
     },
-    priceIndex: rawCard.priceIndex?.map((row) => ({
-      item: row.item[l] || row.item.en,
-      past: row.past[l] || row.past.en,
-      present: row.present[l] || row.present.en,
-    })),
+    priceIndex: Array.isArray(rawCard.priceIndex)
+      ? rawCard.priceIndex.map((row) => ({
+          item: typeof row?.item === "object" ? row.item[l] || row.item.en : row?.item || "",
+          past: typeof row?.past === "object" ? row.past[l] || row.past.en : row?.past || "",
+          present: typeof row?.present === "object" ? row.present[l] || row.present.en : row?.present || "",
+        }))
+      : null,
     caption: {
       heritage: rawCard.caption?.heritage?.[l] || rawCard.caption?.heritage?.en,
       modern: rawCard.caption?.modern?.[l] || rawCard.caption?.modern?.en,

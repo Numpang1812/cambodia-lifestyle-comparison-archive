@@ -51,7 +51,55 @@ function PriceIndex({ rows, title }) {
 
 export function getCardImages(card, era) {
   if (!card) return [];
-  const cfg = card.imageConfig || {};
+  const cfg = card.imageConfig || card.image_config || {};
+
+  const topicLabel =
+    typeof card.topic === "object"
+      ? card.topic?.en || card.topic?.km || ""
+      : card.topic || "Archive Entry";
+
+  // Build image URL using image_config
+  if (cfg.url && typeof cfg.url === "string") {
+    return [
+      {
+        src: cfg.url,
+        name: "entry-photo",
+        caption: topicLabel,
+      },
+    ];
+  }
+
+  if (cfg.path && typeof cfg.path === "string") {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+    const bucket = cfg.bucket || "photos";
+    const src = cfg.path.startsWith("http")
+      ? cfg.path
+      : `${supabaseUrl}/storage/v1/object/public/${bucket}/${cfg.path}`;
+    return [
+      {
+        src,
+        name: "entry-photo",
+        caption: topicLabel,
+      },
+    ];
+  }
+
+  if (
+    card.image &&
+    typeof card.image === "string" &&
+    (card.image.startsWith("http://") ||
+      card.image.startsWith("https://") ||
+      card.image.startsWith("/"))
+  ) {
+    return [
+      {
+        src: card.image,
+        name: "entry-photo",
+        caption: topicLabel,
+      },
+    ];
+  }
+
   const folder = cfg.folder || card.slug;
   if (!folder) return [];
 
@@ -93,7 +141,7 @@ function ArchivePhotoGallery({ card, era, lang = "en" }) {
     setIndex(0);
 
     let active = true;
-    if (folder) {
+    if (folder && !card.imageConfig?.url && !card.imageConfig?.path && !card.image) {
       fetch(`/api/gallery?folder=${folder}&prefix=${prefix}`)
         .then((res) => res.json())
         .then((data) => {
@@ -332,7 +380,17 @@ function EntryModal({ card, era, lang = "en", warping, warpPhase, warpDir, onTim
           </p>
           <h2 className={styles.title}>{card.topic}</h2>
           <div className={styles.modalArchitecture}>
-            <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
+            {Number(rawStoryNum) >= 1 && Number(rawStoryNum) <= 5 ? (
+              <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
+            ) : getCardImages(card, era)[0]?.src ? (
+              <img
+                src={getCardImages(card, era)[0].src}
+                alt={card.topic}
+                className={styles.modalPhotoBanner}
+              />
+            ) : (
+              <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
+            )}
             <span>{illustrationCaption(era, rawStoryNum, lang)}</span>
           </div>
           <ChipRow chips={data.chips} />
@@ -510,7 +568,18 @@ export default function EntryCards({
                     <span>{t.storyLabel} / {c.num}</span>
                     <span>{era === "heritage" ? (lang === "km" ? "ទសវត្សរ៍ ៨០–៩០" : "1980s–90s") : (lang === "km" ? "ទសវត្សរ៍ ២០២០" : "2020s")}</span>
                   </div>
-                  <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
+                  {Number(rawStoryNum) >= 1 && Number(rawStoryNum) <= 5 ? (
+                    <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
+                  ) : getCardImages(c, era)[0]?.src ? (
+                    <img
+                      src={getCardImages(c, era)[0].src}
+                      alt={c.topic}
+                      className={styles.cardScenePhoto}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
+                  )}
                   <span className={styles.sceneTag}>{illustrationCaption(era, rawStoryNum, lang)}</span>
                 </div>
                 <div className={styles.cardBody}>

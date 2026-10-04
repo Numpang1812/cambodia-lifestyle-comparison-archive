@@ -59,6 +59,22 @@ export default function ArchiveApp() {
   }, [supabase]);
 
   useEffect(() => {
+    if (!cards || !cards.length) return;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const entryId = params.get("entry");
+      if (entryId) {
+        const found = cards.find(
+          (c) => String(c.id) === entryId || c.slug === entryId
+        );
+        if (found) {
+          setSelected(found);
+        }
+      }
+    } catch (_) {}
+  }, [cards]);
+
+  useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setUserEmail(data.session?.user?.email ?? null);
     });
@@ -256,6 +272,9 @@ export default function ArchiveApp() {
               {t.navExplore} <span aria-hidden="true">↗</span>
             </a>
             <a href="#about">{t.navAbout}</a>
+            <a href="/contribute">
+              {lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}
+            </a>
             {userEmail ? null : (
               <>
                 <a href="/login">Log in</a>
@@ -317,6 +336,14 @@ export default function ArchiveApp() {
                     <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
                     {motionPaused ? t.motionOff : t.motionOn}
                   </button>
+                  <a
+                    href="/contribute"
+                    className="profile-menu-item"
+                    style={{ textDecoration: "none" }}
+                  >
+                    <span aria-hidden="true">+</span>
+                    {lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}
+                  </a>
                   <button
                     type="button"
                     className="profile-menu-item"

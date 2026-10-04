@@ -7,6 +7,36 @@ export function toKmNum(num) {
   return String(num).replace(/\d/g, (d) => kmDigits[d] || d);
 }
 
+function normalizePriceIndex(raw) {
+  if (!raw) return null;
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw === "string") {
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+    } catch (_) {}
+    if (raw.trim()) {
+      return [
+        {
+          item: { en: "Price Index", km: "សន្ទស្សន៍តម្លៃ" },
+          past: { en: `${raw} KHR`, km: `${toKmNum(raw)} រៀល` },
+          present: { en: "—", km: "—" },
+        },
+      ];
+    }
+  }
+  if (typeof raw === "number") {
+    return [
+      {
+        item: { en: "Price Index", km: "សន្ទស្សន៍តម្លៃ" },
+        past: { en: `${raw} KHR`, km: `${toKmNum(raw)} រៀល` },
+        present: { en: "—", km: "—" },
+      },
+    ];
+  }
+  return null;
+}
+
 // Transform raw Supabase rows into comparison card format expected by archive UI
 export function normalizeEntries(rows) {
   if (!rows || !rows.length) return [];
@@ -14,18 +44,31 @@ export function normalizeEntries(rows) {
   const cardMap = new Map();
 
   for (const row of rows) {
-    const key =
-      row.slug ||
-      (Array.isArray(row.topic) ? row.topic[0] : row.topic) ||
-      row.num ||
-      row.id;
+    const isHeritage =
+      row.timeline &&
+      (row.timeline.toLowerCase().includes("1980") ||
+        row.timeline.toLowerCase().includes("1985") ||
+        row.timeline.toLowerCase().includes("heritage") ||
+        row.timeline.toLowerCase().includes("past") ||
+        (parseInt(row.timeline, 10) >= 1800 && parseInt(row.timeline, 10) <= 1999));
+
+    const eraKey = isHeritage ? "heritage" : "modern";
+
+    // Group only if era slot is not yet taken; otherwise treat as separate entry card
+    let key = row.slug || row.id;
+    if (cardMap.has(key)) {
+      const existing = cardMap.get(key);
+      if (existing[eraKey]) {
+        key = row.id;
+      }
+    }
 
     if (!cardMap.has(key)) {
       cardMap.set(key, {
         id: row.id,
-        num: row.num || "01",
+        num: row.num || null,
         numKm: toKmNum(row.num || "01"),
-        rawNum: row.num || "01",
+        rawNum: row.num || null,
         slug: row.slug || "entry",
         topic: Array.isArray(row.topic)
           ? { en: row.topic[0] || "", km: row.topic[1] || row.topic[0] || "" }
@@ -41,7 +84,8 @@ export function normalizeEntries(rows) {
           presentCount: 2,
           ext: "png",
         },
-        priceIndex: row.price_index || null,
+        image: row.image || null,
+        priceIndex: normalizePriceIndex(row.price_index),
         commonKeywords: Array.isArray(row.keywords) ? row.keywords : [],
         heritageKeywords: [],
         modernKeywords: [],
@@ -51,20 +95,20 @@ export function normalizeEntries(rows) {
     }
 
     const card = cardMap.get(key);
-    const isHeritage =
-      row.timeline &&
-      (row.timeline.toLowerCase().includes("1980") ||
-        row.timeline.toLowerCase().includes("heritage") ||
-        row.timeline.toLowerCase().includes("past"));
+    if (row.image && !card.image) {
+      card.image = row.image;
+    }
+    if (row.image_config && !card.imageConfig?.url && !card.imageConfig?.path) {
+      card.imageConfig = row.image_config;
+    }
 
-    const eraKey = isHeritage ? "heritage" : "modern";
     const defaultLabel = isHeritage
       ? { en: "HERITAGE · 1980s–90s", km: "សម័យដើម · ទសវត្សរ៍ ៨០–៩០" }
       : { en: "MODERN · 2020s", km: "សម័យថ្មី · ទសវត្សរ៍ ២០២០" };
 
     const headline = Array.isArray(row.title)
       ? { en: row.title[0] || "", km: row.title[1] || row.title[0] || "" }
-      : { en: row.title || "", km: row.title || "" };
+      : { en: row.title || "", km: row.title_km || row.title || "" };
 
     const details = Array.isArray(row.content)
       ? { en: row.content[0] || "", km: row.content[1] || row.content[0] || "" }
@@ -105,7 +149,10 @@ export function normalizeEntries(rows) {
     }
   }
 
-  // Ensure both eras exist on each card so UI comparisons & modal warp work
+  // Ensure both eras exist on each card & assign sequential unique card numbers
+  const seenNums = new Set();
+  let nextNum = 1;
+
   return Array.from(cardMap.values()).map((card) => {
     if (!card.heritage && card.modern) {
       card.heritage = {
@@ -119,6 +166,16 @@ export function normalizeEntries(rows) {
         label: { en: "MODERN · 2020s", km: "សម័យថ្មី · ទសវត្សរ៍ ២០២០" },
       };
     }
+
+    let n = card.rawNum;
+    while (!n || seenNums.has(n)) {
+      n = String(nextNum++).padStart(2, "0");
+    }
+    seenNums.add(n);
+    card.num = n;
+    card.rawNum = n;
+    card.numKm = toKmNum(n);
+
     return card;
   });
 }
