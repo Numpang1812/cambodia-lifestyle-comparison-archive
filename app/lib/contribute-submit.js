@@ -67,3 +67,77 @@ export async function uploadAndCreateEntry({ supabase, user, trimmed, photoFile 
 
   return inserted?.[0] || null;
 }
+
+export async function updateExistingEntry({
+  supabase,
+  user,
+  entryId,
+  trimmed,
+  photoFile,
+  existingImageConfig,
+}) {
+  const {
+    data: { user: currentUser },
+  } = await supabase.auth.getUser();
+
+  if (!currentUser || currentUser.id !== user?.id) {
+    throw new Error("UNAUTHORIZED");
+  }
+
+  let finalImageConfig = existingImageConfig || null;
+
+  // If user selected a new photo, upload with random uuid path
+  if (photoFile) {
+    const rawExt = (photoFile.name.split(".").pop() || "jpg").toLowerCase();
+    const ext = rawExt === "web" ? "webp" : rawExt;
+    const randomPath = `${currentUser.id}/${crypto.randomUUID()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("photos")
+      .upload(randomPath, photoFile, {
+        contentType: photoFile.type || "image/jpeg",
+        upsert: false,
+      });
+
+    if (uploadError) throw uploadError;
+
+    const { data: urlData } = supabase.storage
+      .from("photos")
+      .getPublicUrl(randomPath);
+
+    finalImageConfig = {
+      bucket: "photos",
+      path: randomPath,
+      url: urlData.publicUrl,
+      ext: ext,
+    };
+  }
+
+  const parsedKeywords = trimmed.keywords ? JSON.parse(trimmed.keywords) : null;
+
+  // Explicit column names; .select() checks row actually updated
+  const { data: updatedRows, error: updateError } = await supabase
+    .from("entries")
+    .update({
+      title: [trimmed.title, trimmed.titleKm],
+      content: [trimmed.content],
+      timeline: trimmed.timeline,
+      topic: [trimmed.topic],
+      source: [trimmed.source],
+      price_index: trimmed.priceIndex || null,
+      keywords: parsedKeywords,
+      ...(finalImageConfig ? { image_config: finalImageConfig } : {}),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", entryId)
+    .eq("owner", currentUser.id)
+    .select();
+
+  if (updateError || !updatedRows || updatedRows.length === 0) {
+    console.error("Update failed or no row returned:", updateError || "Zero rows returned from update");
+    throw new Error("NOT_SAVED");
+  }
+
+  return updatedRows[0];
+}
+

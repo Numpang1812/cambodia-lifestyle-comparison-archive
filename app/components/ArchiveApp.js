@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "../lib/supabase/client";
-import { fetchEntries } from "../lib/supabase/entries";
+import { fetchEntries, deleteEntry } from "../lib/supabase/entries";
 import EntryCards, { searchTerms } from "./EntryCards";
 import TimeWarp from "./TimeWarp";
 import Architecture from "./Architecture";
@@ -36,6 +36,7 @@ export default function ArchiveApp() {
 
   const router = useRouter();
   const supabase = useMemo(() => createClient(), []);
+  const [currentUser, setCurrentUser] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -77,14 +78,41 @@ export default function ArchiveApp() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       setUserEmail(data.session?.user?.email ?? null);
+      setCurrentUser(data.session?.user ?? null);
     });
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUserEmail(session?.user?.email ?? null);
+        setCurrentUser(session?.user ?? null);
       }
     );
     return () => authListener.subscription.unsubscribe();
   }, [supabase]);
+
+  async function handleDeleteCard(card) {
+    if (!card || !currentUser) return;
+    const topicTitle = typeof card.topic === "object" ? card.topic.en : card.topic;
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${topicTitle}"? This action cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    try {
+      await deleteEntry(supabase, card.id, currentUser.id);
+      setCards((prev) => prev.filter((c) => c.id !== card.id));
+      setSelected(null);
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("entry")) {
+          url.searchParams.delete("entry");
+          window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+        }
+      }
+    } catch (err) {
+      console.error("Delete operation failed:", err);
+      alert("That change wasn't saved");
+    }
+  }
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -625,6 +653,7 @@ export default function ArchiveApp() {
             warping={warping}
             warpPhase={warpPhase}
             warpDir={warpDir}
+            currentUser={currentUser}
             onSelect={(c) => {
               setSelected(c);
               setModalEra(era);
@@ -632,6 +661,7 @@ export default function ArchiveApp() {
             onTimeWarp={warpModal}
             onClose={closeEntry}
             onClearSearch={clearSearch}
+            onDelete={handleDeleteCard}
           />
         </main>
 

@@ -273,7 +273,18 @@ function ArchivePhotoGallery({ card, era, lang = "en" }) {
   );
 }
 
-function EntryModal({ card, era, lang = "en", warping, warpPhase, warpDir, onTimeWarp, onClose }) {
+function EntryModal({
+  card,
+  era,
+  lang = "en",
+  currentUser = null,
+  warping,
+  warpPhase,
+  warpDir,
+  onTimeWarp,
+  onClose,
+  onDelete,
+}) {
   const t = translations[lang] || translations.en;
   const [mounted, setMounted] = useState(false);
   const dialogRef = useRef(null);
@@ -455,6 +466,27 @@ function EntryModal({ card, era, lang = "en", warping, warpPhase, warpDir, onTim
               </span>
             )}
           </button>
+
+          {/* Owner controls: show Edit and Delete buttons only when logged-in user is the entry's owner */}
+          {currentUser?.id && card?.owner && currentUser.id === card.owner ? (
+            <div className={styles.ownerControls}>
+              <a
+                href={`/contribute?edit=${card.id}`}
+                className={styles.editEntryBtn}
+                aria-label="Edit this archive entry"
+              >
+                <span aria-hidden="true">✎</span> {lang === "km" ? "កែប្រែព័ត៌មាន" : "Edit Entry"}
+              </a>
+              <button
+                type="button"
+                className={styles.deleteEntryBtn}
+                onClick={() => onDelete?.(card)}
+                aria-label="Delete this archive entry"
+              >
+                <span aria-hidden="true">✕</span> {lang === "km" ? "លុបព័ត៌មាន" : "Delete Entry"}
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
@@ -475,10 +507,12 @@ export default function EntryCards({
   warping = false,
   warpPhase = "idle",
   warpDir = "fwd",
+  currentUser = null,
   onSelect,
   onTimeWarp,
   onClose,
   onClearSearch,
+  onDelete,
 }) {
   const t = translations[lang] || translations.en;
   const terms = useMemo(() => searchTerms(query), [query]);
@@ -616,11 +650,13 @@ export default function EntryCards({
           card={translatedSelected}
           era={modalEra ?? era}
           lang={lang}
+          currentUser={currentUser}
           warping={warping}
           warpPhase={warpPhase}
           warpDir={warpDir}
           onTimeWarp={onTimeWarp}
           onClose={onClose}
+          onDelete={onDelete}
         />
       ) : null}
     </section>

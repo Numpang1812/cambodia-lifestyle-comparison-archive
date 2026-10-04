@@ -15,6 +15,7 @@ export default function ContributeFormExtraFields({
   setKeywords,
   errors,
   isSubmitting,
+  isEdit = false,
 }) {
   return (
     <>
@@ -25,6 +26,7 @@ export default function ContributeFormExtraFields({
         onChange={onFileSelect}
         error={errors.image}
         disabled={isSubmitting}
+        isEdit={isEdit}
       />
 
       <ContributeTextField

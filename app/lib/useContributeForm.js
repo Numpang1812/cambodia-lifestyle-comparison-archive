@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "./supabase/client";
-import { uploadAndCreateEntry } from "./contribute-submit";
+import { uploadAndCreateEntry, updateExistingEntry } from "./contribute-submit";
 import {
   validateTitle,
   validateTitleKm,
@@ -16,18 +16,51 @@ import {
   validateKeywords,
 } from "./contribute-validation";
 
-export function useContributeForm(user) {
+export function useContributeForm(user, initialData = null) {
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [titleKm, setTitleKm] = useState("");
-  const [content, setContent] = useState("");
-  const [timeline, setTimeline] = useState("");
-  const [topic, setTopic] = useState("");
-  const [source, setSource] = useState("");
-  const [priceIndex, setPriceIndex] = useState("");
-  const [keywords, setKeywords] = useState("");
+  const isEdit = Boolean(initialData?.id);
+  const entryId = initialData?.id || null;
+
+  const [title, setTitle] = useState(
+    Array.isArray(initialData?.title)
+      ? initialData.title[0] || ""
+      : initialData?.title || ""
+  );
+  const [titleKm, setTitleKm] = useState(
+    Array.isArray(initialData?.title)
+      ? initialData.title[1] || ""
+      : initialData?.title_km || ""
+  );
+  const [content, setContent] = useState(
+    Array.isArray(initialData?.content)
+      ? initialData.content[0] || ""
+      : initialData?.content || ""
+  );
+  const [timeline, setTimeline] = useState(initialData?.timeline || "");
+  const [topic, setTopic] = useState(
+    Array.isArray(initialData?.topic)
+      ? initialData.topic[0] || ""
+      : initialData?.topic || ""
+  );
+  const [source, setSource] = useState(
+    Array.isArray(initialData?.source)
+      ? initialData.source[0] || ""
+      : initialData?.source || ""
+  );
+  const [priceIndex, setPriceIndex] = useState(
+    initialData?.price_index
+      ? typeof initialData.price_index === "object"
+        ? JSON.stringify(initialData.price_index)
+        : String(initialData.price_index)
+      : ""
+  );
+  const [keywords, setKeywords] = useState(
+    initialData?.keywords ? JSON.stringify(initialData.keywords) : ""
+  );
   const [photoFile, setPhotoFile] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(
+    initialData?.image_config?.url || null
+  );
 
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");
@@ -36,8 +69,10 @@ export function useContributeForm(user) {
   function handleFileSelect(e) {
     const file = e.target.files?.[0] || null;
     setPhotoFile(file);
-    setPhotoPreview(file ? URL.createObjectURL(file) : null);
+    setPhotoPreview(file ? URL.createObjectURL(file) : initialData?.image_config?.url || null);
     if (file) setErrors((prev) => ({ ...prev, image: validateImage(file) }));
+    else if (!isEdit) setErrors((prev) => ({ ...prev, image: "Photo is required." }));
+    else setErrors((prev) => ({ ...prev, image: null }));
   }
 
   async function handleSubmit(e) {
@@ -55,6 +90,9 @@ export function useContributeForm(user) {
       keywords: keywords.trim(),
     };
 
+    // Changing photo is optional on edit; if no new file chosen, keep existing photo
+    const imageError = isEdit && !photoFile ? null : validateImage(photoFile);
+
     const newErrors = {
       title: validateTitle(trimmed.title),
       title_km: validateTitleKm(trimmed.titleKm),
@@ -63,7 +101,7 @@ export function useContributeForm(user) {
       topic: validateTopic(trimmed.topic),
       source: validateSource(trimmed.source),
       price_index: validatePriceIndex(trimmed.priceIndex),
-      image: validateImage(photoFile),
+      image: imageError,
       keywords: validateKeywords(trimmed.keywords),
     };
 
@@ -74,17 +112,33 @@ export function useContributeForm(user) {
     const supabase = createClient();
 
     try {
-      const inserted = await uploadAndCreateEntry({
-        supabase,
-        user,
-        trimmed,
-        photoFile,
-      });
-      const newId = inserted?.id || "";
-      router.push(newId ? `/?entry=${newId}` : "/");
+      if (isEdit) {
+        await updateExistingEntry({
+          supabase,
+          user,
+          entryId,
+          trimmed,
+          photoFile,
+          existingImageConfig: initialData?.image_config || null,
+        });
+        router.push(`/?entry=${entryId}`);
+      } else {
+        const inserted = await uploadAndCreateEntry({
+          supabase,
+          user,
+          trimmed,
+          photoFile,
+        });
+        const newId = inserted?.id || "";
+        router.push(newId ? `/?entry=${newId}` : "/");
+      }
     } catch (err) {
-      console.error("Contribution submission failed:", err);
-      setFormError("Failed to save entry. Please check your network and try again.");
+      console.error(isEdit ? "Update entry failed:" : "Contribution submission failed:", err);
+      if (err.message === "NOT_SAVED") {
+        setFormError("That change wasn't saved");
+      } else {
+        setFormError("Failed to save entry. Please check your network and try again.");
+      }
       setIsSubmitting(false);
     }
   }

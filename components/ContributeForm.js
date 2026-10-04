@@ -6,8 +6,9 @@ import ContributeFormMetaFields from "./ContributeFormMetaFields";
 import ContributeFormExtraFields from "./ContributeFormExtraFields";
 import styles from "../app/contribute/contribute.module.css";
 
-export default function ContributeForm({ user }) {
-  const form = useContributeForm(user);
+export default function ContributeForm({ user, initialData = null }) {
+  const form = useContributeForm(user, initialData);
+  const isEdit = Boolean(initialData?.id);
 
   return (
     <form className={styles.form} onSubmit={form.handleSubmit} noValidate>
@@ -30,14 +31,18 @@ export default function ContributeForm({ user }) {
         required
       />
 
-      <ContributeFormExtraFields {...form.extraProps} />
+      <ContributeFormExtraFields {...form.extraProps} isEdit={isEdit} />
 
       <button
         type="submit"
         className={styles.submitBtn}
         disabled={form.isSubmitting}
       >
-        {form.isSubmitting ? "UPLOADING & SAVING..." : "SAVE & PUBLISH ENTRY"}
+        {form.isSubmitting
+          ? "UPLOADING & SAVING..."
+          : isEdit
+          ? "UPDATE & SAVE ENTRY"
+          : "SAVE & PUBLISH ENTRY"}
       </button>
     </form>
   );

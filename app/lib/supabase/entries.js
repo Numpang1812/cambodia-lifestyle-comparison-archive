@@ -66,6 +66,7 @@ export function normalizeEntries(rows) {
     if (!cardMap.has(key)) {
       cardMap.set(key, {
         id: row.id,
+        owner: row.owner || null,
         num: row.num || null,
         numKm: toKmNum(row.num || "01"),
         rawNum: row.num || null,
@@ -95,6 +96,9 @@ export function normalizeEntries(rows) {
     }
 
     const card = cardMap.get(key);
+    if (row.owner && !card.owner) {
+      card.owner = row.owner;
+    }
     if (row.image && !card.image) {
       card.image = row.image;
     }
@@ -200,4 +204,39 @@ export async function fetchEntries(supabase) {
     console.error("Supabase unexpected error:", err);
     return [];
   }
+}
+
+// Fetch single entry by ID
+export async function fetchEntryById(supabase, entryId) {
+  if (!supabase || !entryId) return null;
+  try {
+    const { data, error } = await supabase
+      .from("entries")
+      .select("*")
+      .eq("id", entryId)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Fetch entry by ID error:", error.message);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error("Fetch entry unexpected error:", err);
+    return null;
+  }
+}
+
+// Delete entry by ID, checking that user is owner and validating returned row from .select()
+export async function deleteEntry(supabase, entryId, ownerId) {
+  if (!supabase || !entryId) throw new Error("Missing entry ID");
+  const query = supabase.from("entries").delete().eq("id", entryId);
+  if (ownerId) query.eq("owner", ownerId);
+  const { data, error } = await query.select();
+
+  if (error || !data || data.length === 0) {
+    console.error("Delete failed or no row returned:", error || "Zero rows returned from delete");
+    throw new Error("NOT_SAVED");
+  }
+  return data[0];
 }

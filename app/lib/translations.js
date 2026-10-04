@@ -574,6 +574,8 @@ export const rawCardsData = [
 export function getTranslatedCard(rawCard, lang = "en") {
   const l = lang === "km" ? "km" : "en";
   return {
+    id: rawCard.id,
+    owner: rawCard.owner || null,
     num: l === "km" ? rawCard.numKm : rawCard.num,
     rawNum: rawCard.num,
     slug: rawCard.slug,

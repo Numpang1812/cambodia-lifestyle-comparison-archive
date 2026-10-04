@@ -10,6 +10,7 @@ export default function ContributePhotoField({
   onChange,
   error,
   disabled = false,
+  isEdit = false,
 }) {
   const inputRef = useRef(null);
   const sizeMb = file?.size ? (file.size / (1024 * 1024)).toFixed(1) + " MB" : "";
@@ -18,7 +19,7 @@ export default function ContributePhotoField({
     <div className={styles.field}>
       <div className={styles.labelRow}>
         <label htmlFor={id} className={styles.label}>
-          PHOTO <span className={styles.requiredStar}>*</span>
+          PHOTO {isEdit ? <span style={{ opacity: 0.65, fontSize: "11px", fontWeight: "normal" }}>(OPTIONAL)</span> : <span className={styles.requiredStar}>*</span>}
         </label>
         {error && <span className={styles.fieldError} role="alert">{error}</span>}
       </div>
@@ -44,7 +45,7 @@ export default function ContributePhotoField({
           <div className={styles.previewContainer}>
             <img src={previewUrl} alt="Upload preview" className={styles.previewImage} />
             <div className={styles.previewMeta}>
-              <span className={styles.previewName}>{file?.name}</span>
+              <span className={styles.previewName}>{file?.name || "Current archive photo"}</span>
               <span className={styles.previewSize}>{sizeMb}</span>
               <span className={styles.changeBtn}>Click to change photo</span>
             </div>
