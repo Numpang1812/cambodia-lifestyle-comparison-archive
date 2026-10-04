@@ -46,11 +46,22 @@ export async function uploadAndCreateEntry({ supabase, user, trimmed, photoFile 
     ext: ext,
   };
 
+  // Calculate next sequential card number (e.g. "06", "07") to satisfy NOT NULL constraint
+  const { data: existingRows } = await supabase
+    .from("entries")
+    .select("num")
+    .order("num", { ascending: false })
+    .limit(1);
+
+  const highestNum = existingRows?.[0]?.num ? parseInt(existingRows[0].num, 10) : 0;
+  const nextNum = String(Math.max(highestNum + 1, 6)).padStart(2, "0");
+
   // Tuesday check 2: Insert explicitly names columns; no spreading ...data
   const { data: inserted, error: insertError } = await supabase
     .from("entries")
     .insert({
       owner: currentUser.id,
+      num: nextNum,
       title: [trimmed.title, trimmed.titleKm],
       content: [trimmed.content],
       timeline: trimmed.timeline,
