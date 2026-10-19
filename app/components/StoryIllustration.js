@@ -11,10 +11,65 @@ const captions = {
   },
 };
 
-export function illustrationCaption(era, story, lang = "en") {
+export function getTopicStoryIndex(topicOrCard, fallbackStory = 1) {
+  if (!topicOrCard && fallbackStory) {
+    const parsed = parseInt(fallbackStory, 10);
+    if (!isNaN(parsed) && parsed >= 1 && parsed <= 5) return parsed;
+    if (!isNaN(parsed) && parsed > 5) return ((parsed - 1) % 5) + 1;
+    return 1;
+  }
+
+  let text = "";
+  if (typeof topicOrCard === "object" && topicOrCard !== null) {
+    const t = topicOrCard.topic;
+    if (typeof t === "object" && t !== null) {
+      text = `${t.en || ""} ${t.km || ""}`;
+    } else if (Array.isArray(t)) {
+      text = t.join(" ");
+    } else if (typeof t === "string") {
+      text = t;
+    } else {
+      text = `${topicOrCard.en || ""} ${topicOrCard.km || ""}`;
+    }
+    const slug = topicOrCard.slug || topicOrCard.imageConfig?.folder || "";
+    text = `${text} ${slug}`.toLowerCase();
+  } else if (typeof topicOrCard === "string") {
+    text = topicOrCard.toLowerCase();
+  }
+
+  if (text.includes("commute") || text.includes("mobility") || text.includes("ធ្វើដំណើរ") || text.includes("មធ្យោបាយ")) {
+    return 1;
+  }
+  if (text.includes("morning") || text.includes("routine") || text.includes("school prep") || text.includes("ពេលព្រឹក") || text.includes("រៀន")) {
+    return 2;
+  }
+  if (text.includes("free time") || text.includes("free-time") || text.includes("entertainment") || text.includes("side hustle") || text.includes("ពេលទំនេរ") || text.includes("កម្សាន្ត")) {
+    return 3;
+  }
+  if (text.includes("street food") || text.includes("street-food") || text.includes("food") || text.includes("cost of living") || text.includes("ម្ហូប") || text.includes("ជីវភាព")) {
+    return 4;
+  }
+  if (text.includes("romance") || text.includes("date") || text.includes("dating") || text.includes("ស្នេហា") || text.includes("ណាត់ជួប")) {
+    return 5;
+  }
+
+  const fallback = parseInt(fallbackStory, 10);
+  if (!isNaN(fallback) && fallback >= 1 && fallback <= 5) return fallback;
+  if (!isNaN(fallback) && fallback > 5) return ((fallback - 1) % 5) + 1;
+  return 1;
+}
+
+export function illustrationCaption(era, story, lang = "en", topic = null) {
+  let actualStory = story;
+  let actualTopic = topic;
+  if (typeof story === "object" && story !== null) {
+    actualTopic = story;
+    actualStory = story.rawNum || story.num;
+  }
   const l = lang === "km" ? "km" : "en";
   const list = captions[era]?.[l] || captions[era]?.en;
-  return list?.[Number(story) - 1] ?? (l === "km" ? "ជីវិតប្រចាំថ្ងៃរបស់កម្ពុជា" : "CAMBODIAN EVERYDAY LIFE");
+  const index = getTopicStoryIndex(actualTopic, actualStory);
+  return list?.[index - 1] ?? (l === "km" ? "ជីវិតប្រចាំថ្ងៃរបស់កម្ពុជា" : "CAMBODIAN EVERYDAY LIFE");
 }
 
 function Line({ d, ...props }) {
@@ -151,17 +206,20 @@ const scenes = {
   heritage: [HeritageCommute, HeritageMorning, HeritageLeisure, HeritageFood, HeritageRomance],
 };
 
-export default function StoryIllustration({ era = "modern", story = "01", lang = "en" }) {
+export default function StoryIllustration({ era = "modern", story = "01", topic = null, lang = "en" }) {
+  const targetTopic = topic || (typeof story === "object" ? story : null);
+  const targetStory = typeof story === "object" ? (story.rawNum || story.num || "01") : story;
   const id = useId().replace(/:/g, "");
   const past = era === "heritage";
-  const Scene = scenes[era]?.[Number(story) - 1];
+  const index = getTopicStoryIndex(targetTopic, targetStory);
+  const Scene = scenes[era]?.[index - 1] || scenes[era]?.[0];
   if (!Scene) return null;
   const isKm = lang === "km";
   const eraText = past ? (isKm ? "ទសវត្សរ៍ ៨០–៩០" : "1980s–90s") : (isKm ? "ទសវត្សរ៍ ២០២០" : "2020s");
   const countryText = isKm ? "កម្ពុជា" : "Cambodia";
   return (
     <svg className="architecture story-illustration" viewBox="0 0 500 300" fill="none" role="img" aria-labelledby={`${id}-title`} style={{ "--scene-dark": past ? "#30231c" : "#102e32", "--scene-fill": past ? "#78543b" : "#235b60", "--scene-pop": past ? "#e7b779" : "#c8dc96", color: past ? "#e2b686" : "#9de2d7" }}>
-      <title id={`${id}-title`}>{`${illustrationCaption(era, story, lang)} — ${eraText} ${countryText}`}</title>
+      <title id={`${id}-title`}>{`${illustrationCaption(era, targetStory, lang, targetTopic)} — ${eraText} ${countryText}`}</title>
       <defs><radialGradient id={`${id}-glow`}><stop stopColor={past ? "#e7b779" : "#82ddce"} stopOpacity=".13" /><stop offset="1" stopColor={past ? "#e7b779" : "#82ddce"} stopOpacity="0" /></radialGradient></defs>
       <ellipse cx="250" cy="157" rx="224" ry="138" fill={`url(#${id}-glow)`} />
       <ellipse cx="250" cy="260" rx="172" ry="12" fill="var(--scene-dark)" opacity=".5" />

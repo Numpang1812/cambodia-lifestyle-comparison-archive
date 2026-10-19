@@ -391,18 +391,8 @@ function EntryModal({
           </p>
           <h2 className={styles.title}>{card.topic}</h2>
           <div className={styles.modalArchitecture}>
-            {Number(rawStoryNum) >= 1 && Number(rawStoryNum) <= 5 ? (
-              <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
-            ) : getCardImages(card, era)[0]?.src ? (
-              <img
-                src={getCardImages(card, era)[0].src}
-                alt={card.topic}
-                className={styles.modalPhotoBanner}
-              />
-            ) : (
-              <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
-            )}
-            <span>{illustrationCaption(era, rawStoryNum, lang)}</span>
+            <StoryIllustration era={era} story={rawStoryNum} topic={card} lang={lang} />
+            <span>{illustrationCaption(era, rawStoryNum, lang, card)}</span>
           </div>
           <ChipRow chips={data.chips} />
 
@@ -602,19 +592,8 @@ export default function EntryCards({
                     <span>{t.storyLabel} / {c.num}</span>
                     <span>{era === "heritage" ? (lang === "km" ? "ទសវត្សរ៍ ៨០–៩០" : "1980s–90s") : (lang === "km" ? "ទសវត្សរ៍ ២០២០" : "2020s")}</span>
                   </div>
-                  {Number(rawStoryNum) >= 1 && Number(rawStoryNum) <= 5 ? (
-                    <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
-                  ) : getCardImages(c, era)[0]?.src ? (
-                    <img
-                      src={getCardImages(c, era)[0].src}
-                      alt={c.topic}
-                      className={styles.cardScenePhoto}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <StoryIllustration era={era} story={rawStoryNum} lang={lang} />
-                  )}
-                  <span className={styles.sceneTag}>{illustrationCaption(era, rawStoryNum, lang)}</span>
+                  <StoryIllustration era={era} story={rawStoryNum} topic={c} lang={lang} />
+                  <span className={styles.sceneTag}>{illustrationCaption(era, rawStoryNum, lang, c)}</span>
                 </div>
                 <div className={styles.cardBody}>
                   <span className={styles.kicker}>

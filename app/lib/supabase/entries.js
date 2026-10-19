@@ -37,6 +37,22 @@ function normalizePriceIndex(raw) {
   return null;
 }
 
+const TOPIC_KM_MAP = {
+  "Commute & Mobility": "ការធ្វើដំណើរ និងមធ្យោបាយធ្វើដំណើរ",
+  "Morning Routine & School Prep": "ទម្លាប់ពេលព្រឹក និងការរៀបចំទៅរៀន",
+  "Free Time, Entertainment & Side Hustles": "ពេលទំនេរ ការកម្សាន្ត និងការងារក្រៅម៉ោង",
+  "Street Food & Cost of Living": "ម្ហូបតាមផ្លូវ និងកម្រិតជីវភាពរស់នៅ",
+  "Romance & Dating Culture": "ស្នេហា និងវប្បធម៌នៃការណាត់ជួប",
+};
+
+const TOPIC_FOLDER_MAP = {
+  "Commute & Mobility": "commute-and-mobility",
+  "Morning Routine & School Prep": "morning-routine",
+  "Free Time, Entertainment & Side Hustles": "free-time-and-entertainment",
+  "Street Food & Cost of Living": "street-food-and-cost",
+  "Romance & Dating Culture": "romance-and-date-culture",
+};
+
 // Transform raw Supabase rows into comparison card format expected by archive UI
 export function normalizeEntries(rows) {
   if (!rows || !rows.length) return [];
@@ -64,6 +80,11 @@ export function normalizeEntries(rows) {
     }
 
     if (!cardMap.has(key)) {
+      const primaryTopic = Array.isArray(row.topic) ? row.topic[0] : row.topic;
+      const topicKm = Array.isArray(row.topic)
+        ? row.topic[1] || TOPIC_KM_MAP[primaryTopic] || row.topic[0] || ""
+        : TOPIC_KM_MAP[row.topic] || row.topic || "ព័ត៌មានបណ្ណសារ";
+
       cardMap.set(key, {
         id: row.id,
         owner: row.owner || null,
@@ -71,14 +92,12 @@ export function normalizeEntries(rows) {
         numKm: toKmNum(row.num || "01"),
         rawNum: row.num || null,
         slug: row.slug || "entry",
-        topic: Array.isArray(row.topic)
-          ? { en: row.topic[0] || "", km: row.topic[1] || row.topic[0] || "" }
-          : {
-              en: row.topic || "Archive Entry",
-              km: row.topic || "ព័ត៌មានបណ្ណសារ",
-            },
+        topic: {
+          en: primaryTopic || "Archive Entry",
+          km: topicKm,
+        },
         imageConfig: row.image_config || {
-          folder: row.slug || "commute-and-mobility",
+          folder: TOPIC_FOLDER_MAP[primaryTopic] || row.slug || "commute-and-mobility",
           pastPrefix: "past",
           presentPrefix: "present",
           pastCount: 2,
