@@ -510,9 +510,13 @@ export default function EntryCards({
   // Keyword-based search matching scoped to the active era (past vs present):
   // When browsing 1980s Heritage, queries search only past entries and keywords;
   // when browsing 2020s Modern, queries search only present entries and keywords.
+  const eraCards = useMemo(
+    () => cards.filter((c) => Boolean(c[era])),
+    [cards, era]
+  );
   const visibleRaw = useMemo(
-    () => filterCardsByTerms(cards, terms, query, era),
-    [cards, terms, query, era]
+    () => filterCardsByTerms(eraCards, terms, query, era),
+    [eraCards, terms, query, era]
   );
   const visible = useMemo(
     () => visibleRaw.map((c) => getTranslatedCard(c, lang)),
@@ -530,7 +534,7 @@ export default function EntryCards({
         {loading
           ? (lang === "km" ? "កំពុងផ្ទុកទិន្នន័យបណ្ណសារ..." : "Loading archive entries...")
           : terms.length
-          ? t.storiesCountMatch(visible.length, cards.length)
+          ? t.storiesCountMatch(visible.length, eraCards.length)
           : t.storiesCountAll}
       </p>
 

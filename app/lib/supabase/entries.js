@@ -172,24 +172,12 @@ export function normalizeEntries(rows) {
     }
   }
 
-  // Ensure both eras exist on each card & assign sequential unique card numbers
+  // Assign sequential unique card numbers (no era mirroring: a card shows
+  // only in the era(s) it actually has content for)
   const seenNums = new Set();
   let nextNum = 1;
 
   return Array.from(cardMap.values()).map((card) => {
-    if (!card.heritage && card.modern) {
-      card.heritage = {
-        ...card.modern,
-        label: { en: "HERITAGE · 1980s–90s", km: "សម័យដើម · ទសវត្សរ៍ ៨០–៩០" },
-      };
-    }
-    if (!card.modern && card.heritage) {
-      card.modern = {
-        ...card.heritage,
-        label: { en: "MODERN · 2020s", km: "សម័យថ្មី · ទសវត្សរ៍ ២០២០" },
-      };
-    }
-
     let n = card.rawNum;
     while (!n || seenNums.has(n)) {
       n = String(nextNum++).padStart(2, "0");
