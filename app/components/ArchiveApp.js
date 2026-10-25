@@ -295,133 +295,141 @@ export default function ArchiveApp() {
             </span>
           </a>
 
-          <div className="nav-links">
-            <a href="#archive">
-              {t.navExplore} <span aria-hidden="true">↗</span>
-            </a>
-            <a href="#about">{t.navAbout}</a>
-            <a href="/contribute">
-              {lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}
-            </a>
-            {userEmail ? null : (
-              <>
-                <a href="/login">Log in</a>
-                <a href="/signup">Sign up</a>
-              </>
-            )}
-          </div>
-
-          {userEmail ? (
-            <div className="profile" ref={menuRef}>
-              <button
-                type="button"
-                className="profile-btn"
-                onClick={() => setMenuOpen((value) => !value)}
-                aria-haspopup="menu"
-                aria-expanded={menuOpen}
-                aria-label="Account menu"
-              >
-                {userEmail.charAt(0).toUpperCase()}
-              </button>
-              {menuOpen ? (
-                <div className="profile-menu" role="menu">
-                  <p className="profile-menu-email" title={userEmail}>
-                    {userEmail}
-                  </p>
-                  <div className="profile-menu-row">
-                    <span className="profile-menu-label">
-                      {lang === "km" ? "ភាសា" : "Language"}
-                    </span>
-                    <div
-                      className="lang-toggle"
-                      role="group"
-                      aria-label="Language selection"
-                    >
-                      <button
-                        type="button"
-                        className={`lang-btn ${lang === "en" ? "active" : ""}`}
-                        onClick={() => setLang("en")}
-                        aria-pressed={lang === "en"}
-                      >
-                        EN
-                      </button>
-                      <button
-                        type="button"
-                        className={`lang-btn ${lang === "km" ? "active" : ""}`}
-                        onClick={() => setLang("km")}
-                        aria-pressed={lang === "km"}
-                      >
-                        ខ្មែរ
-                      </button>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    className="profile-menu-item"
-                    onClick={() => setMotionPaused((value) => !value)}
-                    aria-pressed={motionPaused}
-                  >
-                    <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
-                    {motionPaused ? t.motionOff : t.motionOn}
-                  </button>
-                  <a
-                    href="/contribute"
-                    className="profile-menu-item"
-                    style={{ textDecoration: "none" }}
-                  >
-                    <span aria-hidden="true">+</span>
-                    {lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}
-                  </a>
-                  <button
-                    type="button"
-                    className="profile-menu-item"
-                    onClick={handleLogout}
-                  >
-                    Log out
-                  </button>
-                </div>
+          <div className="topbar-actions">
+            <div className="nav-links">
+              <a href="#archive">
+                {t.navExplore} <span aria-hidden="true">↗</span>
+              </a>
+              <a href="#about">{t.navAbout}</a>
+              {userEmail ? (
+                <a href="/my-entries">{t.navMyEntries}</a>
               ) : null}
             </div>
-          ) : (
-            <>
-              {/* Language Switcher (EN / ខ្មែរ) */}
-              <div
-                className="lang-toggle"
-                role="group"
-                aria-label="Language selection"
-              >
-                <button
-                  type="button"
-                  className={`lang-btn ${lang === "en" ? "active" : ""}`}
-                  onClick={() => setLang("en")}
-                  aria-pressed={lang === "en"}
-                >
-                  EN
-                </button>
-                <button
-                  type="button"
-                  className={`lang-btn ${lang === "km" ? "active" : ""}`}
-                  onClick={() => setLang("km")}
-                  aria-pressed={lang === "km"}
-                >
-                  ខ្មែរ
-                </button>
-              </div>
 
-              <button
-                className="motion-toggle"
-                type="button"
-                aria-pressed={motionPaused}
-                onClick={() => setMotionPaused((value) => !value)}
-                aria-label={
-                  motionPaused ? "Enable animations" : "Pause animations"
-                }
-              >
-                <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
-                <span>{motionPaused ? t.motionOff : t.motionOn}</span>
-              </button>
-            </>
-          )}
+          <div className="profile" ref={menuRef}>
+            <button
+              type="button"
+              className="profile-btn"
+              onClick={() => setMenuOpen((value) => !value)}
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+              aria-label={userEmail ? "Account menu" : "Main menu"}
+            >
+              {userEmail ? (
+                userEmail.charAt(0).toUpperCase()
+              ) : (
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <circle
+                    cx="12"
+                    cy="8"
+                    r="3.4"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  />
+                  <path
+                    d="M5 20c0-3.4 3.1-5.6 7-5.6s7 2.2 7 5.6"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              )}
+            </button>
+            {menuOpen ? (
+              <div className="profile-menu" role="menu">
+                <p className="profile-menu-email" title={userEmail || undefined}>
+                  {userEmail || (lang === "km" ? "ម៉ឺនុយ" : "Menu")}
+                </p>
+                <div className="profile-menu-row">
+                  <span className="profile-menu-label">
+                    {lang === "km" ? "ភាសា" : "Language"}
+                  </span>
+                  <div
+                    className="lang-toggle"
+                    role="group"
+                    aria-label="Language selection"
+                  >
+                    <button
+                      type="button"
+                      className={`lang-btn ${lang === "en" ? "active" : ""}`}
+                      onClick={() => setLang("en")}
+                      aria-pressed={lang === "en"}
+                    >
+                      EN
+                    </button>
+                    <button
+                      type="button"
+                      className={`lang-btn ${lang === "km" ? "active" : ""}`}
+                      onClick={() => setLang("km")}
+                      aria-pressed={lang === "km"}
+                    >
+                      ខ្មែរ
+                    </button>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="profile-menu-item"
+                  onClick={() => setMotionPaused((value) => !value)}
+                  aria-pressed={motionPaused}
+                >
+                  <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
+                  {motionPaused ? t.motionOff : t.motionOn}
+                </button>
+                {userEmail ? (
+                  <>
+                    <a
+                      href="/my-entries"
+                      className="profile-menu-item"
+                      style={{ textDecoration: "none" }}
+                    >
+                      <span aria-hidden="true">📋</span>
+                      {t.navMyEntries}
+                    </a>
+                    <a
+                      href="/contribute"
+                      className="profile-menu-item"
+                      style={{ textDecoration: "none" }}
+                    >
+                      <span aria-hidden="true">+</span>
+                      {lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}
+                    </a>
+                    <button
+                      type="button"
+                      className="profile-menu-item"
+                      onClick={handleLogout}
+                    >
+                      {t.authLogout}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <a
+                      href="/login"
+                      className="profile-menu-item"
+                      style={{ textDecoration: "none" }}
+                    >
+                      {t.authLoginLink}
+                    </a>
+                    <a
+                      href="/signup"
+                      className="profile-menu-item"
+                      style={{ textDecoration: "none" }}
+                    >
+                      {t.authSignupLink}
+                    </a>
+                  </>
+                )}
+              </div>
+            ) : null}
+          </div>
+          </div>
         </nav>
 
         <header className="siteHeader">

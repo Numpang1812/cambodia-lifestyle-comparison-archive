@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "../lib/supabase/client";
+import { translations } from "../lib/translations";
 
 const styles = {
   page: {
@@ -21,6 +22,11 @@ const styles = {
     border: "1px solid var(--border-strong)",
     borderRadius: "var(--card-radius)",
     boxShadow: "var(--card-shadow)",
+  },
+  langRow: {
+    display: "flex",
+    justifyContent: "flex-end",
+    marginBottom: "16px",
   },
   kicker: {
     display: "flex",
@@ -70,7 +76,6 @@ const styles = {
     borderRadius: "4px",
     color: "var(--text)",
     fontSize: "13px",
-    outline: "none",
   },
   error: {
     margin: 0,
@@ -110,6 +115,22 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [lang, setLang] = useState("en");
+  const t = translations[lang] || translations.en;
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("cambodia_lifestyle_lang");
+      if (saved === "km" || saved === "en") setLang(saved);
+    } catch (_) {}
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    try {
+      localStorage.setItem("cambodia_lifestyle_lang", lang);
+    } catch (_) {}
+  }, [lang]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -123,7 +144,7 @@ export default function LoginPage() {
     });
 
     if (signInError) {
-      setError("Invalid email or password");
+      setError(t.authInvalid);
       setLoading(false);
       return;
     }
@@ -134,16 +155,36 @@ export default function LoginPage() {
   return (
     <main style={styles.page}>
       <div style={styles.card}>
+        <div style={styles.langRow}>
+          <div className="lang-toggle" role="group" aria-label="Language selection">
+            <button
+              type="button"
+              className={`lang-btn ${lang === "en" ? "active" : ""}`}
+              onClick={() => setLang("en")}
+              aria-pressed={lang === "en"}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              className={`lang-btn ${lang === "km" ? "active" : ""}`}
+              onClick={() => setLang("km")}
+              aria-pressed={lang === "km"}
+            >
+              ខ្មែរ
+            </button>
+          </div>
+        </div>
         <p style={styles.kicker}>
-          <span style={styles.dot} /> KHMER LIVING ARCHIVE
+          <span style={styles.dot} /> {t.authKicker}
         </p>
-        <h1 style={styles.title}>Log in</h1>
-        <p style={styles.sub}>Return to the archive with your email and password.</p>
+        <h1 style={styles.title}>{t.authLoginTitle}</h1>
+        <p style={styles.sub}>{t.authLoginSub}</p>
 
         <form style={styles.form} onSubmit={handleSubmit}>
           <div style={styles.field}>
             <label style={styles.label} htmlFor="login-email">
-              EMAIL
+              {t.authEmail}
             </label>
             <input
               id="login-email"
@@ -158,7 +199,7 @@ export default function LoginPage() {
 
           <div style={styles.field}>
             <label style={styles.label} htmlFor="login-password">
-              PASSWORD
+              {t.authPassword}
             </label>
             <input
               id="login-password"
@@ -178,14 +219,14 @@ export default function LoginPage() {
           ) : null}
 
           <button style={styles.button} type="submit" disabled={loading}>
-            {loading ? "LOGGING IN..." : "LOG IN"}
+            {loading ? t.authLoginBusy : t.authLoginBtn}
           </button>
         </form>
 
         <p style={styles.footer}>
-          No account?{" "}
+          {t.authNoAccount}{" "}
           <a style={styles.link} href="/signup">
-            Sign up
+            {t.authSignupLink}
           </a>
         </p>
       </div>

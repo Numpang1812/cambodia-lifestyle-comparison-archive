@@ -91,6 +91,28 @@ export const translations = {
     // Footer
     footerBrand: "Khmer Living Archive / Cambodia Lifestyle",
     footerCourse: "ICT 340 · AUPP · Fall 2026",
+
+    // Auth pages
+    authKicker: "KHMER LIVING ARCHIVE",
+    authLoginTitle: "Log in",
+    authLoginSub: "Return to the archive with your email and password.",
+    authSignupTitle: "Sign up",
+    authSignupSub: "Create an account with your email and password.",
+    authEmail: "EMAIL",
+    authPassword: "PASSWORD",
+    authLoginBtn: "LOG IN",
+    authLoginBusy: "LOGGING IN...",
+    authSignupBtn: "SIGN UP",
+    authSignupBusy: "SIGNING UP...",
+    authInvalid: "Invalid email or password",
+    authSignupError: "Could not create account. Try again.",
+    authConfirmEmail: "Check your email to confirm your account.",
+    authNoAccount: "No account?",
+    authHaveAccount: "Already have an account?",
+    authSignupLink: "Sign up",
+    authLoginLink: "Log in",
+    authLogout: "Log out",
+    navMyEntries: "My entries",
   },
   
   km: {
@@ -183,6 +205,28 @@ export const translations = {
     // Footer
     footerBrand: "បណ្ណសាររស់នៅបែបខ្មែរ / របៀបរស់នៅកម្ពុជា",
     footerCourse: "ICT 340 · AUPP · ឆមាសរដូវស្លឹកឈើជ្រុះ ២០២៦",
+
+    // Auth pages
+    authKicker: "រស់នៅបែបខ្មែរ",
+    authLoginTitle: "ចូលប្រើ",
+    authLoginSub: "ត្រឡប់មកបណ្ណសារវិញដោយអ៊ីមែល និងលេខសម្ងាត់របស់អ្នក។",
+    authSignupTitle: "ចុះឈ្មោះ",
+    authSignupSub: "បង្កើតគណនីដោយអ៊ីមែល និងលេខសម្ងាត់របស់អ្នក។",
+    authEmail: "អ៊ីមែល",
+    authPassword: "លេខសម្ងាត់",
+    authLoginBtn: "ចូលប្រើ",
+    authLoginBusy: "កំពុងចូលប្រើ...",
+    authSignupBtn: "ចុះឈ្មោះ",
+    authSignupBusy: "កំពុងចុះឈ្មោះ...",
+    authInvalid: "អ៊ីមែល ឬលេខសម្ងាត់មិនត្រឹមត្រូវ",
+    authSignupError: "មិនអាចបង្កើតគណនីបានទេ។ សូមព្យាយាមម្តងទៀត។",
+    authConfirmEmail: "សូមពិនិត្យអ៊ីមែលរបស់អ្នកដើម្បីបញ្ជាក់គណនី។",
+    authNoAccount: "មិនទាន់មានគណនី?",
+    authHaveAccount: "មានគណនីរួចហើយ?",
+    authSignupLink: "ចុះឈ្មោះ",
+    authLoginLink: "ចូលប្រើ",
+    authLogout: "ចាកចេញ",
+    navMyEntries: "ការចូលរួមរបស់ខ្ញុំ",
   },
 };
 
@@ -570,6 +614,19 @@ export const rawCardsData = [
   },
 ];
 
+// Translate one era block, tolerating a missing era (single-era entries)
+function translateEra(era, l) {
+  if (!era) return null;
+  return {
+    label: era.label?.[l] || era.label?.en,
+    headline: era.headline?.[l] || era.headline?.en,
+    details: era.details?.[l] || era.details?.en,
+    role: era.role?.[l] || era.role?.en,
+    chips: era.chips?.[l] || era.chips?.en,
+    source: era.source?.[l] || era.source?.en,
+  };
+}
+
 // Helper to get card in target language
 export function getTranslatedCard(rawCard, lang = "en") {
   const l = lang === "km" ? "km" : "en";
@@ -581,22 +638,8 @@ export function getTranslatedCard(rawCard, lang = "en") {
     slug: rawCard.slug,
     imageConfig: rawCard.imageConfig,
     topic: rawCard.topic[l] || rawCard.topic.en,
-    modern: {
-      label: rawCard.modern.label[l] || rawCard.modern.label.en,
-      headline: rawCard.modern.headline[l] || rawCard.modern.headline.en,
-      details: rawCard.modern.details[l] || rawCard.modern.details.en,
-      role: rawCard.modern.role?.[l] || rawCard.modern.role?.en,
-      chips: rawCard.modern.chips[l] || rawCard.modern.chips.en,
-      source: rawCard.modern.source?.[l] || rawCard.modern.source?.en,
-    },
-    heritage: {
-      label: rawCard.heritage.label[l] || rawCard.heritage.label.en,
-      headline: rawCard.heritage.headline[l] || rawCard.heritage.headline.en,
-      details: rawCard.heritage.details[l] || rawCard.heritage.details.en,
-      role: rawCard.heritage.role?.[l] || rawCard.heritage.role?.en,
-      chips: rawCard.heritage.chips[l] || rawCard.heritage.chips.en,
-      source: rawCard.heritage.source?.[l] || rawCard.heritage.source?.en,
-    },
+    modern: translateEra(rawCard.modern, l),
+    heritage: translateEra(rawCard.heritage, l),
     priceIndex: Array.isArray(rawCard.priceIndex)
       ? rawCard.priceIndex.map((row) => ({
           item: typeof row?.item === "object" ? row.item[l] || row.item.en : row?.item || "",

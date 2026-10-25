@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "../lib/supabase/client";
+import { translations } from "../lib/translations";
 
 const styles = {
   page: {
@@ -21,6 +22,11 @@ const styles = {
     border: "1px solid var(--border-strong)",
     borderRadius: "var(--card-radius)",
     boxShadow: "var(--card-shadow)",
+  },
+  langRow: {
+    display: "flex",
+    justifyContent: "flex-end",
+    marginBottom: "16px",
   },
   kicker: {
     display: "flex",
@@ -70,7 +76,6 @@ const styles = {
     borderRadius: "4px",
     color: "var(--text)",
     fontSize: "13px",
-    outline: "none",
   },
   error: {
     margin: 0,
@@ -111,6 +116,22 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [lang, setLang] = useState("en");
+  const t = translations[lang] || translations.en;
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("cambodia_lifestyle_lang");
+      if (saved === "km" || saved === "en") setLang(saved);
+    } catch (_) {}
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    try {
+      localStorage.setItem("cambodia_lifestyle_lang", lang);
+    } catch (_) {}
+  }, [lang]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -125,7 +146,7 @@ export default function SignupPage() {
     });
 
     if (signUpError) {
-      setError("Could not create account. Try again.");
+      setError(t.authSignupError);
       setLoading(false);
       return;
     }
@@ -135,23 +156,43 @@ export default function SignupPage() {
       return;
     }
 
-    setMessage("Check your email to confirm your account.");
+    setMessage(t.authConfirmEmail);
     setLoading(false);
   }
 
   return (
     <main style={styles.page}>
       <div style={styles.card}>
+        <div style={styles.langRow}>
+          <div className="lang-toggle" role="group" aria-label="Language selection">
+            <button
+              type="button"
+              className={`lang-btn ${lang === "en" ? "active" : ""}`}
+              onClick={() => setLang("en")}
+              aria-pressed={lang === "en"}
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              className={`lang-btn ${lang === "km" ? "active" : ""}`}
+              onClick={() => setLang("km")}
+              aria-pressed={lang === "km"}
+            >
+              ខ្មែរ
+            </button>
+          </div>
+        </div>
         <p style={styles.kicker}>
-          <span style={styles.dot} /> KHMER LIVING ARCHIVE
+          <span style={styles.dot} /> {t.authKicker}
         </p>
-        <h1 style={styles.title}>Sign up</h1>
-        <p style={styles.sub}>Create an account with your email and password.</p>
+        <h1 style={styles.title}>{t.authSignupTitle}</h1>
+        <p style={styles.sub}>{t.authSignupSub}</p>
 
         <form style={styles.form} onSubmit={handleSubmit}>
           <div style={styles.field}>
             <label style={styles.label} htmlFor="signup-email">
-              EMAIL
+              {t.authEmail}
             </label>
             <input
               id="signup-email"
@@ -166,7 +207,7 @@ export default function SignupPage() {
 
           <div style={styles.field}>
             <label style={styles.label} htmlFor="signup-password">
-              PASSWORD
+              {t.authPassword}
             </label>
             <input
               id="signup-password"
@@ -192,14 +233,14 @@ export default function SignupPage() {
           ) : null}
 
           <button style={styles.button} type="submit" disabled={loading}>
-            {loading ? "SIGNING UP..." : "SIGN UP"}
+            {loading ? t.authSignupBusy : t.authSignupBtn}
           </button>
         </form>
 
         <p style={styles.footer}>
-          Already have an account?{" "}
+          {t.authHaveAccount}{" "}
           <a style={styles.link} href="/login">
-            Log in
+            {t.authLoginLink}
           </a>
         </p>
       </div>
