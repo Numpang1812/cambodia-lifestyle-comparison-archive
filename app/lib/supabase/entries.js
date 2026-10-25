@@ -198,6 +198,7 @@ export async function fetchEntries(supabase) {
     const { data, error } = await supabase
       .from("entries")
       .select("*")
+      .eq("status", "published")
       .order("num", { ascending: true });
 
     if (error) {

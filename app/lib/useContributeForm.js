@@ -65,6 +65,7 @@ export function useContributeForm(user, initialData = null) {
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittedSuccess, setSubmittedSuccess] = useState(false);
 
   function handleFileSelect(e) {
     const file = e.target.files?.[0] || null;
@@ -121,16 +122,15 @@ export function useContributeForm(user, initialData = null) {
           photoFile,
           existingImageConfig: initialData?.image_config || null,
         });
-        router.push(`/?entry=${entryId}`);
+        router.push("/my-entries");
       } else {
-        const inserted = await uploadAndCreateEntry({
+        await uploadAndCreateEntry({
           supabase,
           user,
           trimmed,
           photoFile,
         });
-        const newId = inserted?.id || "";
-        router.push(newId ? `/?entry=${newId}` : "/");
+        setSubmittedSuccess(true);
       }
     } catch (err) {
       console.error(isEdit ? "Update entry failed:" : "Contribution submission failed:", err);
@@ -144,6 +144,7 @@ export function useContributeForm(user, initialData = null) {
   }
 
   return {
+    submittedSuccess,
     content,
     setContent,
     errors,

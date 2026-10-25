@@ -4,11 +4,16 @@ import { useContributeForm } from "../app/lib/useContributeForm";
 import ContributeTextField from "./ContributeTextField";
 import ContributeFormMetaFields from "./ContributeFormMetaFields";
 import ContributeFormExtraFields from "./ContributeFormExtraFields";
+import ContributeSuccessNotice from "./ContributeSuccessNotice";
 import styles from "../app/contribute/contribute.module.css";
 
 export default function ContributeForm({ user, initialData = null }) {
   const form = useContributeForm(user, initialData);
   const isEdit = Boolean(initialData?.id);
+
+  if (form.submittedSuccess) {
+    return <ContributeSuccessNotice />;
+  }
 
   return (
     <form className={styles.form} onSubmit={form.handleSubmit} noValidate>
@@ -42,7 +47,7 @@ export default function ContributeForm({ user, initialData = null }) {
           ? "UPLOADING & SAVING..."
           : isEdit
           ? "UPDATE & SAVE ENTRY"
-          : "SAVE & PUBLISH ENTRY"}
+          : "SUBMIT FOR REVIEW"}
       </button>
     </form>
   );

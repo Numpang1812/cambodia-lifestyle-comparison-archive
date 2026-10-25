@@ -126,20 +126,35 @@ export async function updateExistingEntry({
 
   const parsedKeywords = trimmed.keywords ? JSON.parse(trimmed.keywords) : null;
 
+  // Reviewer check: reviewers keep their edits published, non-reviewers return to pending
+  let isReviewer = false;
+  try {
+    const { data: reviewerFlag } = await supabase.rpc("is_reviewer");
+    isReviewer = Boolean(reviewerFlag);
+  } catch (err) {
+    console.error("is_reviewer RPC check error:", err);
+  }
+
+  const updatePayload = {
+    title: [trimmed.title, trimmed.titleKm],
+    content: [trimmed.content],
+    timeline: trimmed.timeline,
+    topic: [trimmed.topic],
+    source: [trimmed.source],
+    price_index: trimmed.priceIndex || null,
+    keywords: parsedKeywords,
+    ...(finalImageConfig ? { image_config: finalImageConfig } : {}),
+    updated_at: new Date().toISOString(),
+  };
+
+  if (!isReviewer) {
+    updatePayload.status = "pending";
+  }
+
   // Explicit column names; .select() checks row actually updated
   const { data: updatedRows, error: updateError } = await supabase
     .from("entries")
-    .update({
-      title: [trimmed.title, trimmed.titleKm],
-      content: [trimmed.content],
-      timeline: trimmed.timeline,
-      topic: [trimmed.topic],
-      source: [trimmed.source],
-      price_index: trimmed.priceIndex || null,
-      keywords: parsedKeywords,
-      ...(finalImageConfig ? { image_config: finalImageConfig } : {}),
-      updated_at: new Date().toISOString(),
-    })
+    .update(updatePayload)
     .eq("id", entryId)
     .eq("owner", currentUser.id)
     .select();
