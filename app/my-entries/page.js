@@ -47,13 +47,17 @@ export default function MyEntriesPage() {
           </p>
           <h1 className={styles.title}>My Entries (ការចូលរួមរបស់ខ្ញុំ)</h1>
           <p className={styles.sub}>
-            Track your contributed stories, cultural observations, and review statuses.
+            តាមដានរឿងរ៉ាវ ការសង្កេតវប្បធម៌ និងស្ថានភាពនៃការពិនិត្យការចូលរួមរបស់អ្នក។
+            <br />
+            <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
+              Track your contributed stories, cultural observations, and review statuses.
+            </span>
           </p>
         </div>
 
         {loading ? (
           <div className={styles.card}>
-            <p className={styles.sub}>Loading entries...</p>
+            <p className={styles.sub}>កំពុងផ្ទុកការចូលរួម... / Loading entries...</p>
           </div>
         ) : !user ? (
           <ContributeLoginPrompt />
@@ -68,11 +72,14 @@ export default function MyEntriesPage() {
           </div>
         ) : entries.length === 0 ? (
           <div className={styles.card} style={{ textAlign: "center", padding: "40px 20px" }}>
-            <p style={{ margin: "0 0 16px 0", color: "var(--text-muted)" }}>
+            <p style={{ margin: "0 0 6px 0", color: "var(--text)" }}>
+              មិនទាន់មានការចូលរួមនៅឡើយទេ។ ចែករំលែកការសង្កេតវប្បធម៌ដំបូងរបស់អ្នកទៅកាន់បណ្ណសារ!
+            </p>
+            <p style={{ margin: "0 0 16px 0", color: "var(--text-muted)", fontSize: "13px" }}>
               No contributions yet. Add your first cultural observation to the archive!
             </p>
             <a href="/contribute" className={styles.submitBtn} style={{ textDecoration: "none", display: "inline-block" }}>
-              + CONTRIBUTE AN ENTRY
+              + CONTRIBUTE AN ENTRY (ចូលរួមចំណែក)
             </a>
           </div>
         ) : (
