@@ -15,9 +15,9 @@ const STATUS_CONFIG = {
   },
   returned: {
     label: "Returned · បានប្រគល់ត្រឡប់",
-    color: "#ef4444",
-    bg: "rgba(239, 68, 68, 0.12)",
-    border: "rgba(239, 68, 68, 0.35)",
+    color: "#f97316",
+    bg: "rgba(249, 115, 22, 0.12)",
+    border: "rgba(249, 115, 22, 0.35)",
   },
 };
 
