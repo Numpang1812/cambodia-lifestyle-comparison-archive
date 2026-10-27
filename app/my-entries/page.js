@@ -5,6 +5,7 @@ import { createClient } from "../lib/supabase/client";
 import MyEntriesCard from "../../components/MyEntriesCard";
 import ContributeLoginPrompt from "../../components/ContributeLoginPrompt";
 import styles from "../contribute/contribute.module.css";
+import collection from "../../collection.config.js";
 
 export default function MyEntriesPage() {
   const [user, setUser] = useState(null);
@@ -43,7 +44,7 @@ export default function MyEntriesPage() {
         <a href="/" className={styles.backLink}>← BACK TO ARCHIVE</a>
         <div className={styles.header}>
           <p className={styles.kicker}>
-            <span className={styles.dot} /> KHMER LIVING ARCHIVE
+            <span className={styles.dot} /> {collection.name.toUpperCase()} ARCHIVE
           </p>
           <h1 className={styles.title}>My Entries (ការចូលរួមរបស់ខ្ញុំ)</h1>
           <p className={styles.sub}>
