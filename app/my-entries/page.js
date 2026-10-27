@@ -10,6 +10,7 @@ export default function MyEntriesPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState([]);
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
     const supabase = createClient();
@@ -24,8 +25,11 @@ export default function MyEntriesPage() {
           .eq("owner", authUser.id)
           .order("created_at", { ascending: false });
 
-        if (!error && data) {
-          setEntries(data);
+        if (error) {
+          console.error("Reading My entries failed:", error);
+          setLoadError(error);
+        } else {
+          setEntries(data || []);
         }
       }
       setLoading(false);
@@ -53,6 +57,15 @@ export default function MyEntriesPage() {
           </div>
         ) : !user ? (
           <ContributeLoginPrompt />
+        ) : loadError ? (
+          <div className={styles.card} role="alert" style={{ textAlign: "center", padding: "40px 20px" }}>
+            <p style={{ margin: "0 0 8px 0", fontWeight: 600, color: "var(--accent)" }}>
+              Could not load your entries
+            </p>
+            <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "13px" }}>
+              Check your connection and reload the page to try again.
+            </p>
+          </div>
         ) : entries.length === 0 ? (
           <div className={styles.card} style={{ textAlign: "center", padding: "40px 20px" }}>
             <p style={{ margin: "0 0 16px 0", color: "var(--text-muted)" }}>
