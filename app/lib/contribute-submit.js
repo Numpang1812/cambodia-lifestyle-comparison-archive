@@ -130,7 +130,7 @@ export async function updateExistingEntry({
   let isReviewer = false;
   try {
     const { data: reviewerFlag } = await supabase.rpc("is_reviewer");
-    isReviewer = Boolean(reviewerFlag);
+    isReviewer = reviewerFlag === true;
   } catch (err) {
     console.error("is_reviewer RPC check error:", err);
   }
