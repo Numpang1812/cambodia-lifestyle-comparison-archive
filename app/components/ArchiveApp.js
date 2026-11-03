@@ -38,6 +38,7 @@ export default function ArchiveApp() {
   const supabase = useMemo(() => createClient(), []);
   const [currentUser, setCurrentUser] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
+  const [isReviewer, setIsReviewer] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const [cards, setCards] = useState([]);
@@ -76,14 +77,26 @@ export default function ArchiveApp() {
   }, [cards]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setUserEmail(data.session?.user?.email ?? null);
-      setCurrentUser(data.session?.user ?? null);
-    });
+    async function syncUser(session) {
+      const user = session?.user ?? null;
+      setUserEmail(user?.email ?? null);
+      setCurrentUser(user);
+      if (!user) {
+        setIsReviewer(false);
+        return;
+      }
+      try {
+        const { data } = await supabase.rpc("is_reviewer");
+        setIsReviewer(data === true);
+      } catch (err) {
+        console.error("is_reviewer check error:", err);
+        setIsReviewer(false);
+      }
+    }
+    supabase.auth.getSession().then(({ data }) => syncUser(data.session));
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
-        setUserEmail(session?.user?.email ?? null);
-        setCurrentUser(session?.user ?? null);
+        syncUser(session);
       }
     );
     return () => authListener.subscription.unsubscribe();
@@ -392,6 +405,16 @@ export default function ArchiveApp() {
                       <span aria-hidden="true">📋</span>
                       {t.navMyEntries}
                     </a>
+                    {isReviewer ? (
+                      <a
+                        href="/review"
+                        className="profile-menu-item"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <span aria-hidden="true">🗂</span>
+                        {t.navReviewPanel}
+                      </a>
+                    ) : null}
                     <a
                       href="/contribute"
                       className="profile-menu-item"
