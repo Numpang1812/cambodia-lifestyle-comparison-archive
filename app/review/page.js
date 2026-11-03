@@ -61,7 +61,25 @@ export default function ReviewPage() {
         entry_id: entry.id,
         decision,
       });
-      if (error || data === false) throw error || new Error("not saved");
+      if (error) throw error;
+      if (data === false) {
+        // Lost the race: another reviewer already decided. Entry is terminal now.
+        const { data: row } = await supabase
+          .from("entries")
+          .select("status")
+          .eq("id", entry.id)
+          .maybeSingle();
+        const settled = row?.status;
+        setNotice(
+          settled === "published"
+            ? t.reviewAlreadyApproved
+            : settled === "returned"
+            ? t.reviewAlreadyRejected
+            : t.reviewError
+        );
+        setEntries((prev) => prev.filter((e) => e.id !== entry.id));
+        return;
+      }
       setEntries((prev) => prev.filter((e) => e.id !== entry.id));
     } catch (err) {
       console.error("review_entry failed:", err);
