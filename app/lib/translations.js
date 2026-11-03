@@ -124,6 +124,8 @@ export const translations = {
     reviewEmpty: "No pending entries to review.",
     reviewNoAccess: "This panel is for reviewers only.",
     reviewError: "That change wasn't saved.",
+    reviewAlreadyApproved: "This archive was already approved by another reviewer.",
+    reviewAlreadyRejected: "This archive was already rejected by another reviewer.",
   },
   
   km: {
@@ -249,6 +251,8 @@ export const translations = {
     reviewEmpty: "គ្មានការចូលរួមរង់ចាំពិនិត្យទេ។",
     reviewNoAccess: "ផ្ទាំងនេះសម្រាប់អ្នកពិនិត្យតែប៉ុណ្ណោះ។",
     reviewError: "ការផ្លាស់ប្តូរនោះមិនត្រូវបានរក្សាទុកទេ។",
+    reviewAlreadyApproved: "បណ្ណសារនេះត្រូវបានអនុម័តដោយអ្នកពិនិត្យផ្សេងរួចហើយ។",
+    reviewAlreadyRejected: "បណ្ណសារនេះត្រូវបានបដិសេធដោយអ្នកពិនិត្យផ្សេងរួចហើយ។",
   },
 };
 
