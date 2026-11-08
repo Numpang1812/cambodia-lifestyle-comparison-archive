@@ -299,7 +299,7 @@ export default function ArchiveApp() {
                 {t.navExplore} <span aria-hidden="true">↗</span>
               </a>
               <a href="#about">{t.navAbout}</a>
-              {userEmail ? <a href="/my-entries">{t.navMyEntries}</a> : null}
+              <a href="/contribute">{lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}</a>
             </div>
 
             <div className="profile" ref={menuRef}>
@@ -382,14 +382,6 @@ export default function ArchiveApp() {
                           {t.navReviewPanel}
                         </a>
                       ) : null}
-                      <a
-                        href="/contribute"
-                        className="profile-menu-item"
-                        style={{ textDecoration: "none" }}
-                      >
-                        <span aria-hidden="true">+</span>
-                        {lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}
-                      </a>
                       <button type="button" className="profile-menu-item" onClick={handleLogout}>
                         {t.authLogout}
                       </button>
