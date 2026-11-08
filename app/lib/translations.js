@@ -78,6 +78,7 @@ export const translations = {
     // Time warp button
     warpToPast: "TIME WARP · 1980s · HERITAGE",
     warpToPresent: "TIME WARP · 2020s · MODERN",
+    warpUnavailable: "TIME WARP UNAVAILABLE · NO OTHER ERA",
     warpingToPast: "RECONSTRUCTING 1980s…",
     warpingToPresent: "MATERIALIZING 2020s…",
 
@@ -135,6 +136,16 @@ export const translations = {
     reviewError: "That change wasn't saved.",
     reviewAlreadyApproved: "This archive was already approved by another reviewer.",
     reviewAlreadyRejected: "This archive was already rejected by another reviewer.",
+    addEraCta: "Add the other era to a story",
+    addEraTitle: "Add the other era",
+    addEraSub:
+      "Pick a story that has only one era, then contribute its missing 1980s–90s or 2020s half.",
+    addEraMissingPast: "Missing 1980s–90s version",
+    addEraMissingModern: "Missing 2020s version",
+    addEraContribute: "Contribute this era",
+    addEraBack: "← Back to options",
+    addEraNone: "Every story already has both eras. Nothing to pair.",
+    addEraBanner: (eraLabel, title) => `Adding the ${eraLabel} half of “${title}”`,
   },
 
   km: {
@@ -214,6 +225,7 @@ export const translations = {
     // Time warp button
     warpToPast: "បម្លាស់ប្តូរពេលវេលា · ទសវត្សរ៍ ៨០ · សម័យដើម",
     warpToPresent: "បម្លាស់ប្តូរពេលវេលា · ២០២០ · សម័យថ្មី",
+    warpUnavailable: "មិនអាចបម្លាស់ពេលវេលាបានទេ · គ្មានសម័យផ្សេង",
     warpingToPast: "កំពុងស្ថាបនាទសវត្សរ៍ ៨០ ឡើងវិញ…",
     warpingToPresent: "កំពុងបម្លាស់មកទសវត្សរ៍ ២០២០…",
 
@@ -272,6 +284,15 @@ export const translations = {
     reviewError: "ការផ្លាស់ប្តូរនោះមិនត្រូវបានរក្សាទុកទេ។",
     reviewAlreadyApproved: "បណ្ណសារនេះត្រូវបានអនុម័តដោយអ្នកពិនិត្យផ្សេងរួចហើយ។",
     reviewAlreadyRejected: "បណ្ណសារនេះត្រូវបានបដិសេធដោយអ្នកពិនិត្យផ្សេងរួចហើយ។",
+    addEraCta: "បន្ថែមសម័យដែលខ្វះទៅលើរឿងមួយ",
+    addEraTitle: "បន្ថែមសម័យផ្សេង",
+    addEraSub: "ជ្រើសរើសរឿងដែលមានតែមួយសម័យ បន្ទាប់មកចូលរួមចំណែកពាក់កណ្តាលដែលខ្វះ។",
+    addEraMissingPast: "ខ្វះកំណែតំណាងទសវត្សរ៍ ៨០–៩០",
+    addEraMissingModern: "ខ្វះកំណែតំណាងទសវត្សរ៍ ២០២០",
+    addEraContribute: "ចូលរួមសម័យនេះ",
+    addEraBack: "← ត្រឡប់ទៅជម្រើស",
+    addEraNone: "រឿងទាំងអស់មានសម័យទាំងពីររួចហើយ។ គ្មានអ្វីត្រូវផ្គូផ្គងទេ។",
+    addEraBanner: (eraLabel, title) => `កំពុងបន្ថែមពាក់កណ្តាល ${eraLabel} នៃ “${title}”`,
   },
 };
 
