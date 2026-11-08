@@ -1,0 +1,8 @@
+pre-push:
+  commands:
+    lint:
+      run: npx eslint .
+    format:
+      run: npx prettier --check .
+    test:
+      run: node --test tests/review-security.test.mjs
