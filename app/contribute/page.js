@@ -7,6 +7,7 @@ import { fetchEntryById, fetchEntries } from "../lib/supabase/entries";
 import { translations } from "../lib/translations";
 import ContributeForm from "../../components/ContributeForm";
 import ContributeLoginPrompt from "../../components/ContributeLoginPrompt";
+import AddEraCard from "../../components/AddEraCard";
 import styles from "./contribute.module.css";
 
 function choiceStyle(active) {
@@ -185,37 +186,9 @@ function ContributeContent() {
               </p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                {singleEraCards.map((c) => {
-                  const missing = c.heritage ? "modern" : "heritage";
-                  return (
-                    <a
-                      key={c.slug}
-                      href={`/contribute?addEra=${encodeURIComponent(c.slug)}&era=${missing}`}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        gap: "12px",
-                        padding: "12px 16px",
-                        border: "1px solid var(--border)",
-                        borderRadius: "4px",
-                        textDecoration: "none",
-                        color: "var(--text)",
-                      }}
-                    >
-                      <span>{c.topic.en}</span>
-                      <span
-                        style={{
-                          font: "11px var(--font-mono)",
-                          color: missing === "heritage" ? "#e07b39" : "#4ea87a",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {missing === "heritage" ? t.addEraMissingPast : t.addEraMissingModern}
-                      </span>
-                    </a>
-                  );
-                })}
+                {singleEraCards.map((c) => (
+                  <AddEraCard key={c.slug} card={c} t={t} />
+                ))}
               </div>
             )}
           </div>
