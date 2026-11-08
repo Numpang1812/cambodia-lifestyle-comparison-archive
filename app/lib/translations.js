@@ -9,22 +9,24 @@ export const translations = {
     motionOn: "Motion on",
     motionOff: "Motion off",
     skipLink: "Skip to the archive",
-    
+
     // Hero section
     heroKicker: "ONE COUNTRY. GENERATIONS OF STORIES.",
     heroTitlePast: "Cambodia,",
     heroTitlePastSub: "the way we lived.",
     heroTitlePresent: "Cambodia,",
     heroTitlePresentSub: "a world of change.",
-    heroDescPast: "Before the city lights, life followed a different rhythm. Step into the wooden homes, dusty roads and everyday stories of a generation.",
-    heroDescPresent: "From wooden homes to changing skylines. Travel between generations and discover how everyday Cambodian life has transformed.",
+    heroDescPast:
+      "Before the city lights, life followed a different rhythm. Step into the wooden homes, dusty roads and everyday stories of a generation.",
+    heroDescPresent:
+      "From wooden homes to changing skylines. Travel between generations and discover how everyday Cambodian life has transformed.",
     heroExplore: "Explore everyday life",
     heroStatStories: "05 stories",
     heroStatEras: "02 eras",
     heroStatHeritage: "One shared heritage",
     heroScenePast: "THE ROOTS OF EVERYDAY LIFE",
     heroScenePresent: "A NEW CHAPTER, STILL CAMBODIA",
-    
+
     // Timeline
     timelineKicker: "THE TIME MACHINE",
     timelineTitle: "Same place.",
@@ -37,7 +39,7 @@ export const translations = {
     statusPresent: "Present era · You are here",
     statusLeaving: "Leaving this era…",
     statusDrawing: "Drawing a new world…",
-    
+
     // Archive toolbar
     toolbarKicker: "THE EVERYDAY COLLECTION",
     toolbarTitle: "Little moments.",
@@ -45,10 +47,11 @@ export const translations = {
     searchPlaceholder: "Find a story… (e.g. food, bicycle, romance)",
     searchClear: "Clear search",
     searchNoMatch: "no direct match — press Enter to search anyway",
-    
+
     // Cards list
     storiesCountAll: "05 stories to explore · Choose an illustration to step inside",
-    storiesCountMatch: (matchCount, total) => `${matchCount} of ${total} stories matching your search`,
+    storiesCountMatch: (matchCount, total) =>
+      `${matchCount} of ${total} stories matching your search`,
     noStoriesFound: "No stories found",
     noStoriesHint: "Try searching for “food”, “school” or “bicycle”, or reset the search.",
     showAllStories: "Show all stories",
@@ -56,38 +59,44 @@ export const translations = {
     kickerHeritage: "LIFE BEFORE THE CITY LIGHTS",
     kickerModern: "LIFE IN A CONNECTED CAMBODIA",
     storyLabel: "STORY",
-    
+
     // Modal
     closeEntry: "Close entry",
     priceIndexTitle: "PRICE INDEX — 1980s ⇄ 2020s",
-    archivePhotosTitle: (isHeritage) => `ARCHIVE PHOTOGRAPHS · ${isHeritage ? "1980s–90s" : "2020s"}`,
+    archivePhotosTitle: (isHeritage) =>
+      `ARCHIVE PHOTOGRAPHS · ${isHeritage ? "1980s–90s" : "2020s"}`,
     photoCounter: (curr, total) => `PHOTO ${curr} OF ${total}`,
     prevPhoto: "← Prev",
     nextPhoto: "Next Photo ↻",
     infiniteScrollNote: (total) => `Infinite scroll active (loops 1 ⇄ ${total})`,
     noPhotosTitle: (isHeritage) => `NO ${isHeritage ? "HERITAGE" : "MODERN"} PHOTOGRAPHS ARCHIVED`,
-    noPhotosDesc: (isHeritage, topic) => `There are currently no ${isHeritage ? "past" : "present"} photos added for ${topic}.`,
-    photoPatternBadge: (prefix, folder) => `PATTERN: ${prefix}1.png, ${prefix}2.png… in /assets/images/${folder}/`,
-    
+    noPhotosDesc: (isHeritage, topic) =>
+      `There are currently no ${isHeritage ? "past" : "present"} photos added for ${topic}.`,
+    photoPatternBadge: (prefix, folder) =>
+      `PATTERN: ${prefix}1.png, ${prefix}2.png… in /assets/images/${folder}/`,
+
     // Time warp button
     warpToPast: "TIME WARP · 1980s · HERITAGE",
     warpToPresent: "TIME WARP · 2020s · MODERN",
     warpingToPast: "RECONSTRUCTING 1980s…",
     warpingToPresent: "MATERIALIZING 2020s…",
-    
+
     // About
     aboutKicker: "KEEPING OUR STORIES ALIVE",
     aboutTitle: "A changing country.",
     aboutTitleSub: "A connection that stays.",
-    aboutDesc: "A comparison between Cambodia lifestyle in the 1980s and the current era, built for Vibe Coding Course Final Project.",
-    aboutNote: "An authentic living archive documenting 10 generational realities across 5 dual-timeline facets.",
+    aboutDesc:
+      "A comparison between Cambodia lifestyle in the 1980s and the current era, built for Vibe Coding Course Final Project.",
+    aboutNote:
+      "An authentic living archive documenting 10 generational realities across 5 dual-timeline facets.",
     curatedBy: "CURATED BY",
     source: "SOURCES & ORAL HISTORY",
     cardSourceLabel: "Source",
     curatorName: "Tyvirakpoung Piseth",
-    sourceDesc: "1980s Heritage: Oral history shared by My Father (Soy Piseth) & My Uncle (Leang Phally). 2020s Present: Firsthand lifestyle observations by Tyvirakpoung Piseth.",
+    sourceDesc:
+      "1980s Heritage: Oral history shared by My Father (Soy Piseth) & My Uncle (Leang Phally). 2020s Present: Firsthand lifestyle observations by Tyvirakpoung Piseth.",
     entrySourceLabel: "SOURCE & ATTRIBUTION",
-    
+
     // Footer
     footerBrand: "Khmer Living Archive / Cambodia Lifestyle",
     footerCourse: "ICT 340 · AUPP · Fall 2026",
@@ -127,7 +136,7 @@ export const translations = {
     reviewAlreadyApproved: "This archive was already approved by another reviewer.",
     reviewAlreadyRejected: "This archive was already rejected by another reviewer.",
   },
-  
+
   km: {
     brand: "រស់នៅបែបខ្មែរ",
     brandSub: "បណ្ណសាររបៀបរស់នៅប្រចាំថ្ងៃ",
@@ -136,22 +145,24 @@ export const translations = {
     motionOn: "ចលនា: បើក",
     motionOff: "ចលនា: បិទ",
     skipLink: "រំលងទៅកាន់បណ្ណសារ",
-    
+
     // Hero section
     heroKicker: "ប្រទេសមួយ។ សាច់រឿងច្រើនជំនាន់។",
     heroTitlePast: "កម្ពុជា,",
     heroTitlePastSub: "របៀបដែលយើងធ្លាប់រស់នៅ។",
     heroTitlePresent: "កម្ពុជា,",
     heroTitlePresentSub: "ពិភពលោកនៃការផ្លាស់ប្តូរ។",
-    heroDescPast: "មុនពេលពន្លឺភ្លើងទីក្រុង ជីវិតមានចង្វាក់ខុសប្លែកពីបច្ចុប្បន្ន។ ឈានជើងចូលទៅកាន់ផ្ទះឈើ ផ្លូវដីហុយ និងរឿងរ៉ាវប្រចាំថ្ងៃនៃមនុស្សជំនាន់មុន។",
-    heroDescPresent: "ពីផ្ទះឈើបុរាណមកកាន់អគារខ្ពស់កប់ពពក។ ធ្វើដំណើរឆ្លងកាត់ជំនាន់ និងស្វែងយល់ពីរបៀបដែលជីវិតប្រចាំថ្ងៃរបស់ប្រជាជនកម្ពុជាបានផ្លាស់ប្តូរ។",
+    heroDescPast:
+      "មុនពេលពន្លឺភ្លើងទីក្រុង ជីវិតមានចង្វាក់ខុសប្លែកពីបច្ចុប្បន្ន។ ឈានជើងចូលទៅកាន់ផ្ទះឈើ ផ្លូវដីហុយ និងរឿងរ៉ាវប្រចាំថ្ងៃនៃមនុស្សជំនាន់មុន។",
+    heroDescPresent:
+      "ពីផ្ទះឈើបុរាណមកកាន់អគារខ្ពស់កប់ពពក។ ធ្វើដំណើរឆ្លងកាត់ជំនាន់ និងស្វែងយល់ពីរបៀបដែលជីវិតប្រចាំថ្ងៃរបស់ប្រជាជនកម្ពុជាបានផ្លាស់ប្តូរ។",
     heroExplore: "រុករកជីវិតប្រចាំថ្ងៃ",
     heroStatStories: "០៥ សាច់រឿង",
     heroStatEras: "០២ យុគសម័យ",
     heroStatHeritage: "មរតករួមគ្នាតែមួយ",
     heroScenePast: "ឫសគល់នៃជីវិតប្រចាំថ្ងៃ",
     heroScenePresent: "ទំព័រថ្មីនៃកម្ពុជា",
-    
+
     // Timeline
     timelineKicker: "ម៉ាស៊ីនពេលវេលា",
     timelineTitle: "ទីកន្លែងតែមួយ។",
@@ -164,7 +175,7 @@ export const translations = {
     statusPresent: "សម័យបច្ចុប្បន្ន · អ្នកកំពុងនៅទីនេះ",
     statusLeaving: "កំពុងចាកចេញពីសម័យនេះ…",
     statusDrawing: "កំពុងបង្ហាញពិភពថ្មី…",
-    
+
     // Archive toolbar
     toolbarKicker: "បណ្តុំរឿងរ៉ាវប្រចាំថ្ងៃ",
     toolbarTitle: "រឿងរ៉ាវតូចៗ។",
@@ -172,10 +183,11 @@ export const translations = {
     searchPlaceholder: "ស្វែងរកសាច់រឿង… (ឧ. ម្ហូប, កង់, ស្នេហា)",
     searchClear: "សម្អាតការស្វែងរក",
     searchNoMatch: "គ្មានលទ្ធផលត្រូវគ្នាផ្ទាល់ — ចុច Enter ដើម្បីស្វែងរក",
-    
+
     // Cards list
     storiesCountAll: "០៥ សាច់រឿងសម្រាប់រុករក · ចុចលើរូបគំនូរដើម្បីចូលអាន",
-    storiesCountMatch: (matchCount, total) => `${matchCount} នៃ ${total} សាច់រឿងត្រូវគ្នានឹងការស្វែងរករបស់អ្នក`,
+    storiesCountMatch: (matchCount, total) =>
+      `${matchCount} នៃ ${total} សាច់រឿងត្រូវគ្នានឹងការស្វែងរករបស់អ្នក`,
     noStoriesFound: "រកមិនឃើញសាច់រឿងទេ",
     noStoriesHint: "សាកល្បងស្វែងរកពាក្យ “ម្ហូប”, “សាលា” ឬ “កង់” ឬបង្ហាញសាច់រឿងទាំងអស់ឡើងវិញ។",
     showAllStories: "បង្ហាញសាច់រឿងទាំងអស់",
@@ -183,38 +195,44 @@ export const translations = {
     kickerHeritage: "ជីវិតមុនពេលមានពន្លឺភ្លើងក្រុង",
     kickerModern: "ជីវិតក្នុងយុគសម័យឌីជីថលនៃកម្ពុជា",
     storyLabel: "សាច់រឿង",
-    
+
     // Modal
     closeEntry: "បិទផ្ទាំង",
     priceIndexTitle: "សន្ទស្សន៍តម្លៃទំនិញ — ទសវត្សរ៍ ៨០ ⇄ ២០២០",
-    archivePhotosTitle: (isHeritage) => `រូបថតបណ្ណសារ · ${isHeritage ? "ទសវត្សរ៍ ៨០–៩០" : "ទសវត្សរ៍ ២០២០"}`,
+    archivePhotosTitle: (isHeritage) =>
+      `រូបថតបណ្ណសារ · ${isHeritage ? "ទសវត្សរ៍ ៨០–៩០" : "ទសវត្សរ៍ ២០២០"}`,
     photoCounter: (curr, total) => `រូបថតទី ${curr} នៃ ${total}`,
     prevPhoto: "← មុន",
     nextPhoto: "រូបបន្ទាប់ ↻",
     infiniteScrollNote: (total) => `ដំណើរការរំកិលមិនចេះចប់ (វិលជុំ ១ ⇄ ${total})`,
     noPhotosTitle: (isHeritage) => `មិនទាន់មានរូបថតសម័យ${isHeritage ? "ដើម" : "ថ្មី"}ទេ`,
-    noPhotosDesc: (isHeritage, topic) => `បច្ចុប្បន្នមិនទាន់មានរូបថតសម័យ${isHeritage ? "មុន" : "បច្ចុប្បន្ន"}សម្រាប់ "${topic}" នៅឡើយទេ។`,
-    photoPatternBadge: (prefix, folder) => `គំរូឈ្មោះរូបភាព: ${prefix}1.png, ${prefix}2.png… ក្នុង /assets/images/${folder}/`,
-    
+    noPhotosDesc: (isHeritage, topic) =>
+      `បច្ចុប្បន្នមិនទាន់មានរូបថតសម័យ${isHeritage ? "មុន" : "បច្ចុប្បន្ន"}សម្រាប់ "${topic}" នៅឡើយទេ។`,
+    photoPatternBadge: (prefix, folder) =>
+      `គំរូឈ្មោះរូបភាព: ${prefix}1.png, ${prefix}2.png… ក្នុង /assets/images/${folder}/`,
+
     // Time warp button
     warpToPast: "បម្លាស់ប្តូរពេលវេលា · ទសវត្សរ៍ ៨០ · សម័យដើម",
     warpToPresent: "បម្លាស់ប្តូរពេលវេលា · ២០២០ · សម័យថ្មី",
     warpingToPast: "កំពុងស្ថាបនាទសវត្សរ៍ ៨០ ឡើងវិញ…",
     warpingToPresent: "កំពុងបម្លាស់មកទសវត្សរ៍ ២០២០…",
-    
+
     // About
     aboutKicker: "ការរក្សាសាច់រឿងរបស់យើងឱ្យនៅរស់រវើក",
     aboutTitle: "ប្រទេសមួយដែលផ្លាស់ប្តូរ។",
     aboutTitleSub: "ទំនាក់ទំនងដែលនៅគង់វង្ស។",
-    aboutDesc: "ការប្រៀបធៀបរបៀបរស់នៅរបស់ប្រជាជនកម្ពុជាក្នុងទសវត្សរ៍ឆ្នាំ១៩៨០ និងសម័យបច្ចុប្បន្ន រៀបចំសម្រាប់គម្រោងបញ្ចប់ការសិក្សាវគ្គ Vibe Coding។",
-    aboutNote: "បណ្ណសាររស់នៅដែលកត់ត្រាការពិតជាក់ស្តែងចំនួន ១០ នៃមនុស្សពីរជំនាន់ ឆ្លងកាត់ ៥ ទិដ្ឋភាពនៃជីវិតប្រចាំថ្ងៃ។",
+    aboutDesc:
+      "ការប្រៀបធៀបរបៀបរស់នៅរបស់ប្រជាជនកម្ពុជាក្នុងទសវត្សរ៍ឆ្នាំ១៩៨០ និងសម័យបច្ចុប្បន្ន រៀបចំសម្រាប់គម្រោងបញ្ចប់ការសិក្សាវគ្គ Vibe Coding។",
+    aboutNote:
+      "បណ្ណសាររស់នៅដែលកត់ត្រាការពិតជាក់ស្តែងចំនួន ១០ នៃមនុស្សពីរជំនាន់ ឆ្លងកាត់ ៥ ទិដ្ឋភាពនៃជីវិតប្រចាំថ្ងៃ។",
     curatedBy: "រៀបចំចងក្រងដោយ",
     source: "ប្រភព និងប្រវត្តិផ្ទាល់មាត់",
     cardSourceLabel: "ប្រភព",
     curatorName: "ពិសិដ្ឋ​ ទីវីរៈពង្ស ",
-    sourceDesc: "សម័យដើមទសវត្សរ៍ ៨០: ប្រវត្តិផ្ទាល់មាត់ពី ឪពុករបស់ខ្ញុំ (សយ ពិសិដ្ឋ) និងអ៊ុំបង្កើតរបស់ខ្ញុំ (លាង ផល្លី)។ សម័យបច្ចុប្បន្ន ២០២០: ការកត់ត្រាសង្កេតផ្ទាល់ជាក់ស្តែងដោយ ពិសិដ្ឋ​​ ទីវីរៈពង្ស។",
+    sourceDesc:
+      "សម័យដើមទសវត្សរ៍ ៨០: ប្រវត្តិផ្ទាល់មាត់ពី ឪពុករបស់ខ្ញុំ (សយ ពិសិដ្ឋ) និងអ៊ុំបង្កើតរបស់ខ្ញុំ (លាង ផល្លី)។ សម័យបច្ចុប្បន្ន ២០២០: ការកត់ត្រាសង្កេតផ្ទាល់ជាក់ស្តែងដោយ ពិសិដ្ឋ​​ ទីវីរៈពង្ស។",
     entrySourceLabel: "ប្រភព និងការចងក្រង",
-    
+
     // Footer
     footerBrand: "បណ្ណសាររស់នៅបែបខ្មែរ / របៀបរស់នៅកម្ពុជា",
     footerCourse: "ICT 340 · AUPP · ឆមាសរដូវស្លឹកឈើជ្រុះ ២០២៦",
@@ -242,7 +260,8 @@ export const translations = {
     navMyEntries: "ការចូលរួមរបស់ខ្ញុំ",
     navReviewPanel: "ផ្ទាំងពិនិត្យ",
     reviewTitle: "ផ្ទាំងពិនិត្យ",
-    reviewSub: "ពិនិត្យការចូលរួមដែលកំពុងរង់ចាំ។ អនុម័តដើម្បីបោះពុម្ពផ្សាយ ឬប្រគល់ត្រឡប់ទៅអ្នកចូលរួមវិញ។",
+    reviewSub:
+      "ពិនិត្យការចូលរួមដែលកំពុងរង់ចាំ។ អនុម័តដើម្បីបោះពុម្ពផ្សាយ ឬប្រគល់ត្រឡប់ទៅអ្នកចូលរួមវិញ។",
     reviewMine: "បណ្ណសាររបស់ខ្ញុំ",
     reviewOthers: "របស់អ្នកផ្សេង",
     reviewApprove: "អនុម័ត",
@@ -325,16 +344,54 @@ export const rawCardsData = [
       modern: { en: "SMART KEYS & CITY STREETS", km: "សោស្មាតឃី និងដងវិថីក្រុង" },
     },
     commonKeywords: [
-      "commute", "mobility", "transport", "traffic", "road", "wheel", "ride",
-      "ធ្វើដំណើរ", "មធ្យោបាយ", "ផ្លូវ", "ចរាចរណ៍"
+      "commute",
+      "mobility",
+      "transport",
+      "traffic",
+      "road",
+      "wheel",
+      "ride",
+      "ធ្វើដំណើរ",
+      "មធ្យោបាយ",
+      "ផ្លូវ",
+      "ចរាចរណ៍",
     ],
     heritageKeywords: [
-      "bicycle", "cyclo", "bike", "dirt", "viva", "chaly", "c70", "dame", "steel", "kick-start", "suzuki",
-      "ជិះកង់", "កង់", "ស៊ីក្លូ", "ផ្លូវដី", "អាសង់", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+      "bicycle",
+      "cyclo",
+      "bike",
+      "dirt",
+      "viva",
+      "chaly",
+      "c70",
+      "dame",
+      "steel",
+      "kick-start",
+      "suzuki",
+      "ជិះកង់",
+      "កង់",
+      "ស៊ីក្លូ",
+      "ផ្លូវដី",
+      "អាសង់",
+      "សយ ពិសិដ្ឋ",
+      "លាង ផល្លី",
     ],
     modernKeywords: [
-      "scooter", "honda", "pcx", "click", "grab", "boulevard", "smart key", "zoomer", "automatic",
-      "ហ្គ្រេប", "មហាវិថី", "ម៉ូតូ", "ឡាន", "ស្កូតទ័រ", "ពិសិដ្ឋ ទីវីរៈពង្ស"
+      "scooter",
+      "honda",
+      "pcx",
+      "click",
+      "grab",
+      "boulevard",
+      "smart key",
+      "zoomer",
+      "automatic",
+      "ហ្គ្រេប",
+      "មហាវិថី",
+      "ម៉ូតូ",
+      "ឡាន",
+      "ស្កូតទ័រ",
+      "ពិសិដ្ឋ ទីវីរៈពង្ស",
     ],
   },
   {
@@ -393,19 +450,61 @@ export const rawCardsData = [
     },
     caption: {
       heritage: { en: "WATER JARS & WOOD-FIRED MORNINGS", km: "ពាងទឹក និងចង្ក្រានអុសពេលព្រឹក" },
-      modern: { en: "ALARMS, CLASS CHATS & BREAKFAST", km: "ម៉ោងរោទិ៍ គ្រុបតេឡេក្រាម និងអាហារពេលព្រឹក" },
+      modern: {
+        en: "ALARMS, CLASS CHATS & BREAKFAST",
+        km: "ម៉ោងរោទិ៍ គ្រុបតេឡេក្រាម និងអាហារពេលព្រឹក",
+      },
     },
     commonKeywords: [
-      "morning", "routine", "school", "wake", "breakfast", "rice",
-      "ពេលព្រឹក", "រៀន", "សាលា", "អាហារពេលព្រឹក"
+      "morning",
+      "routine",
+      "school",
+      "wake",
+      "breakfast",
+      "rice",
+      "ពេលព្រឹក",
+      "រៀន",
+      "សាលា",
+      "អាហារពេលព្រឹក",
     ],
     heritageKeywords: [
-      "water", "stove", "river", "pond", "bucket", "changkran", "peang", "pneang", "haul", "charcoal", "fish", "firewood", "clay jar", "shoulder pole",
-      "រែកទឹក", "ពាងទឹក", "ចង្ក្រានអុស", "បាយកក", "ត្រីងៀត", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+      "water",
+      "stove",
+      "river",
+      "pond",
+      "bucket",
+      "changkran",
+      "peang",
+      "pneang",
+      "haul",
+      "charcoal",
+      "fish",
+      "firewood",
+      "clay jar",
+      "shoulder pole",
+      "រែកទឹក",
+      "ពាងទឹក",
+      "ចង្ក្រានអុស",
+      "បាយកក",
+      "ត្រីងៀត",
+      "សយ ពិសិដ្ឋ",
+      "លាង ផល្លី",
     ],
     modernKeywords: [
-      "alarm", "telegram", "smartphone", "heater", "running water", "instant", "chat", "delivery", "class", "15-minute",
-      "ម៉ោងរោទិ៍", "តេឡេក្រាម", "ងូតទឹក", "ពិសិដ្ឋ ទីវីរៈពង្ស"
+      "alarm",
+      "telegram",
+      "smartphone",
+      "heater",
+      "running water",
+      "instant",
+      "chat",
+      "delivery",
+      "class",
+      "15-minute",
+      "ម៉ោងរោទិ៍",
+      "តេឡេក្រាម",
+      "ងូតទឹក",
+      "ពិសិដ្ឋ ទីវីរៈពង្ស",
     ],
   },
   {
@@ -467,16 +566,63 @@ export const rawCardsData = [
       modern: { en: "PLAY, STREAM & CREATE", km: "លេងហ្គេម មើលវីដេអូ និងធ្វើការងារឌីជីថល" },
     },
     commonKeywords: [
-      "free time", "entertainment", "hobby", "games", "leisure", "music", "play", "hustle",
-      "ពេលទំនេរ", "កម្សាន្ត", "ហ្គេម", "លេង", "ចម្រៀង"
+      "free time",
+      "entertainment",
+      "hobby",
+      "games",
+      "leisure",
+      "music",
+      "play",
+      "hustle",
+      "ពេលទំនេរ",
+      "កម្សាន្ត",
+      "ហ្គេម",
+      "លេង",
+      "ចម្រៀង",
     ],
     heritageKeywords: [
-      "sey", "chhoung", "radio", "cassette", "pagoda", "soccer", "errands", "massage", "chap sos", "copy", "notes", "transistor", "pocket money",
-      "ទាត់សី", "ចោលឈូង", "វិទ្យុ", "កាសែត", "វត្តអារាម", "ច្របាច់ជើង", "ចម្លងមេរៀន", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+      "sey",
+      "chhoung",
+      "radio",
+      "cassette",
+      "pagoda",
+      "soccer",
+      "errands",
+      "massage",
+      "chap sos",
+      "copy",
+      "notes",
+      "transistor",
+      "pocket money",
+      "ទាត់សី",
+      "ចោលឈូង",
+      "វិទ្យុ",
+      "កាសែត",
+      "វត្តអារាម",
+      "ច្របាច់ជើង",
+      "ចម្លងមេរៀន",
+      "សយ ពិសិដ្ឋ",
+      "លាង ផល្លី",
     ],
     modernKeywords: [
-      "youtube", "netflix", "pubg", "mlbb", "aeon", "mall", "cafe", "freelance", "side hustle", "coding", "mobile gaming", "streaming", "screen",
-      "អ៊ីអន", "ផ្សារទំនើប", "ហាងកាហ្វេ", "សរសេរកូដ", "ពិសិដ្ឋ ទីវីរៈពង្ស"
+      "youtube",
+      "netflix",
+      "pubg",
+      "mlbb",
+      "aeon",
+      "mall",
+      "cafe",
+      "freelance",
+      "side hustle",
+      "coding",
+      "mobile gaming",
+      "streaming",
+      "screen",
+      "អ៊ីអន",
+      "ផ្សារទំនើប",
+      "ហាងកាហ្វេ",
+      "សរសេរកូដ",
+      "ពិសិដ្ឋ ទីវីរៈពង្ស",
     ],
   },
   {
@@ -555,16 +701,69 @@ export const rawCardsData = [
       modern: { en: "BOBA & DOORSTEP DELIVERY", km: "តែគុជ និងសេវាដឹកដល់កន្លែង" },
     },
     commonKeywords: [
-      "street food", "cost living", "food", "snack", "riel", "market", "price", "eat", "drink",
-      "ម្ហូប", "អាហារ", "ចំណី", "តម្លៃ", "លុយរៀល", "ញ៉ាំ", "ឆ្ងាញ់"
+      "street food",
+      "cost living",
+      "food",
+      "snack",
+      "riel",
+      "market",
+      "price",
+      "eat",
+      "drink",
+      "ម្ហូប",
+      "អាហារ",
+      "ចំណី",
+      "តម្លៃ",
+      "លុយរៀល",
+      "ញ៉ាំ",
+      "ឆ្ងាញ់",
     ],
     heritageKeywords: [
-      "num kchay", "num krouk", "banh chok", "skor teanh", "ice cream", "cart", "bell", "scarcity", "post-war", "morning market", "syrup", "iced syrup", "100 riel", "500 riel",
-      "នំកាឆាយ", "នំគ្រក់", "នំបញ្ចុក", "ស្ករទាញ", "ទឹកសេរ៉ូ", "ការ៉េមកោស", "កណ្តឹង", "ផ្សារព្រឹក", "រទេះ", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+      "num kchay",
+      "num krouk",
+      "banh chok",
+      "skor teanh",
+      "ice cream",
+      "cart",
+      "bell",
+      "scarcity",
+      "post-war",
+      "morning market",
+      "syrup",
+      "iced syrup",
+      "100 riel",
+      "500 riel",
+      "នំកាឆាយ",
+      "នំគ្រក់",
+      "នំបញ្ចុក",
+      "ស្ករទាញ",
+      "ទឹកសេរ៉ូ",
+      "ការ៉េមកោស",
+      "កណ្តឹង",
+      "ផ្សារព្រឹក",
+      "រទេះ",
+      "សយ ពិសិដ្ឋ",
+      "លាង ផល្លី",
     ],
     modernKeywords: [
-      "boba", "nham24", "foodpanda", "delivery", "korean", "bbq", "sushi", "japanese", "milk tea", "khr", "dollar", "app", "on-demand",
-      "តែគុជ", "សាច់អាំង", "ស៊ូស៊ី", "ដឹកជញ្ជូន", "ពិសិដ្ឋ ទីវីរៈពង្ស"
+      "boba",
+      "nham24",
+      "foodpanda",
+      "delivery",
+      "korean",
+      "bbq",
+      "sushi",
+      "japanese",
+      "milk tea",
+      "khr",
+      "dollar",
+      "app",
+      "on-demand",
+      "តែគុជ",
+      "សាច់អាំង",
+      "ស៊ូស៊ី",
+      "ដឹកជញ្ជូន",
+      "ពិសិដ្ឋ ទីវីរៈពង្ស",
     ],
   },
   {
@@ -591,7 +790,7 @@ export const rawCardsData = [
       },
       details: {
         en: "Dating today starts through many routes — random events, classmates, Instagram, dating apps and even video games.\n\nIt is complicated because social media defines a long set of stages, like the three-month talking stage and similar unwritten rules. People hesitate to confess their feelings because they never believe the timing is right.\n\nSome use a new partner as a rebound to heal, which is messy. Cheating existed before too, but now it also counts when you are not officially dating — when you are caught in an undefined stage whose boundaries neither person has set.",
-        km: "ការណាត់ជួបសព្វថ្ងៃចាប់ផ្តើមតាមវិធីច្រើន — ជួបដោយចៃដន្យ មិត្តរួមថ្នាក់ Instagram កម្មវិធីណាត់ជួប និងសូម្បីហ្គេមវីដេអូ។\n\nវាស្មុគស្មាញ ព្រោះបណ្តាញសង្គមកំណត់ដំណាក់កាលជាច្រើន ដូចជាច្បាប់ \"talking stage\" ៣ ខែ និងវិធានមិនសរសេរផ្សេងទៀត។ មនុស្សស្ទាក់ស្ទើរក្នុងការសារភាពចិត្ត ព្រោះពួកគេគិតថាពេលវេលាមិនដែលត្រឹមត្រូវ។\n\nអ្នកខ្លះប្រើដៃគូថ្មីជា rebound ដើម្បីព្យាបាលចិត្ត ដែលវាច្របូកច្របល់ណាស់។ ការក្បត់ចិត្តមានតាំងពីមុនដែរ ប៉ុន្តែឥឡូវត្រូវបានរាប់បញ្ចូលទៀត ទោះបីអ្នកមិនទាន់កំពុងណាត់ជួបផ្លូវការ — ពេលអ្នកជាប់នៅក្នុងដំណាក់កាលមិនច្បាស់លាស់ ដែលគ្មានភាគីណាមួយកំណត់ព្រំដែន។",
+        km: 'ការណាត់ជួបសព្វថ្ងៃចាប់ផ្តើមតាមវិធីច្រើន — ជួបដោយចៃដន្យ មិត្តរួមថ្នាក់ Instagram កម្មវិធីណាត់ជួប និងសូម្បីហ្គេមវីដេអូ។\n\nវាស្មុគស្មាញ ព្រោះបណ្តាញសង្គមកំណត់ដំណាក់កាលជាច្រើន ដូចជាច្បាប់ "talking stage" ៣ ខែ និងវិធានមិនសរសេរផ្សេងទៀត។ មនុស្សស្ទាក់ស្ទើរក្នុងការសារភាពចិត្ត ព្រោះពួកគេគិតថាពេលវេលាមិនដែលត្រឹមត្រូវ។\n\nអ្នកខ្លះប្រើដៃគូថ្មីជា rebound ដើម្បីព្យាបាលចិត្ត ដែលវាច្របូកច្របល់ណាស់។ ការក្បត់ចិត្តមានតាំងពីមុនដែរ ប៉ុន្តែឥឡូវត្រូវបានរាប់បញ្ចូលទៀត ទោះបីអ្នកមិនទាន់កំពុងណាត់ជួបផ្លូវការ — ពេលអ្នកជាប់នៅក្នុងដំណាក់កាលមិនច្បាស់លាស់ ដែលគ្មានភាគីណាមួយកំណត់ព្រំដែន។',
       },
       chips: {
         en: ["💬 IG Stories", "🐍 Breadcrumbing"],
@@ -609,8 +808,8 @@ export const rawCardsData = [
         km: "ការសារភាពត្រង់ៗ សំបុត្រក្រដាស និងចិត្តស្មោះពិតប្រាកដ",
       },
       details: {
-        en: "My father courted my mother by flirting and calling her on a cheap mobile phone, and he asked for her house address so he could drive over and see her. Folded paper notes and shared bicycle rides were part of the era too.\n\nMarriages back then were usually arranged, but my father and uncle were an exception — they were allowed to choose their own wives. My father met my mother at Kirirom, and they married quickly, within eight or nine months.\n\nSaying \"I love you\" carried real weight for my father; he would devote his heart to that person before he ever said it.",
-        km: "ឪពុកខ្ញុំស្រលាញ់ម្តាយខ្ញុំដោយលេងសើចផ្អែម និងទូរស័ព្ទរកគាត់តាមទូរស័ព្ទចល័តថោកៗ ហើយគាត់បានសួរអាសយដ្ឋានផ្ទះរបស់គាត់ ដើម្បីបើកបរទៅជួប។ សំបុត្រក្រដាសបត់ និងការជិះកង់ជូនគ្នាក៏ជាផ្នែកនៃសម័យនោះដែរ។\n\nការរៀបការសម័យនោះភាគច្រើនជាការរៀបចំចាត់ចែង ប៉ុន្តែឪពុក និងពូរបស់ខ្ញុំជាករណីលើកលែង — ពួកគាត់អាចជ្រើសរើសប្រពន្ធដោយខ្លួនឯង។ ឪពុកខ្ញុំជួបម្តាយខ្ញុំនៅគិរីរម្យ ហើយពួកគាត់រៀបការយ៉ាងលឿន ក្នុងរយៈពេល ៨–៩ ខែ។\n\nការនិយាយថា \"ខ្ញុំស្រឡាញ់អ្នក\" មានអត្ថន័យខ្លាំងណាស់សម្រាប់ឪពុកខ្ញុំ — គាត់ត្រូវយកចិត្តទុកដាក់ចំពោះមនុស្សនោះពេញលេញ មុនពេលនិយាយ។",
+        en: 'My father courted my mother by flirting and calling her on a cheap mobile phone, and he asked for her house address so he could drive over and see her. Folded paper notes and shared bicycle rides were part of the era too.\n\nMarriages back then were usually arranged, but my father and uncle were an exception — they were allowed to choose their own wives. My father met my mother at Kirirom, and they married quickly, within eight or nine months.\n\nSaying "I love you" carried real weight for my father; he would devote his heart to that person before he ever said it.',
+        km: 'ឪពុកខ្ញុំស្រលាញ់ម្តាយខ្ញុំដោយលេងសើចផ្អែម និងទូរស័ព្ទរកគាត់តាមទូរស័ព្ទចល័តថោកៗ ហើយគាត់បានសួរអាសយដ្ឋានផ្ទះរបស់គាត់ ដើម្បីបើកបរទៅជួប។ សំបុត្រក្រដាសបត់ និងការជិះកង់ជូនគ្នាក៏ជាផ្នែកនៃសម័យនោះដែរ។\n\nការរៀបការសម័យនោះភាគច្រើនជាការរៀបចំចាត់ចែង ប៉ុន្តែឪពុក និងពូរបស់ខ្ញុំជាករណីលើកលែង — ពួកគាត់អាចជ្រើសរើសប្រពន្ធដោយខ្លួនឯង។ ឪពុកខ្ញុំជួបម្តាយខ្ញុំនៅគិរីរម្យ ហើយពួកគាត់រៀបការយ៉ាងលឿន ក្នុងរយៈពេល ៨–៩ ខែ។\n\nការនិយាយថា "ខ្ញុំស្រឡាញ់អ្នក" មានអត្ថន័យខ្លាំងណាស់សម្រាប់ឪពុកខ្ញុំ — គាត់ត្រូវយកចិត្តទុកដាក់ចំពោះមនុស្សនោះពេញលេញ មុនពេលនិយាយ។',
       },
       chips: {
         en: ["✉️ Paper notes", "🚲 Rides home"],
@@ -626,16 +825,56 @@ export const rawCardsData = [
       modern: { en: "STORIES, HEARTS & TYPING DOTS", km: "ស្ទូរី បេះដូង និងសារជជែក" },
     },
     commonKeywords: [
-      "romance", "dating", "love", "couple", "date", "heart", "confession",
-      "ស្នេហា", "សង្សារ", "ណាត់ជួប", "ស្រឡាញ់", "បេះដូង", "គូស្នេហ៍"
+      "romance",
+      "dating",
+      "love",
+      "couple",
+      "date",
+      "heart",
+      "confession",
+      "ស្នេហា",
+      "សង្សារ",
+      "ណាត់ជួប",
+      "ស្រឡាញ់",
+      "បេះដូង",
+      "គូស្នេហ៍",
     ],
     heritageKeywords: [
-      "paper note", "folded", "bicycle ride", "intentions", "genuine", "ride home", "escort", "letters", "honest",
-      "សំបុត្រ", "សំបុត្របត់", "ជិះកង់ជូន", "សំបុត្រស្នេហ៍", "សយ ពិសិដ្ឋ", "លាង ផល្លី"
+      "paper note",
+      "folded",
+      "bicycle ride",
+      "intentions",
+      "genuine",
+      "ride home",
+      "escort",
+      "letters",
+      "honest",
+      "សំបុត្រ",
+      "សំបុត្របត់",
+      "ជិះកង់ជូន",
+      "សំបុត្រស្នេហ៍",
+      "សយ ពិសិដ្ឋ",
+      "លាង ផល្លី",
     ],
     modernKeywords: [
-      "ig", "instagram", "story", "relationship", "fwb", "situationship", "breadcrumbing", "talking stage", "chat", "dm", "filter", "feed", "typing", "stories",
-      "ជជែកស្នេហ៍", "សារ", "ស្ទូរី", "ពិសិដ្ឋ ទីវីរៈពង្ស"
+      "ig",
+      "instagram",
+      "story",
+      "relationship",
+      "fwb",
+      "situationship",
+      "breadcrumbing",
+      "talking stage",
+      "chat",
+      "dm",
+      "filter",
+      "feed",
+      "typing",
+      "stories",
+      "ជជែកស្នេហ៍",
+      "សារ",
+      "ស្ទូរី",
+      "ពិសិដ្ឋ ទីវីរៈពង្ស",
     ],
   },
 ];
@@ -670,7 +909,10 @@ export function getTranslatedCard(rawCard, lang = "en") {
       ? rawCard.priceIndex.map((row) => ({
           item: typeof row?.item === "object" ? row.item[l] || row.item.en : row?.item || "",
           past: typeof row?.past === "object" ? row.past[l] || row.past.en : row?.past || "",
-          present: typeof row?.present === "object" ? row.present[l] || row.present.en : row?.present || "",
+          present:
+            typeof row?.present === "object"
+              ? row.present[l] || row.present.en
+              : row?.present || "",
         }))
       : null,
     caption: {
@@ -696,4 +938,3 @@ export {
   scoreCard,
   filterCardsByTerms,
 } from "./search.js";
-

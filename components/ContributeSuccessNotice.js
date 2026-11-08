@@ -48,7 +48,8 @@ export default function ContributeSuccessNotice() {
           color: "var(--text)",
         }}
       >
-        ការចូលរួមរបស់អ្នកត្រូវបានបញ្ជូនរួចរាល់ហើយកំពុងរង់ចាំការពិនិត្យពីអ្នកគ្រប់គ្រងបណ្ណសារ។ អ្នកអាចតាមដានស្ថានភាពក្នុងទំព័រ &quot;ការចូលរួមរបស់ខ្ញុំ&quot;។
+        ការចូលរួមរបស់អ្នកត្រូវបានបញ្ជូនរួចរាល់ហើយកំពុងរង់ចាំការពិនិត្យពីអ្នកគ្រប់គ្រងបណ្ណសារ។
+        អ្នកអាចតាមដានស្ថានភាពក្នុងទំព័រ &quot;ការចូលរួមរបស់ខ្ញុំ&quot;។
       </p>
       <p
         style={{
@@ -58,7 +59,8 @@ export default function ContributeSuccessNotice() {
           color: "var(--text-muted)",
         }}
       >
-        Your entry has been submitted and is waiting for review. It will appear in the archive once approved. You can track its status in My Entries.
+        Your entry has been submitted and is waiting for review. It will appear in the archive once
+        approved. You can track its status in My Entries.
       </p>
       <div
         style={{

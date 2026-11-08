@@ -4,15 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./entry-cards.module.css";
 import StoryIllustration, { illustrationCaption } from "./StoryIllustration";
-import {
-  translations,
-  getTranslatedCard,
-} from "../lib/translations";
-import {
-  searchTerms,
-  scoreCard,
-  filterCardsByTerms,
-} from "../lib/search";
+import { translations, getTranslatedCard } from "../lib/translations";
+import { searchTerms, scoreCard, filterCardsByTerms } from "../lib/search";
 
 export { searchTerms };
 
@@ -105,7 +98,7 @@ export function getCardImages(card, era) {
 
   // Strictly separate eras: past(n) for heritage, present(n) for modern
   const isHeritage = era === "heritage";
-  const prefix = isHeritage ? (cfg.pastPrefix || "past") : (cfg.presentPrefix || "present");
+  const prefix = isHeritage ? cfg.pastPrefix || "past" : cfg.presentPrefix || "present";
   const count = isHeritage ? (cfg.pastCount ?? 0) : (cfg.presentCount ?? 0);
   const ext = cfg.ext || "png";
 
@@ -164,9 +157,7 @@ function ArchivePhotoGallery({ card, era, lang = "en" }) {
     return (
       <div className={styles.photoGallery}>
         <div className={styles.photoGalleryHeader}>
-          <span className={styles.photoGalleryTitle}>
-            {t.archivePhotosTitle(isHeritage)}
-          </span>
+          <span className={styles.photoGalleryTitle}>{t.archivePhotosTitle(isHeritage)}</span>
           <span className={styles.photoGalleryCounter}>
             {lang === "km" ? "០ រូបថត" : "0 PHOTOGRAPHS"}
           </span>
@@ -188,15 +179,9 @@ function ArchivePhotoGallery({ card, era, lang = "en" }) {
               <circle cx="8.5" cy="10" r="1.5" />
               <path d="M21 15l-5-5L5 21" />
             </svg>
-            <p className={styles.placeholderTitle}>
-              {t.noPhotosTitle(isHeritage)}
-            </p>
-            <p className={styles.placeholderText}>
-              {t.noPhotosDesc(isHeritage, card.topic)}
-            </p>
-            <span className={styles.placeholderBadge}>
-              {t.photoPatternBadge(prefix, folder)}
-            </span>
+            <p className={styles.placeholderTitle}>{t.noPhotosTitle(isHeritage)}</p>
+            <p className={styles.placeholderText}>{t.noPhotosDesc(isHeritage, card.topic)}</p>
+            <span className={styles.placeholderBadge}>{t.photoPatternBadge(prefix, folder)}</span>
           </div>
         </div>
       </div>
@@ -213,9 +198,7 @@ function ArchivePhotoGallery({ card, era, lang = "en" }) {
   return (
     <div className={styles.photoGallery}>
       <div className={styles.photoGalleryHeader}>
-        <span className={styles.photoGalleryTitle}>
-          {t.archivePhotosTitle(isHeritage)}
-        </span>
+        <span className={styles.photoGalleryTitle}>{t.archivePhotosTitle(isHeritage)}</span>
         <span className={styles.photoGalleryCounter}>
           {t.photoCounter((index % total) + 1, total)}
         </span>
@@ -264,9 +247,7 @@ function ArchivePhotoGallery({ card, era, lang = "en" }) {
               />
             ))}
           </div>
-          <span className={styles.photoInfiniteNote}>
-            {t.infiniteScrollNote(total)}
-          </span>
+          <span className={styles.photoInfiniteNote}>{t.infiniteScrollNote(total)}</span>
         </div>
       )}
     </div>
@@ -292,7 +273,14 @@ function EntryModal({
   closeRef.current = onClose;
   const data = card[era] ?? {};
   const other = era === "heritage" ? "modern" : "heritage";
-  const otherDecade = other === "heritage" ? (lang === "km" ? "ទសវត្សរ៍ ៨០" : "1980s") : (lang === "km" ? "ទសវត្សរ៍ ២០២០" : "2020s");
+  const otherDecade =
+    other === "heritage"
+      ? lang === "km"
+        ? "ទសវត្សរ៍ ៨០"
+        : "1980s"
+      : lang === "km"
+        ? "ទសវត្សរ៍ ២០២០"
+        : "2020s";
   const running = warpPhase !== "idle";
   // back = target is heritage (moving left); fwd = target is modern (moving right)
   const back = running ? warpDir === "back" : other === "heritage";
@@ -311,12 +299,19 @@ function EntryModal({
     function onKey(e) {
       if (e.key === "Escape") closeRef.current?.();
       if (e.key === "Tab") {
-        const items = dialogRef.current?.querySelectorAll('button:not(:disabled), a[href], input, [tabindex="0"]');
+        const items = dialogRef.current?.querySelectorAll(
+          'button:not(:disabled), a[href], input, [tabindex="0"]'
+        );
         if (!items?.length) return;
         const first = items[0];
         const last = items[items.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     }
     window.addEventListener("keydown", onKey);
@@ -399,11 +394,16 @@ function EntryModal({
           <div className={styles.eraPanel}>
             <p className={styles.eraLabel}>{data.label}</p>
             <h3 className={styles.eraHeadline}>{data.headline}</h3>
-            <p className={styles.eraDetails} style={{ whiteSpace: "pre-line" }}>{data.details}</p>
+            <p className={styles.eraDetails} style={{ whiteSpace: "pre-line" }}>
+              {data.details}
+            </p>
             {data.role ? <p className={styles.eraRole}>{data.role}</p> : null}
             {data.source ? (
               <div className={styles.eraSource}>
-                <span className={styles.sourceTag}>{t.cardSourceLabel || t.source || "SOURCE"}:</span> {data.source}
+                <span className={styles.sourceTag}>
+                  {t.cardSourceLabel || t.source || "SOURCE"}:
+                </span>{" "}
+                {data.source}
               </div>
             ) : null}
           </div>
@@ -442,8 +442,12 @@ function EntryModal({
 
             <span className={styles.warpLabel}>
               {running
-                ? (back ? t.warpingToPast : t.warpingToPresent)
-                : (back ? t.warpToPast : t.warpToPresent)}
+                ? back
+                  ? t.warpingToPast
+                  : t.warpingToPresent
+                : back
+                  ? t.warpToPast
+                  : t.warpToPresent}
             </span>
 
             {/* Forward arrow on right when target is 2020s */}
@@ -510,10 +514,7 @@ export default function EntryCards({
   // Keyword-based search matching scoped to the active era (past vs present):
   // When browsing 1980s Heritage, queries search only past entries and keywords;
   // when browsing 2020s Modern, queries search only present entries and keywords.
-  const eraCards = useMemo(
-    () => cards.filter((c) => Boolean(c[era])),
-    [cards, era]
-  );
+  const eraCards = useMemo(() => cards.filter((c) => Boolean(c[era])), [cards, era]);
   const visibleRaw = useMemo(
     () => filterCardsByTerms(eraCards, terms, query, era),
     [eraCards, terms, query, era]
@@ -532,10 +533,12 @@ export default function EntryCards({
     <section aria-label="Lifestyle categories">
       <p className={styles.count} role="status">
         {loading
-          ? (lang === "km" ? "កំពុងផ្ទុកទិន្នន័យបណ្ណសារ..." : "Loading archive entries...")
+          ? lang === "km"
+            ? "កំពុងផ្ទុកទិន្នន័យបណ្ណសារ..."
+            : "Loading archive entries..."
           : terms.length
-          ? t.storiesCountMatch(visible.length, eraCards.length)
-          : t.storiesCountAll}
+            ? t.storiesCountMatch(visible.length, eraCards.length)
+            : t.storiesCountAll}
       </p>
 
       {loading ? (
@@ -593,11 +596,23 @@ export default function EntryCards({
                 />
                 <div className={styles.cardScene}>
                   <div className={styles.cardMeta}>
-                    <span>{t.storyLabel} / {c.num}</span>
-                    <span>{era === "heritage" ? (lang === "km" ? "ទសវត្សរ៍ ៨០–៩០" : "1980s–90s") : (lang === "km" ? "ទសវត្សរ៍ ២០២០" : "2020s")}</span>
+                    <span>
+                      {t.storyLabel} / {c.num}
+                    </span>
+                    <span>
+                      {era === "heritage"
+                        ? lang === "km"
+                          ? "ទសវត្សរ៍ ៨០–៩០"
+                          : "1980s–90s"
+                        : lang === "km"
+                          ? "ទសវត្សរ៍ ២០២០"
+                          : "2020s"}
+                    </span>
                   </div>
                   <StoryIllustration era={era} story={rawStoryNum} topic={c} lang={lang} />
-                  <span className={styles.sceneTag}>{illustrationCaption(era, rawStoryNum, lang, c)}</span>
+                  <span className={styles.sceneTag}>
+                    {illustrationCaption(era, rawStoryNum, lang, c)}
+                  </span>
                 </div>
                 <div className={styles.cardBody}>
                   <span className={styles.kicker}>
@@ -614,7 +629,10 @@ export default function EntryCards({
                   </div>
                   {data.source ? (
                     <div className={styles.cardSource}>
-                      <span className={styles.cardSourceLabel}>{t.cardSourceLabel || "Source"}:</span> {data.source}
+                      <span className={styles.cardSourceLabel}>
+                        {t.cardSourceLabel || "Source"}:
+                      </span>{" "}
+                      {data.source}
                     </div>
                   ) : null}
                   <div className={styles.cardFooter}>

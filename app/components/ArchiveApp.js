@@ -8,10 +8,7 @@ import EntryCards, { searchTerms } from "./EntryCards";
 import TimeWarp from "./TimeWarp";
 import Architecture from "./Architecture";
 import Atmosphere from "./Atmosphere";
-import {
-  translations,
-  getTranslatedCard,
-} from "../lib/translations";
+import { translations, getTranslatedCard } from "../lib/translations";
 import { filterCardsByTerms } from "../lib/search";
 
 export default function ArchiveApp() {
@@ -66,9 +63,7 @@ export default function ArchiveApp() {
       const params = new URLSearchParams(window.location.search);
       const entryId = params.get("entry");
       if (entryId) {
-        const found = cards.find(
-          (c) => String(c.id) === entryId || c.slug === entryId
-        );
+        const found = cards.find((c) => String(c.id) === entryId || c.slug === entryId);
         if (found) {
           setSelected(found);
         }
@@ -94,11 +89,9 @@ export default function ArchiveApp() {
       }
     }
     supabase.auth.getSession().then(({ data }) => syncUser(data.session));
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        syncUser(session);
-      }
-    );
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      syncUser(session);
+    });
     return () => authListener.subscription.unsubscribe();
   }, [supabase]);
 
@@ -258,9 +251,7 @@ export default function ArchiveApp() {
   const suggestTerms = useMemo(() => searchTerms(draft), [draft]);
   const suggestions = useMemo(
     () =>
-      draft.trim().length
-        ? filterCardsByTerms(cards, suggestTerms, draft, era).slice(0, 6)
-        : [],
+      draft.trim().length ? filterCardsByTerms(cards, suggestTerms, draft, era).slice(0, 6) : [],
     [cards, suggestTerms, draft, era]
   );
 
@@ -289,13 +280,7 @@ export default function ArchiveApp() {
       >
         <nav className="topbar" aria-label="Main navigation">
           <a className="brand" href="#">
-            <svg
-              width="30"
-              height="32"
-              viewBox="0 0 30 32"
-              fill="none"
-              aria-hidden="true"
-            >
+            <svg width="30" height="32" viewBox="0 0 30 32" fill="none" aria-hidden="true">
               <path
                 d="M3 13L15 3L27 13M7 12V25H23V12M3 29H27M12 25V16H18V25M15 3V0"
                 stroke="currentColor"
@@ -314,144 +299,122 @@ export default function ArchiveApp() {
                 {t.navExplore} <span aria-hidden="true">↗</span>
               </a>
               <a href="#about">{t.navAbout}</a>
-              {userEmail ? (
-                <a href="/my-entries">{t.navMyEntries}</a>
-              ) : null}
+              {userEmail ? <a href="/my-entries">{t.navMyEntries}</a> : null}
             </div>
 
-          <div className="profile" ref={menuRef}>
-            <button
-              type="button"
-              className="profile-btn"
-              onClick={() => setMenuOpen((value) => !value)}
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-              aria-label={userEmail ? "Account menu" : "Main menu"}
-            >
-              {userEmail ? (
-                userEmail.charAt(0).toUpperCase()
-              ) : (
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <circle
-                    cx="12"
-                    cy="8"
-                    r="3.4"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                  />
-                  <path
-                    d="M5 20c0-3.4 3.1-5.6 7-5.6s7 2.2 7 5.6"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              )}
-            </button>
-            {menuOpen ? (
-              <div className="profile-menu" role="menu">
-                <p className="profile-menu-email" title={userEmail || undefined}>
-                  {userEmail || (lang === "km" ? "ម៉ឺនុយ" : "Menu")}
-                </p>
-                <div className="profile-menu-row">
-                  <span className="profile-menu-label">
-                    {lang === "km" ? "ភាសា" : "Language"}
-                  </span>
-                  <div
-                    className="lang-toggle"
-                    role="group"
-                    aria-label="Language selection"
-                  >
-                    <button
-                      type="button"
-                      className={`lang-btn ${lang === "en" ? "active" : ""}`}
-                      onClick={() => setLang("en")}
-                      aria-pressed={lang === "en"}
-                    >
-                      EN
-                    </button>
-                    <button
-                      type="button"
-                      className={`lang-btn ${lang === "km" ? "active" : ""}`}
-                      onClick={() => setLang("km")}
-                      aria-pressed={lang === "km"}
-                    >
-                      ខ្មែរ
-                    </button>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="profile-menu-item"
-                  onClick={() => setMotionPaused((value) => !value)}
-                  aria-pressed={motionPaused}
-                >
-                  <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
-                  {motionPaused ? t.motionOff : t.motionOn}
-                </button>
+            <div className="profile" ref={menuRef}>
+              <button
+                type="button"
+                className="profile-btn"
+                onClick={() => setMenuOpen((value) => !value)}
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                aria-label={userEmail ? "Account menu" : "Main menu"}
+              >
                 {userEmail ? (
-                  <>
-                    <a
-                      href="/my-entries"
-                      className="profile-menu-item"
-                      style={{ textDecoration: "none" }}
-                    >
-                      <span aria-hidden="true">📋</span>
-                      {t.navMyEntries}
-                    </a>
-                    {isReviewer ? (
+                  userEmail.charAt(0).toUpperCase()
+                ) : (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3.4" stroke="currentColor" strokeWidth="1.6" />
+                    <path
+                      d="M5 20c0-3.4 3.1-5.6 7-5.6s7 2.2 7 5.6"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                )}
+              </button>
+              {menuOpen ? (
+                <div className="profile-menu" role="menu">
+                  <p className="profile-menu-email" title={userEmail || undefined}>
+                    {userEmail || (lang === "km" ? "ម៉ឺនុយ" : "Menu")}
+                  </p>
+                  <div className="profile-menu-row">
+                    <span className="profile-menu-label">
+                      {lang === "km" ? "ភាសា" : "Language"}
+                    </span>
+                    <div className="lang-toggle" role="group" aria-label="Language selection">
+                      <button
+                        type="button"
+                        className={`lang-btn ${lang === "en" ? "active" : ""}`}
+                        onClick={() => setLang("en")}
+                        aria-pressed={lang === "en"}
+                      >
+                        EN
+                      </button>
+                      <button
+                        type="button"
+                        className={`lang-btn ${lang === "km" ? "active" : ""}`}
+                        onClick={() => setLang("km")}
+                        aria-pressed={lang === "km"}
+                      >
+                        ខ្មែរ
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="profile-menu-item"
+                    onClick={() => setMotionPaused((value) => !value)}
+                    aria-pressed={motionPaused}
+                  >
+                    <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
+                    {motionPaused ? t.motionOff : t.motionOn}
+                  </button>
+                  {userEmail ? (
+                    <>
                       <a
-                        href="/review"
+                        href="/my-entries"
                         className="profile-menu-item"
                         style={{ textDecoration: "none" }}
                       >
-                        <span aria-hidden="true">🗂</span>
-                        {t.navReviewPanel}
+                        <span aria-hidden="true">📋</span>
+                        {t.navMyEntries}
                       </a>
-                    ) : null}
-                    <a
-                      href="/contribute"
-                      className="profile-menu-item"
-                      style={{ textDecoration: "none" }}
-                    >
-                      <span aria-hidden="true">+</span>
-                      {lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}
-                    </a>
-                    <button
-                      type="button"
-                      className="profile-menu-item"
-                      onClick={handleLogout}
-                    >
-                      {t.authLogout}
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <a
-                      href="/login"
-                      className="profile-menu-item"
-                      style={{ textDecoration: "none" }}
-                    >
-                      {t.authLoginLink}
-                    </a>
-                    <a
-                      href="/signup"
-                      className="profile-menu-item"
-                      style={{ textDecoration: "none" }}
-                    >
-                      {t.authSignupLink}
-                    </a>
-                  </>
-                )}
-              </div>
-            ) : null}
-          </div>
+                      {isReviewer ? (
+                        <a
+                          href="/review"
+                          className="profile-menu-item"
+                          style={{ textDecoration: "none" }}
+                        >
+                          <span aria-hidden="true">🗂</span>
+                          {t.navReviewPanel}
+                        </a>
+                      ) : null}
+                      <a
+                        href="/contribute"
+                        className="profile-menu-item"
+                        style={{ textDecoration: "none" }}
+                      >
+                        <span aria-hidden="true">+</span>
+                        {lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}
+                      </a>
+                      <button type="button" className="profile-menu-item" onClick={handleLogout}>
+                        {t.authLogout}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <a
+                        href="/login"
+                        className="profile-menu-item"
+                        style={{ textDecoration: "none" }}
+                      >
+                        {t.authLoginLink}
+                      </a>
+                      <a
+                        href="/signup"
+                        className="profile-menu-item"
+                        style={{ textDecoration: "none" }}
+                      >
+                        {t.authSignupLink}
+                      </a>
+                    </>
+                  )}
+                </div>
+              ) : null}
+            </div>
           </div>
         </nav>
 
@@ -465,9 +428,7 @@ export default function ArchiveApp() {
               <br />
               <span>{past ? t.heroTitlePastSub : t.heroTitlePresentSub}</span>
             </h1>
-            <p className="description">
-              {past ? t.heroDescPast : t.heroDescPresent}
-            </p>
+            <p className="description">{past ? t.heroDescPast : t.heroDescPresent}</p>
             <a className="explore-link" href="#archive">
               {t.heroExplore} <span aria-hidden="true">↓</span>
             </a>
@@ -481,7 +442,7 @@ export default function ArchiveApp() {
             <div className="scene-orbit" />
             <span className="scene-coordinate">11.5564° N / 104.9282° E</span>
             <span className="scene-year">
-              {past ? (lang === "km" ? "១៩៨០" : "1980") : (lang === "km" ? "២០២០" : "2020")}
+              {past ? (lang === "km" ? "១៩៨០" : "1980") : lang === "km" ? "២០២០" : "2020"}
               <span>{lang === "km" ? "" : "s"}</span>
             </span>
             <Architecture era={era} hero />
@@ -529,8 +490,8 @@ export default function ArchiveApp() {
                   ? t.statusLeaving
                   : t.statusDrawing
                 : past
-                ? t.statusPast
-                : t.statusPresent}
+                  ? t.statusPast
+                  : t.statusPresent}
             </p>
           </div>
 
@@ -549,14 +510,7 @@ export default function ArchiveApp() {
                 aria-label={t.searchPlaceholder}
               >
                 <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-                  <circle
-                    cx="7"
-                    cy="7"
-                    r="5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
+                  <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" strokeWidth="2" />
                   <path
                     d="M11 11l4 4"
                     stroke="currentColor"
@@ -585,9 +539,7 @@ export default function ArchiveApp() {
                     setShowSuggest(true);
                     setSuggestIndex((index) =>
                       suggestions.length
-                        ? (index +
-                            (e.key === "ArrowDown" ? 1 : -1) +
-                            suggestions.length) %
+                        ? (index + (e.key === "ArrowDown" ? 1 : -1) + suggestions.length) %
                           suggestions.length
                         : -1
                     );
@@ -609,9 +561,7 @@ export default function ArchiveApp() {
                 role="combobox"
                 aria-autocomplete="list"
                 aria-activedescendant={
-                  showDropdown && suggestIndex >= 0
-                    ? `suggestion-${suggestIndex}`
-                    : undefined
+                  showDropdown && suggestIndex >= 0 ? `suggestion-${suggestIndex}` : undefined
                 }
                 aria-expanded={showDropdown}
                 aria-controls="search-suggestions"

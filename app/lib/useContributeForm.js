@@ -22,30 +22,20 @@ export function useContributeForm(user, initialData = null) {
   const entryId = initialData?.id || null;
 
   const [title, setTitle] = useState(
-    Array.isArray(initialData?.title)
-      ? initialData.title[0] || ""
-      : initialData?.title || ""
+    Array.isArray(initialData?.title) ? initialData.title[0] || "" : initialData?.title || ""
   );
   const [titleKm, setTitleKm] = useState(
-    Array.isArray(initialData?.title)
-      ? initialData.title[1] || ""
-      : initialData?.title_km || ""
+    Array.isArray(initialData?.title) ? initialData.title[1] || "" : initialData?.title_km || ""
   );
   const [content, setContent] = useState(
-    Array.isArray(initialData?.content)
-      ? initialData.content[0] || ""
-      : initialData?.content || ""
+    Array.isArray(initialData?.content) ? initialData.content[0] || "" : initialData?.content || ""
   );
   const [timeline, setTimeline] = useState(initialData?.timeline || "");
   const [topic, setTopic] = useState(
-    Array.isArray(initialData?.topic)
-      ? initialData.topic[0] || ""
-      : initialData?.topic || ""
+    Array.isArray(initialData?.topic) ? initialData.topic[0] || "" : initialData?.topic || ""
   );
   const [source, setSource] = useState(
-    Array.isArray(initialData?.source)
-      ? initialData.source[0] || ""
-      : initialData?.source || ""
+    Array.isArray(initialData?.source) ? initialData.source[0] || "" : initialData?.source || ""
   );
   const [priceIndex, setPriceIndex] = useState(
     initialData?.price_index
@@ -58,9 +48,7 @@ export function useContributeForm(user, initialData = null) {
     initialData?.keywords ? JSON.stringify(initialData.keywords) : ""
   );
   const [photoFile, setPhotoFile] = useState(null);
-  const [photoPreview, setPhotoPreview] = useState(
-    initialData?.image_config?.url || null
-  );
+  const [photoPreview, setPhotoPreview] = useState(initialData?.image_config?.url || null);
 
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");

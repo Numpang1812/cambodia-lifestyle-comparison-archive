@@ -19,9 +19,20 @@ export default function ContributePhotoField({
     <div className={styles.field}>
       <div className={styles.labelRow}>
         <label htmlFor={id} className={styles.label}>
-          PHOTO {isEdit ? <span style={{ opacity: 0.65, fontSize: "11px", fontWeight: "normal" }}>(OPTIONAL)</span> : <span className={styles.requiredStar}>*</span>}
+          PHOTO{" "}
+          {isEdit ? (
+            <span style={{ opacity: 0.65, fontSize: "11px", fontWeight: "normal" }}>
+              (OPTIONAL)
+            </span>
+          ) : (
+            <span className={styles.requiredStar}>*</span>
+          )}
         </label>
-        {error && <span className={styles.fieldError} role="alert">{error}</span>}
+        {error && (
+          <span className={styles.fieldError} role="alert">
+            {error}
+          </span>
+        )}
       </div>
 
       <input
@@ -39,7 +50,9 @@ export default function ContributePhotoField({
         onClick={() => !disabled && inputRef.current?.click()}
         role="button"
         tabIndex={0}
-        onKeyDown={(e) => !disabled && (e.key === "Enter" || e.key === " ") && inputRef.current?.click()}
+        onKeyDown={(e) =>
+          !disabled && (e.key === "Enter" || e.key === " ") && inputRef.current?.click()
+        }
       >
         {previewUrl ? (
           <div className={styles.previewContainer}>

@@ -54,11 +54,9 @@ function ContributeContent() {
 
     init();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user ?? null);
-      }
-    );
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
 
     return () => authListener.subscription.unsubscribe();
   }, [editId]);
@@ -76,9 +74,7 @@ function ContributeContent() {
           <p className={styles.kicker}>
             <span className={styles.dot} /> KHMER LIVING ARCHIVE
           </p>
-          <h1 className={styles.title}>
-            {isEdit ? "Edit Archive Entry" : "Contribute an Entry"}
-          </h1>
+          <h1 className={styles.title}>{isEdit ? "Edit Archive Entry" : "Contribute an Entry"}</h1>
           <p className={styles.sub}>
             {isEdit
               ? "Update cultural observation, timeline, or photo. Changes are preserved directly in the archive."
@@ -97,17 +93,17 @@ function ContributeContent() {
             <p className={styles.fieldError} style={{ margin: "0 0 16px 0", fontSize: "14px" }}>
               {editError}
             </p>
-            <a href="/" className={styles.submitBtn} style={{ display: "inline-block", textAlign: "center", textDecoration: "none" }}>
+            <a
+              href="/"
+              className={styles.submitBtn}
+              style={{ display: "inline-block", textAlign: "center", textDecoration: "none" }}
+            >
               Return to Archive
             </a>
           </div>
         ) : user ? (
           <div className={styles.card}>
-            <ContributeForm
-              user={user}
-              initialData={entryData}
-              key={entryData?.id || "new"}
-            />
+            <ContributeForm user={user} initialData={entryData} key={entryData?.id || "new"} />
           </div>
         ) : (
           <ContributeLoginPrompt />
@@ -119,9 +115,10 @@ function ContributeContent() {
 
 export default function ContributePage() {
   return (
-    <Suspense fallback={<div style={{ padding: "40px", color: "var(--text-muted)" }}>Loading...</div>}>
+    <Suspense
+      fallback={<div style={{ padding: "40px", color: "var(--text-muted)" }}>Loading...</div>}
+    >
       <ContributeContent />
     </Suspense>
   );
 }
-

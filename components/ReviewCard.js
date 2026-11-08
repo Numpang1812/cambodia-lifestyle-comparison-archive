@@ -27,8 +27,23 @@ export default function ReviewCard({ entry, t, busy, onDecide }) {
         gap: "12px",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
-        <span style={{ font: "11px var(--font-mono)", color: "#eab308", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "12px",
+          flexWrap: "wrap",
+        }}
+      >
+        <span
+          style={{
+            font: "11px var(--font-mono)",
+            color: "#eab308",
+            textTransform: "uppercase",
+            letterSpacing: "0.5px",
+          }}
+        >
           {statusKey}
         </span>
         <span style={{ font: "11px var(--font-mono)", color: "var(--text-muted)" }}>
@@ -39,20 +54,42 @@ export default function ReviewCard({ entry, t, busy, onDecide }) {
       <div>
         <h3 style={{ margin: "0 0 4px 0", fontSize: "17px", color: "var(--text)" }}>{titleEn}</h3>
         {titleKm ? (
-          <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)", fontFamily: "var(--font-kantumruy)" }}>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "14px",
+              color: "var(--text-muted)",
+              fontFamily: "var(--font-kantumruy)",
+            }}
+          >
             {titleKm}
           </p>
         ) : null}
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "8px", borderTop: "1px solid var(--border)", flexWrap: "wrap", gap: "10px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingTop: "8px",
+          borderTop: "1px solid var(--border)",
+          flexWrap: "wrap",
+          gap: "10px",
+        }}
+      >
         <span style={{ font: "12px var(--font-mono)", color: "var(--text-muted)" }}>{topic}</span>
         <div style={{ display: "flex", gap: "10px" }}>
           <button
             type="button"
             disabled={busy}
             onClick={() => onDecide(entry, "published")}
-            style={{ ...BTN, color: "#22c55e", borderColor: "rgba(34, 197, 94, 0.4)", opacity: busy ? 0.5 : 1 }}
+            style={{
+              ...BTN,
+              color: "#22c55e",
+              borderColor: "rgba(34, 197, 94, 0.4)",
+              opacity: busy ? 0.5 : 1,
+            }}
           >
             {busy ? t.reviewBusy : t.reviewApprove}
           </button>
@@ -60,7 +97,12 @@ export default function ReviewCard({ entry, t, busy, onDecide }) {
             type="button"
             disabled={busy}
             onClick={() => onDecide(entry, "returned")}
-            style={{ ...BTN, color: "#f97316", borderColor: "rgba(249, 115, 22, 0.4)", opacity: busy ? 0.5 : 1 }}
+            style={{
+              ...BTN,
+              color: "#f97316",
+              borderColor: "rgba(249, 115, 22, 0.4)",
+              opacity: busy ? 0.5 : 1,
+            }}
           >
             {t.reviewReturn}
           </button>

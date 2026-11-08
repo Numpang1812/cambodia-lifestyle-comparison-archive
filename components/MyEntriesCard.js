@@ -41,7 +41,15 @@ export default function MyEntriesCard({ entry }) {
         gap: "12px",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "12px",
+          flexWrap: "wrap",
+        }}
+      >
         <span
           style={{
             font: "11px var(--font-mono)",
@@ -62,27 +70,54 @@ export default function MyEntriesCard({ entry }) {
       </div>
 
       <div>
-        <h3 style={{ margin: "0 0 4px 0", fontSize: "17px", color: "var(--text)" }}>
-          {titleEn}
-        </h3>
+        <h3 style={{ margin: "0 0 4px 0", fontSize: "17px", color: "var(--text)" }}>{titleEn}</h3>
         {titleKm && (
-          <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)", fontFamily: "var(--font-kantumruy)" }}>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "14px",
+              color: "var(--text-muted)",
+              fontFamily: "var(--font-kantumruy)",
+            }}
+          >
             {titleKm}
           </p>
         )}
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "8px", borderTop: "1px solid var(--border)", flexWrap: "wrap", gap: "10px" }}>
-        <span style={{ font: "12px var(--font-mono)", color: "var(--text-muted)" }}>
-          {topic}
-        </span>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingTop: "8px",
+          borderTop: "1px solid var(--border)",
+          flexWrap: "wrap",
+          gap: "10px",
+        }}
+      >
+        <span style={{ font: "12px var(--font-mono)", color: "var(--text-muted)" }}>{topic}</span>
         <div style={{ display: "flex", gap: "10px" }}>
           {statusKey === "published" && (
-            <a href={`/?entry=${entry.id}`} style={{ font: "11px var(--font-mono)", color: "var(--accent)", textDecoration: "underline" }}>
+            <a
+              href={`/?entry=${entry.id}`}
+              style={{
+                font: "11px var(--font-mono)",
+                color: "var(--accent)",
+                textDecoration: "underline",
+              }}
+            >
               VIEW IN ARCHIVE
             </a>
           )}
-          <a href={`/contribute?edit=${entry.id}`} style={{ font: "11px var(--font-mono)", color: "var(--accent)", textDecoration: "underline" }}>
+          <a
+            href={`/contribute?edit=${entry.id}`}
+            style={{
+              font: "11px var(--font-mono)",
+              color: "var(--accent)",
+              textDecoration: "underline",
+            }}
+          >
             EDIT ENTRY →
           </a>
         </div>

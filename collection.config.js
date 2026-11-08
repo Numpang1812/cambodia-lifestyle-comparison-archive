@@ -11,13 +11,15 @@ const collection = {
   name: "Cambodia Lifestyle",
 
   // One sentence: what is this archive, and why does it matter?
-  description: "A comparison between Cambodia lifestyle in the 1980s and the current era, built for Vibe Coding Course Final Project.",
+  description:
+    "A comparison between Cambodia lifestyle in the 1980s and the current era, built for Vibe Coding Course Final Project.",
 
   // Who is building this archive? Your name, as you want it shown.
   curator: "Tyvirakpoung Piseth",
 
   // Where does your knowledge come from? A person, a place, a community.
-  source: "Oral histories from my father and uncle (1980s heritage) & firsthand observations by Tyvirakpoung Piseth (2020s present).",
+  source:
+    "Oral histories from my father and uncle (1980s heritage) & firsthand observations by Tyvirakpoung Piseth (2020s present).",
 };
 
 export default collection;

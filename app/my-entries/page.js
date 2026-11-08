@@ -16,7 +16,9 @@ export default function MyEntriesPage() {
   useEffect(() => {
     const supabase = createClient();
     async function init() {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
+      const {
+        data: { user: authUser },
+      } = await supabase.auth.getUser();
       setUser(authUser ?? null);
 
       if (authUser) {
@@ -41,7 +43,9 @@ export default function MyEntriesPage() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <a href="/" className={styles.backLink}>← BACK TO ARCHIVE</a>
+        <a href="/" className={styles.backLink}>
+          ← BACK TO ARCHIVE
+        </a>
         <div className={styles.header}>
           <p className={styles.kicker}>
             <span className={styles.dot} /> {collection.name.toUpperCase()} ARCHIVE
@@ -63,7 +67,11 @@ export default function MyEntriesPage() {
         ) : !user ? (
           <ContributeLoginPrompt />
         ) : loadError ? (
-          <div className={styles.card} role="alert" style={{ textAlign: "center", padding: "40px 20px" }}>
+          <div
+            className={styles.card}
+            role="alert"
+            style={{ textAlign: "center", padding: "40px 20px" }}
+          >
             <p style={{ margin: "0 0 8px 0", fontWeight: 600, color: "var(--accent)" }}>
               Could not load your entries
             </p>
@@ -79,7 +87,11 @@ export default function MyEntriesPage() {
             <p style={{ margin: "0 0 16px 0", color: "var(--text-muted)", fontSize: "13px" }}>
               No contributions yet. Add your first cultural observation to the archive!
             </p>
-            <a href="/contribute" className={styles.submitBtn} style={{ textDecoration: "none", display: "inline-block" }}>
+            <a
+              href="/contribute"
+              className={styles.submitBtn}
+              style={{ textDecoration: "none", display: "inline-block" }}
+            >
               + CONTRIBUTE AN ENTRY (ចូលរួមចំណែក)
             </a>
           </div>

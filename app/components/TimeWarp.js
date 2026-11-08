@@ -2,7 +2,10 @@
 
 import { useEffect, useRef } from "react";
 
-export const WARP_TIMING = { full: { duration: 2100, swap: 420 }, quick: { duration: 1700, swap: 320 } };
+export const WARP_TIMING = {
+  full: { duration: 2100, swap: 420 },
+  quick: { duration: 1700, swap: 320 },
+};
 
 export default function TimeWarp({ active, target, onSwap, onDone, mode = "full" }) {
   const canvasRef = useRef(null);
@@ -38,7 +41,9 @@ export default function TimeWarp({ active, target, onSwap, onDone, mode = "full"
     const tint = target === "heritage" ? "235,178,112" : "145,228,216";
     const direction = target === "heritage" ? -1 : 1;
     const particles = Array.from({ length: mode === "quick" ? 55 : 100 }, (_, i) => ({
-      angle: i * 2.39996, distance: .08 + (i % 17) / 22, speed: .4 + (i % 7) / 9,
+      angle: i * 2.39996,
+      distance: 0.08 + (i % 17) / 22,
+      speed: 0.4 + (i % 7) / 9,
     }));
     const draw = (now) => {
       const elapsed = now - start;
@@ -55,10 +60,10 @@ export default function TimeWarp({ active, target, onSwap, onDone, mode = "full"
         return;
       }
       const pulse = Math.pow(Math.sin(Math.PI * t), 2);
-      const opacity = Math.sin(Math.PI * Math.min(t / .5, 1)) * .32;
-      const cx = width * .55;
-      const cy = height * .42;
-      const reach = Math.hypot(width, height) * .6;
+      const opacity = Math.sin(Math.PI * Math.min(t / 0.5, 1)) * 0.32;
+      const cx = width * 0.55;
+      const cy = height * 0.42;
+      const reach = Math.hypot(width, height) * 0.6;
       ctx.strokeStyle = `rgba(${tint},${Math.max(0, opacity)})`;
       ctx.lineWidth = 1;
       for (const p of particles) {
@@ -75,7 +80,7 @@ export default function TimeWarp({ active, target, onSwap, onDone, mode = "full"
         const x = width * (direction === 1 ? progress : 1 - progress);
         const glow = ctx.createLinearGradient(x - 55, 0, x + 55, 0);
         glow.addColorStop(0, `rgba(${tint},0)`);
-        glow.addColorStop(.5, `rgba(${tint},${.09 * Math.sin(progress * Math.PI)})`);
+        glow.addColorStop(0.5, `rgba(${tint},${0.09 * Math.sin(progress * Math.PI)})`);
         glow.addColorStop(1, `rgba(${tint},0)`);
         ctx.fillStyle = glow;
         ctx.fillRect(x - 55, 0, 110, height);
@@ -90,5 +95,11 @@ export default function TimeWarp({ active, target, onSwap, onDone, mode = "full"
     };
   }, [active, target, mode]);
 
-  return <canvas ref={canvasRef} className={`warp-canvas${active ? " active" : ""}`} aria-hidden="true" />;
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`warp-canvas${active ? " active" : ""}`}
+      aria-hidden="true"
+    />
+  );
 }

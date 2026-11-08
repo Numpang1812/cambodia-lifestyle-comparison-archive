@@ -25,7 +25,9 @@ export default function ReviewPage() {
   useEffect(() => {
     const supabase = createClient();
     async function init() {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) {
         setStatus("noaccess");
         return;
@@ -74,8 +76,8 @@ export default function ReviewPage() {
           settled === "published"
             ? t.reviewAlreadyApproved
             : settled === "returned"
-            ? t.reviewAlreadyRejected
-            : t.reviewError
+              ? t.reviewAlreadyRejected
+              : t.reviewError
         );
         setEntries((prev) => prev.filter((e) => e.id !== entry.id));
         return;
@@ -100,11 +102,19 @@ export default function ReviewPage() {
         </h2>
         {list.length === 0 ? (
           <div className={styles.card}>
-            <p className={styles.sub} style={{ margin: 0 }}>{t.reviewEmpty}</p>
+            <p className={styles.sub} style={{ margin: 0 }}>
+              {t.reviewEmpty}
+            </p>
           </div>
         ) : (
           list.map((entry) => (
-            <ReviewCard key={entry.id} entry={entry} t={t} busy={busyId === entry.id} onDecide={handleDecide} />
+            <ReviewCard
+              key={entry.id}
+              entry={entry}
+              t={t}
+              busy={busyId === entry.id}
+              onDecide={handleDecide}
+            />
           ))
         )}
       </section>
@@ -114,7 +124,9 @@ export default function ReviewPage() {
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <a href="/" className={styles.backLink}>← BACK TO ARCHIVE</a>
+        <a href="/" className={styles.backLink}>
+          ← BACK TO ARCHIVE
+        </a>
         <div className={styles.header}>
           <p className={styles.kicker}>
             <span className={styles.dot} /> {translations.en.brand}

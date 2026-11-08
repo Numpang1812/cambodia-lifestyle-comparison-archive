@@ -28,9 +28,7 @@ export async function uploadAndCreateEntry({ supabase, user, trimmed, photoFile 
 
   if (uploadError) throw uploadError;
 
-  const { data: urlData } = supabase.storage
-    .from("photos")
-    .getPublicUrl(randomPath);
+  const { data: urlData } = supabase.storage.from("photos").getPublicUrl(randomPath);
 
   const parsedKeywords = trimmed.keywords ? JSON.parse(trimmed.keywords) : null;
   const baseSlug = (trimmed.title || trimmed.topic)
@@ -112,9 +110,7 @@ export async function updateExistingEntry({
 
     if (uploadError) throw uploadError;
 
-    const { data: urlData } = supabase.storage
-      .from("photos")
-      .getPublicUrl(randomPath);
+    const { data: urlData } = supabase.storage.from("photos").getPublicUrl(randomPath);
 
     finalImageConfig = {
       bucket: "photos",
@@ -160,10 +156,12 @@ export async function updateExistingEntry({
     .select();
 
   if (updateError || !updatedRows || updatedRows.length === 0) {
-    console.error("Update failed or no row returned:", updateError || "Zero rows returned from update");
+    console.error(
+      "Update failed or no row returned:",
+      updateError || "Zero rows returned from update"
+    );
     throw new Error("NOT_SAVED");
   }
 
   return updatedRows[0];
 }
-

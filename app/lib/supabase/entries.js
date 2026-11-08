@@ -140,14 +140,14 @@ export function normalizeEntries(rows) {
     const role = Array.isArray(row.role)
       ? { en: row.role[0] || "", km: row.role[1] || "" }
       : row.role
-      ? { en: row.role, km: row.role }
-      : null;
+        ? { en: row.role, km: row.role }
+        : null;
 
     const source = Array.isArray(row.source)
       ? { en: row.source[0] || "", km: row.source[1] || "" }
       : row.source
-      ? { en: row.source, km: row.source }
-      : null;
+        ? { en: row.source, km: row.source }
+        : null;
 
     const chips =
       row.chips && typeof row.chips === "object"

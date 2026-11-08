@@ -14,7 +14,7 @@ export function validateTitle(val) {
   // No symbols allowed other than (! : ? ‘ ’ ' " “ ”)
   const allowed = /^[a-zA-Z0-9\s!:?'‘’"“”]+$/;
   if (!allowed.test(val)) {
-    return "No symbols allowed other than (! : ? ‘ ’ \" “ ”).";
+    return 'No symbols allowed other than (! : ? ‘ ’ " “ ”).';
   }
   return null;
 }

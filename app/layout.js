@@ -23,11 +23,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      data-era="modern"
-      className={`${kantumruy.variable} ${moulpali.variable}`}
-    >
+    <html lang="en" data-era="modern" className={`${kantumruy.variable} ${moulpali.variable}`}>
       <body>{children}</body>
     </html>
   );

@@ -38,16 +38,12 @@ export default function ContributeForm({ user, initialData = null }) {
 
       <ContributeFormExtraFields {...form.extraProps} isEdit={isEdit} />
 
-      <button
-        type="submit"
-        className={styles.submitBtn}
-        disabled={form.isSubmitting}
-      >
+      <button type="submit" className={styles.submitBtn} disabled={form.isSubmitting}>
         {form.isSubmitting
           ? "UPLOADING & SAVING..."
           : isEdit
-          ? "UPDATE & SAVE ENTRY"
-          : "SUBMIT FOR REVIEW"}
+            ? "UPDATE & SAVE ENTRY"
+            : "SUBMIT FOR REVIEW"}
       </button>
     </form>
   );

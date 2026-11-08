@@ -9,9 +9,29 @@
 export function searchTerms(query) {
   if (!query) return [];
   const stopWords = new Set([
-    "and", "or", "the", "in", "of", "to", "for", "with", "a", "an",
-    "&", "+", "vs", "versus",
-    "និង", "ឬ", "នៃ", "របស់", "ការ", "ដើម្បី", "ជាមួយ", "ឯ", "ក្នុង"
+    "and",
+    "or",
+    "the",
+    "in",
+    "of",
+    "to",
+    "for",
+    "with",
+    "a",
+    "an",
+    "&",
+    "+",
+    "vs",
+    "versus",
+    "និង",
+    "ឬ",
+    "នៃ",
+    "របស់",
+    "ការ",
+    "ដើម្បី",
+    "ជាមួយ",
+    "ឯ",
+    "ក្នុង",
   ]);
 
   const rawTokens = query
@@ -34,11 +54,7 @@ export function getActiveKeywords(rawCard, era = null) {
   if (era === "modern") {
     return [...common, ...(rawCard.modernKeywords || [])];
   }
-  return [
-    ...common,
-    ...(rawCard.heritageKeywords || []),
-    ...(rawCard.modernKeywords || []),
-  ];
+  return [...common, ...(rawCard.heritageKeywords || []), ...(rawCard.modernKeywords || [])];
 }
 
 // Build comprehensive searchable haystack for a card scoped by era
@@ -110,11 +126,7 @@ export function getCardHaystack(rawCard, era = null) {
     items = [...commonItems, ...modernItems];
   } else {
     // If era is not specified, include both eras
-    items = [
-      ...commonItems,
-      ...heritageItems,
-      ...modernItems,
-    ];
+    items = [...commonItems, ...heritageItems, ...modernItems];
   }
 
   return items.filter(Boolean).join(" ").toLowerCase();
@@ -138,10 +150,7 @@ export function scoreCard(rawCard, terms, rawQuery = "", era = null) {
     if (hay.includes(term)) {
       score += 4;
       // Topic match gets a large boost
-      if (
-        rawCard.topic?.en?.toLowerCase().includes(term) ||
-        rawCard.topic?.km?.includes(term)
-      ) {
+      if (rawCard.topic?.en?.toLowerCase().includes(term) || rawCard.topic?.km?.includes(term)) {
         score += 8;
       }
       // Exact active keyword match gets a boost
@@ -162,10 +171,7 @@ export function scoreCard(rawCard, terms, rawQuery = "", era = null) {
 
   // 2. Query-level matching for non-spaced scripts (Khmer) or full phrase match
   if (q.length >= 2) {
-    if (
-      rawCard.topic?.en?.toLowerCase().includes(q) ||
-      rawCard.topic?.km?.includes(q)
-    ) {
+    if (rawCard.topic?.en?.toLowerCase().includes(q) || rawCard.topic?.km?.includes(q)) {
       score += 10;
     }
 
