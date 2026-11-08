@@ -9,6 +9,22 @@ import ContributeForm from "../../components/ContributeForm";
 import ContributeLoginPrompt from "../../components/ContributeLoginPrompt";
 import styles from "./contribute.module.css";
 
+function choiceStyle(active) {
+  return {
+    flex: "1 1 200px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "4px",
+    padding: "16px 18px",
+    border: `1px solid ${active ? "var(--accent)" : "var(--border)"}`,
+    background: active ? "var(--accent-soft)" : "transparent",
+    borderRadius: "6px",
+    textDecoration: "none",
+    color: "var(--text)",
+    transition: "border-color 0.2s ease, background 0.2s ease",
+  };
+}
+
 function ContributeContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit");
@@ -95,14 +111,14 @@ function ContributeContent() {
 
   const isEdit = Boolean(editId);
   const isPick = addEra === "pick";
-  const isAddEra = Boolean(addEra) && !isPick;
+  const isAddEra = Boolean(addEra);
   const eraLabel = pair?.era === "heritage" ? t.eraPastDecade : t.eraPresentDecade;
 
   return (
     <main className={styles.page}>
       <div className={styles.container}>
-        <a href={isPick || isAddEra ? "/contribute?addEra=pick" : "/"} className={styles.backLink}>
-          ← {isPick || isAddEra ? "BACK TO OPTIONS" : "BACK TO ARCHIVE"}
+        <a href={isPick || (isAddEra && !editId) ? "/contribute" : "/"} className={styles.backLink}>
+          ← {isAddEra && !editId ? "BACK" : "BACK TO ARCHIVE"}
         </a>
 
         <div className={styles.header}>
@@ -110,16 +126,37 @@ function ContributeContent() {
             <span className={styles.dot} /> KHMER LIVING ARCHIVE
           </p>
           <h1 className={styles.title}>
-            {isPick ? t.addEraTitle : isEdit ? "Edit Archive Entry" : "Contribute an Entry"}
+            {isEdit ? "Edit Archive Entry" : isAddEra ? t.addEraTitle : "Contribute an Entry"}
           </h1>
           <p className={styles.sub}>
-            {isPick
-              ? t.addEraSub
-              : isEdit
-                ? "Update cultural observation, timeline, or photo. Published edits return to review."
+            {isEdit
+              ? "Update cultural observation, timeline, or photo. Published edits return to review."
+              : isAddEra
+                ? t.addEraSub
                 : "Add a real cultural observation, living memory, or lifestyle artifact to the archive. All fields are reviewed and preserved."}
           </p>
         </div>
+
+        {!isEdit ? (
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "20px" }}>
+            <a href="/contribute" style={choiceStyle(!isAddEra)} aria-current={!isAddEra}>
+              <span aria-hidden="true" style={{ fontSize: "18px" }}>
+                ✎
+              </span>
+              <span style={{ fontWeight: 600 }}>{t.newStoryTab}</span>
+              <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>{t.newStoryDesc}</span>
+            </a>
+            <a href="/contribute?addEra=pick" style={choiceStyle(isAddEra)} aria-current={isAddEra}>
+              <span aria-hidden="true" style={{ fontSize: "18px" }}>
+                ⇄
+              </span>
+              <span style={{ fontWeight: 600 }}>{t.addEraTab}</span>
+              <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                {t.addEraTabDesc}
+              </span>
+            </a>
+          </div>
+        ) : null}
 
         {loading || loadingEntry ? (
           <div className={styles.card}>
@@ -208,24 +245,14 @@ function ContributeContent() {
               )}
             </div>
           </>
-        ) : user ? (
-          <div className={styles.card}>
-            <ContributeForm user={user} initialData={entryData} key={entryData?.id || "new"} />
-            <a
-              href="/contribute?addEra=pick"
-              className={styles.submitBtn}
-              style={{
-                display: "inline-block",
-                textAlign: "center",
-                textDecoration: "none",
-                marginTop: "12px",
-              }}
-            >
-              {t.addEraCta}
-            </a>
-          </div>
         ) : (
-          <ContributeLoginPrompt />
+          <div className={styles.card}>
+            {user ? (
+              <ContributeForm user={user} initialData={entryData} key={entryData?.id || "new"} />
+            ) : (
+              <ContributeLoginPrompt />
+            )}
+          </div>
         )}
       </div>
     </main>
