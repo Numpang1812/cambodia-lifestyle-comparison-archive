@@ -16,7 +16,7 @@ import {
   validateKeywords,
 } from "./contribute-validation";
 
-export function useContributeForm(user, initialData = null) {
+export function useContributeForm(user, initialData = null, pairSlug = null) {
   const router = useRouter();
   const isEdit = Boolean(initialData?.id);
   const entryId = initialData?.id || null;
@@ -117,6 +117,7 @@ export function useContributeForm(user, initialData = null) {
           user,
           trimmed,
           photoFile,
+          pairSlug,
         });
         setSubmittedSuccess(true);
       }

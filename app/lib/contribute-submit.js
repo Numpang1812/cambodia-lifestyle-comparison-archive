@@ -4,7 +4,13 @@
 // 3. Storage path is user.id + random UUID (never original filename)
 // 4. Catches errors, logs console.error, never exposes error.message to user
 
-export async function uploadAndCreateEntry({ supabase, user, trimmed, photoFile }) {
+export async function uploadAndCreateEntry({
+  supabase,
+  user,
+  trimmed,
+  photoFile,
+  pairSlug = null,
+}) {
   // Tuesday check 1: Owner strictly from authenticated session
   const {
     data: { user: currentUser },
@@ -35,7 +41,9 @@ export async function uploadAndCreateEntry({ supabase, user, trimmed, photoFile 
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
-  const slug = `${baseSlug}-${crypto.randomUUID().slice(0, 6)}`;
+  // Reuse an existing story's slug when contributing the missing era so the two
+  // rows pair up for the time warp; otherwise mint a fresh slug.
+  const slug = pairSlug || `${baseSlug}-${crypto.randomUUID().slice(0, 6)}`;
 
   const imageConfig = {
     bucket: "photos",

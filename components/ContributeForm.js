@@ -7,8 +7,8 @@ import ContributeFormExtraFields from "./ContributeFormExtraFields";
 import ContributeSuccessNotice from "./ContributeSuccessNotice";
 import styles from "../app/contribute/contribute.module.css";
 
-export default function ContributeForm({ user, initialData = null }) {
-  const form = useContributeForm(user, initialData);
+export default function ContributeForm({ user, initialData = null, pairSlug = null }) {
+  const form = useContributeForm(user, initialData, pairSlug);
   const isEdit = Boolean(initialData?.id);
 
   if (form.submittedSuccess) {
