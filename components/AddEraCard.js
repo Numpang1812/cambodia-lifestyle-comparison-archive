@@ -8,10 +8,12 @@ const COLOR = {
 };
 
 export default function AddEraCard({ card, t }) {
-  const missing = card.heritage ? "modern" : "heritage";
+  const existing = card.heritage ? "heritage" : "modern";
+  const missing = existing === "heritage" ? "modern" : "heritage";
   const c = COLOR[missing];
-  const titleEn = card.topic?.en || "—";
-  const titleKm = card.topic?.km || "";
+  const headline = card[existing]?.headline || {};
+  const titleEn = headline.en || "—";
+  const titleKm = headline.km || "";
 
   return (
     <a
