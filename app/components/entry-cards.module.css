@@ -260,6 +260,27 @@
   border-left-color: #d5a576;
 }
 
+/* Single-era stories: only the past exists -> orange; only the present -> green.
+   Signals that this story is missing its time-warp counterpart. */
+.card[data-single="heritage"] {
+  border-color: #e07b39;
+  box-shadow:
+    0 0 0 1px #e07b3966,
+    var(--card-shadow);
+}
+.card[data-single="modern"] {
+  border-color: #4ea87a;
+  box-shadow:
+    0 0 0 1px #4ea87a66,
+    var(--card-shadow);
+}
+.card[data-single="heritage"]:hover {
+  border-color: #f0904a;
+}
+.card[data-single="modern"]:hover {
+  border-color: #5fc492;
+}
+
 /* Build the visible facade before revealing its story. */
 :global([data-phase="dis"]) .card {
   animation: depart 420ms ease-in both;
@@ -550,7 +571,6 @@
   border-radius: 3px;
   color: var(--accent);
   font: 11px/1.4 var(--font-mono);
-  font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
   text-decoration: none;
@@ -574,7 +594,6 @@
   border-radius: 3px;
   color: #f87171;
   font: 11px/1.4 var(--font-mono);
-  font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;

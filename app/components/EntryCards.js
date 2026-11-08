@@ -284,6 +284,7 @@ function EntryModal({
   const running = warpPhase !== "idle";
   // back = target is heritage (moving left); fwd = target is modern (moving right)
   const back = running ? warpDir === "back" : other === "heritage";
+  const otherAvailable = Boolean(card[other]);
 
   useEffect(() => {
     setMounted(true);
@@ -418,12 +419,17 @@ function EntryModal({
           <button
             type="button"
             className={`${styles.warpBtn} ${back ? styles.warpBtnBack : styles.warpBtnFwd} ${running ? styles.warpBtnRunning : ""}`}
-            onClick={() => onTimeWarp?.()}
-            disabled={warping}
-            aria-label={`Time warp to the ${otherDecade} version of ${card.topic}`}
+            onClick={() => otherAvailable && onTimeWarp?.()}
+            disabled={warping || !otherAvailable}
+            style={!otherAvailable ? { opacity: 0.45, cursor: "not-allowed" } : undefined}
+            aria-label={
+              otherAvailable
+                ? `Time warp to the ${otherDecade} version of ${card.topic}`
+                : t.warpUnavailable
+            }
           >
             {/* Back arrow on left when target is 1980s */}
-            {back && (
+            {back && otherAvailable && (
               <span
                 className={`${styles.warpArrow} ${styles.warpArrowLeft} ${running ? styles.warpArrowRunBack : ""}`}
                 aria-hidden="true"
@@ -433,7 +439,7 @@ function EntryModal({
             )}
 
             {/* Energy trail */}
-            {running && (
+            {running && otherAvailable && (
               <span
                 className={back ? styles.warpTrailBack : styles.warpTrailFwd}
                 aria-hidden="true"
@@ -441,17 +447,19 @@ function EntryModal({
             )}
 
             <span className={styles.warpLabel}>
-              {running
-                ? back
-                  ? t.warpingToPast
-                  : t.warpingToPresent
-                : back
-                  ? t.warpToPast
-                  : t.warpToPresent}
+              {!otherAvailable
+                ? t.warpUnavailable
+                : running
+                  ? back
+                    ? t.warpingToPast
+                    : t.warpingToPresent
+                  : back
+                    ? t.warpToPast
+                    : t.warpToPresent}
             </span>
 
             {/* Forward arrow on right when target is 2020s */}
-            {!back && (
+            {!back && otherAvailable && (
               <span
                 className={`${styles.warpArrow} ${styles.warpArrowRight} ${running ? styles.warpArrowRunFwd : ""}`}
                 aria-hidden="true"
@@ -576,11 +584,21 @@ export default function EntryCards({
           {visible.map((c, index) => {
             const data = c[era] ?? {};
             const rawStoryNum = c.rawNum || c.num;
+            const singleEra =
+              Boolean(c.heritage) === Boolean(c.modern) ? null : c.heritage ? "heritage" : "modern";
             return (
               <article
                 key={`${c.rawNum || c.num}-${era}`}
                 className={styles.card}
                 data-era={era}
+                data-single={singleEra || undefined}
+                title={
+                  singleEra
+                    ? singleEra === "heritage"
+                      ? t.addEraMissingModern
+                      : t.addEraMissingPast
+                    : undefined
+                }
                 style={{ "--entry-delay": `${index * 90}ms` }}
               >
                 <button
