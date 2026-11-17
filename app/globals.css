@@ -40,14 +40,10 @@
   --card-radius: 2px;
 }
 
-/* When switched to past (heritage era), use Moulpali for EVERYTHING */
-html[data-era="heritage"],
-html[data-era="heritage"] body,
-html[data-era="heritage"] *,
-[data-era="heritage"],
-[data-era="heritage"] * {
-  font-family: var(--font-moulpali), "Moulpali", var(--font-kantumruy), sans-serif !important;
-}
+/* Era fonts come from the --font-* tokens set per era above, so switching back
+   to modern always restores Kantumruy. A blanket html[data-era="heritage"] *
+   !important rule used to live here; it forced Moulpali over everything,
+   including the entry modal after it had warped to modern. */
 
 [data-era="heritage"] .title,
 [data-era="heritage"] h1,
@@ -319,9 +315,19 @@ input:focus-visible,
   color: var(--text);
   border-color: var(--border-strong);
 }
-.profile-menu-item > span:first-child {
+.profile-menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
   color: var(--accent);
-  font-size: 15px;
+}
+.profile-menu-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 html[lang="km"]:not([data-era="heritage"]) {
   --font-unified: var(--font-kantumruy), "Kantumruy Pro", sans-serif;
@@ -349,9 +355,11 @@ html[lang="km"] .footer {
   letter-spacing: 0 !important;
   line-height: 1.6 !important;
 }
-html[data-era="heritage"][lang="km"],
-html[data-era="heritage"][lang="km"] * {
-  font-family: var(--font-moulpali), "Moulpali", var(--font-kantumruy), sans-serif !important;
+html[data-era="heritage"][lang="km"] {
+  --font-unified: var(--font-moulpali), "Moulpali", var(--font-kantumruy), sans-serif;
+  --font-body: var(--font-unified);
+  --font-display: var(--font-unified);
+  --font-mono: var(--font-unified);
 }
 .siteHeader {
   display: grid;

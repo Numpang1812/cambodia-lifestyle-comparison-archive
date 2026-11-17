@@ -384,6 +384,24 @@
 .modal[data-era="modern"] {
   border-top: 3px solid var(--accent-2);
 }
+/* The modal owns its era font, independent of the page era, so warping it
+   in place swaps the typeface both ways. */
+.modal[data-era="heritage"],
+.modal[data-era="heritage"] * {
+  --font-unified: var(--font-moulpali), "Moulpali", var(--font-kantumruy), sans-serif;
+  --font-body: var(--font-unified);
+  --font-display: var(--font-unified);
+  --font-mono: var(--font-unified);
+  font-family: var(--font-unified);
+}
+.modal[data-era="modern"],
+.modal[data-era="modern"] * {
+  --font-unified: var(--font-kantumruy), "Kantumruy Pro", sans-serif;
+  --font-body: var(--font-unified);
+  --font-display: var(--font-unified);
+  --font-mono: var(--font-unified);
+  font-family: var(--font-unified);
+}
 .modalClose {
   position: absolute;
   top: 18px;
