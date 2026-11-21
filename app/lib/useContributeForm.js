@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "./supabase/client";
 import { uploadAndCreateEntry, updateExistingEntry } from "./contribute-submit";
@@ -55,6 +55,24 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedSuccess, setSubmittedSuccess] = useState(false);
 
+  const submitLock = useRef(false);
+  const focusTarget = useRef(null);
+
+  useEffect(() => {
+    const target = focusTarget.current;
+    if (!target) return;
+    focusTarget.current = null;
+
+    if (target === "image") {
+      const input = document.getElementById("photo");
+      const zone = input?.parentElement?.querySelector('[role="button"]');
+      if (zone) zone.focus();
+      return;
+    }
+
+    document.getElementById(target)?.focus();
+  }, [errors]);
+
   function handleFileSelect(e) {
     const file = e.target.files?.[0] || null;
     setPhotoFile(file);
@@ -66,6 +84,7 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (submitLock.current) return;
     setFormError("");
 
     const trimmed = {
@@ -94,13 +113,29 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
       keywords: validateKeywords(trimmed.keywords),
     };
 
-    setErrors(newErrors);
-    if (Object.values(newErrors).some(Boolean)) return;
+    const order = [
+      "title",
+      "title_km",
+      "topic",
+      "timeline",
+      "content",
+      "image",
+      "source",
+      "price_index",
+      "keywords",
+    ];
+    const firstInvalid = order.find((key) => newErrors[key]);
+    focusTarget.current = firstInvalid || null;
 
+    setErrors(newErrors);
+    if (firstInvalid) return;
+
+    submitLock.current = true;
     setIsSubmitting(true);
-    const supabase = createClient();
 
     try {
+      const supabase = createClient();
+
       if (isEdit) {
         await updateExistingEntry({
           supabase,
@@ -122,13 +157,27 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
         setSubmittedSuccess(true);
       }
     } catch (err) {
-      console.error(isEdit ? "Update entry failed:" : "Contribution submission failed:", err);
-      if (err.message === "NOT_SAVED") {
-        setFormError("That change wasn't saved");
-      } else {
-        setFormError("Failed to save entry. Please check your network and try again.");
-      }
+      submitLock.current = false;
       setIsSubmitting(false);
+      console.error(isEdit ? "Update entry failed:" : "Contribution submission failed:", err);
+
+      if (err?.message === "UNAUTHORIZED") {
+        setFormError(
+          "Your session has expired, so this wasn't saved. Your draft is still in this form — sign in again in another tab, then save here."
+        );
+      } else if (err?.message === "NOT_SAVED" && !isEdit && pairSlug) {
+        setFormError(
+          "That change wasn't saved. Your draft is still in this form. This can happen when the year is missing or not four digits, or when that story already has an entry for that era — check the year, then save again."
+        );
+      } else if (err?.message === "NOT_SAVED") {
+        setFormError(
+          "That change wasn't saved. Your draft is still in this form — check your connection and save again."
+        );
+      } else {
+        setFormError(
+          "Failed to save entry. Your draft is still in this form — check your connection and save again."
+        );
+      }
     }
   }
 
@@ -139,6 +188,7 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
     errors,
     formError,
     isSubmitting,
+    errorCount: Object.values(errors).filter(Boolean).length,
     handleSubmit,
     metaProps: {
       title,
