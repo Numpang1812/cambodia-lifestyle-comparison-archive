@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createClient } from "../lib/supabase/client";
 import { translations } from "../lib/translations";
 import ReviewCard from "../../components/ReviewCard";
@@ -9,11 +9,16 @@ import styles from "../contribute/contribute.module.css";
 export default function ReviewPage() {
   const [lang, setLang] = useState("en");
   const t = translations[lang] || translations.en;
+  const statusText =
+    lang === "km"
+      ? { approved: "បានអនុម័ត", returned: "បានប្រគល់ត្រឡប់", retry: "ព្យាយាមម្ដងទៀត" }
+      : { approved: "Approved", returned: "Returned", retry: "Retry" };
   const [status, setStatus] = useState("loading");
   const [entries, setEntries] = useState([]);
   const [userId, setUserId] = useState(null);
   const [busyId, setBusyId] = useState(null);
   const [notice, setNotice] = useState(null);
+  const lockRef = useRef(false);
 
   useEffect(() => {
     try {
@@ -23,71 +28,96 @@ export default function ReviewPage() {
   }, []);
 
   useEffect(() => {
-    const supabase = createClient();
     async function init() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        setStatus("noaccess");
-        return;
-      }
-      const { data: flag } = await supabase.rpc("is_reviewer");
-      if (flag !== true) {
+      let supabase = null;
+      let user = null;
+      try {
+        supabase = createClient();
+        const { data, error } = await supabase.auth.getUser();
+        user = data?.user || null;
+        if (error || !user) {
+          setStatus("noaccess");
+          return;
+        }
+        const { data: flag, error: flagError } = await supabase.rpc("is_reviewer");
+        if (flagError || flag !== true) {
+          setStatus("noaccess");
+          return;
+        }
+      } catch (err) {
+        console.error("Review access check failed:", err);
         setStatus("noaccess");
         return;
       }
       setUserId(user.id);
-      const { data, error } = await supabase
-        .from("entries")
-        .select("*")
-        .neq("status", "published")
-        .order("created_at", { ascending: false });
-      if (error) {
-        console.error("Review queue load failed:", error);
-        setEntries([]);
-      } else {
+      try {
+        const { data, error } = await supabase
+          .from("entries")
+          .select("*")
+          .eq("status", "pending")
+          .order("created_at", { ascending: false });
+        if (error) {
+          console.error("Review queue load failed:", error);
+          setEntries([]);
+          setStatus("error");
+          return;
+        }
         setEntries(data || []);
+        setStatus("ready");
+      } catch (err) {
+        console.error("Review queue load failed:", err);
+        setEntries([]);
+        setStatus("error");
       }
-      setStatus("ready");
     }
     init();
   }, []);
 
   async function handleDecide(entry, decision) {
-    const supabase = createClient();
+    if (lockRef.current) return;
+    lockRef.current = true;
     setBusyId(entry.id);
     setNotice(null);
     try {
+      const supabase = createClient();
       const { data, error } = await supabase.rpc("review_entry", {
         entry_id: entry.id,
         decision,
       });
       if (error) throw error;
+      if (data === true) {
+        setEntries((prev) => prev.filter((e) => e.id !== entry.id));
+        setNotice({
+          kind: "success",
+          text: `✓ ${decision === "published" ? statusText.approved : statusText.returned}`,
+        });
+        return;
+      }
       if (data === false) {
-        // Lost the race: another reviewer already decided. Entry is terminal now.
-        const { data: row } = await supabase
+        const { data: row, error: statusError } = await supabase
           .from("entries")
           .select("status")
           .eq("id", entry.id)
           .maybeSingle();
         const settled = row?.status;
-        setNotice(
-          settled === "published"
-            ? t.reviewAlreadyApproved
-            : settled === "returned"
-              ? t.reviewAlreadyRejected
-              : t.reviewError
-        );
-        setEntries((prev) => prev.filter((e) => e.id !== entry.id));
+        if (!statusError && (settled === "published" || settled === "returned")) {
+          setEntries((prev) => prev.filter((e) => e.id !== entry.id));
+          setNotice({
+            kind: "conflict",
+            text: settled === "published" ? t.reviewAlreadyApproved : t.reviewAlreadyRejected,
+          });
+        } else {
+          setNotice({ kind: "error", text: t.reviewError });
+        }
         return;
       }
-      setEntries((prev) => prev.filter((e) => e.id !== entry.id));
+      setNotice({ kind: "error", text: t.reviewError });
     } catch (err) {
       console.error("review_entry failed:", err);
-      setNotice(t.reviewError);
+      setNotice({ kind: "error", text: t.reviewError });
     } finally {
       setBusyId(null);
+      lockRef.current = false;
     }
   }
 
@@ -112,7 +142,9 @@ export default function ReviewPage() {
               key={entry.id}
               entry={entry}
               t={t}
+              lang={lang}
               busy={busyId === entry.id}
+              locked={busyId !== null}
               onDecide={handleDecide}
             />
           ))
@@ -136,8 +168,24 @@ export default function ReviewPage() {
         </div>
 
         {notice ? (
-          <div className={styles.card} role="alert" style={{ marginBottom: "16px" }}>
-            <p style={{ margin: 0, color: "var(--accent)" }}>{notice}</p>
+          <div
+            className={styles.card}
+            role={notice.kind === "error" ? "alert" : "status"}
+            style={{ marginBottom: "16px" }}
+          >
+            <p
+              style={{
+                margin: 0,
+                color:
+                  notice.kind === "error"
+                    ? "var(--accent)"
+                    : notice.kind === "success"
+                      ? "#22c55e"
+                      : "#eab308",
+              }}
+            >
+              {notice.text}
+            </p>
           </div>
         ) : null}
 
@@ -148,6 +196,17 @@ export default function ReviewPage() {
         ) : status === "noaccess" ? (
           <div className={styles.card} role="alert">
             <p style={{ margin: 0, color: "var(--accent)" }}>{t.reviewNoAccess}</p>
+          </div>
+        ) : status === "error" ? (
+          <div className={styles.card} role="alert">
+            <p style={{ margin: "0 0 12px 0", color: "var(--accent)" }}>{t.reviewError}</p>
+            <button
+              type="button"
+              className={styles.submitBtn}
+              onClick={() => window.location.reload()}
+            >
+              {statusText.retry}
+            </button>
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
