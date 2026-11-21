@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "../lib/supabase/client";
-import { fetchEntryById, fetchEntries } from "../lib/supabase/entries";
+import { fetchEntryById, fetchEntries, normalizeEntries } from "../lib/supabase/entries";
 import { translations } from "../lib/translations";
 import ContributeForm from "../../components/ContributeForm";
 import ContributeLoginPrompt from "../../components/ContributeLoginPrompt";
@@ -30,7 +30,6 @@ function ContributeContent() {
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit");
   const addEra = searchParams.get("addEra"); // "pick" | <slug>
-  const eraParam = searchParams.get("era"); // "heritage" | "modern"
 
   const [lang, setLang] = useState("en");
   const t = translations[lang] || translations.en;
@@ -78,24 +77,30 @@ function ContributeContent() {
           const cards = await fetchEntries(supabase);
           setSingleEraCards(cards.filter((c) => Boolean(c.heritage) !== Boolean(c.modern)));
           setLoadingEntry(false);
-        } else if (addEra) {
-          const cards = await fetchEntries(supabase);
-          const card = cards.find((c) => c.slug === addEra);
-          if (card) {
+        } else if (addEra !== null) {
+          const { data, error } = await supabase
+            .from("entries")
+            .select("id,slug,timeline,topic")
+            .eq("slug", addEra)
+            .eq("status", "published")
+            .limit(2);
+          if (addEra && !error && data?.length === 1) {
+            const [card] = normalizeEntries(data);
             setPair({
               slug: card.slug,
-              era: eraParam === "heritage" ? "heritage" : "modern",
+              era: card.heritage ? "modern" : "heritage",
               topic: card.topic,
             });
-            setEntryData({ topic: [card.topic.en, card.topic.km] });
           } else {
-            setEditError("Story not found.");
+            setPair(null);
           }
           setLoadingEntry(false);
         }
       } catch (err) {
         console.error("Auth / entry fetch check failed:", err);
         setUser(null);
+        setPair(null);
+        setLoadingEntry(false);
       } finally {
         setLoading(false);
       }
@@ -108,11 +113,11 @@ function ContributeContent() {
     });
 
     return () => authListener.subscription.unsubscribe();
-  }, [editId, addEra, eraParam]);
+  }, [editId, addEra]);
 
   const isEdit = Boolean(editId);
   const isPick = addEra === "pick";
-  const isAddEra = Boolean(addEra);
+  const isAddEra = addEra !== null;
   const eraLabel = pair?.era === "heritage" ? t.eraPastDecade : t.eraPresentDecade;
 
   return (
@@ -165,10 +170,10 @@ function ContributeContent() {
               {loadingEntry ? "Loading entry details..." : "Verifying contributor credentials..."}
             </p>
           </div>
-        ) : editError ? (
+        ) : editError || (isEdit && isAddEra) || (isAddEra && !isPick && pair?.slug !== addEra) ? (
           <div className={styles.card}>
             <p className={styles.fieldError} style={{ margin: "0 0 16px 0", fontSize: "14px" }}>
-              {editError}
+              {editError || "Choose a published story with exactly one era."}
             </p>
             <a
               href="/"
@@ -202,14 +207,15 @@ function ContributeContent() {
               }}
             >
               <p className={styles.sub} style={{ margin: 0 }}>
-                {t.addEraBanner(eraLabel, pair.topic.en)}
+                {t.addEraBanner(eraLabel, pair.topic[lang])} (
+                {pair.era === "heritage" ? "1800–1999" : "2000–2099"})
               </p>
             </div>
             <div className={styles.card}>
               {user ? (
                 <ContributeForm
                   user={user}
-                  initialData={entryData}
+                  initialData={{ topic: [pair.topic.en, pair.topic.km] }}
                   pairSlug={pair.slug}
                   key={`pair-${pair.slug}-${pair.era}`}
                 />

@@ -4,6 +4,9 @@
 // 3. Storage path is user.id + random UUID (never original filename)
 // 4. Catches errors, logs console.error, never exposes error.message to user
 
+import { validateTimeline } from "./contribute-validation";
+import { normalizeEntries } from "./supabase/entries";
+
 export async function uploadAndCreateEntry({
   supabase,
   user,
@@ -18,6 +21,24 @@ export async function uploadAndCreateEntry({
 
   if (!currentUser || currentUser.id !== user?.id) {
     throw new Error("UNAUTHORIZED");
+  }
+
+  if (pairSlug !== null) {
+    if (!pairSlug || typeof trimmed.timeline !== "string" || validateTimeline(trimmed.timeline)) {
+      throw new Error("NOT_SAVED");
+    }
+    const { data, error } = await supabase
+      .from("entries")
+      .select("id,slug,timeline,status")
+      .eq("slug", pairSlug)
+      .in("status", ["published", "pending"])
+      .limit(2);
+    if (error || data?.length !== 1 || data[0].status !== "published") {
+      throw new Error("NOT_SAVED");
+    }
+    const [card] = normalizeEntries(data);
+    const era = Number(trimmed.timeline) < 2000 ? "heritage" : "modern";
+    if (card[era]) throw new Error("NOT_SAVED");
   }
 
   // Tuesday check 4: Path is <user_id>/<random_uuid>.<clean_extension>
@@ -101,6 +122,14 @@ export async function updateExistingEntry({
     throw new Error("UNAUTHORIZED");
   }
 
+  const { data: original, error: readError } = await supabase
+    .from("entries")
+    .select("content,topic,source")
+    .eq("id", entryId)
+    .eq("owner", currentUser.id)
+    .maybeSingle();
+  if (readError || !original) throw new Error("NOT_SAVED");
+
   let finalImageConfig = existingImageConfig || null;
 
   // If user selected a new photo, upload with random uuid path
@@ -141,15 +170,20 @@ export async function updateExistingEntry({
 
   const updatePayload = {
     title: [trimmed.title, trimmed.titleKm],
-    content: [trimmed.content],
     timeline: trimmed.timeline,
-    topic: [trimmed.topic],
-    source: [trimmed.source],
     price_index: trimmed.priceIndex || null,
     keywords: parsedKeywords,
     ...(finalImageConfig ? { image_config: finalImageConfig } : {}),
     updated_at: new Date().toISOString(),
   };
+
+  for (const field of ["content", "topic", "source"]) {
+    const stored = original[field];
+    const values = Array.isArray(stored) ? stored : [stored];
+    if (trimmed[field] !== values[0]) {
+      updatePayload[field] = [trimmed[field], ...values.slice(1)];
+    }
+  }
 
   if (!isReviewer) {
     updatePayload.status = "pending";
