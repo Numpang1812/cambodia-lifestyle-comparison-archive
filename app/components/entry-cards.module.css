@@ -129,7 +129,8 @@
 .kicker {
   display: block;
   margin: 0;
-  font-size: 10px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
   line-height: 1.7;
   font-family: var(--font-unified);
   font-weight: 600;
@@ -145,13 +146,29 @@
   font-family: var(--font-unified);
   letter-spacing: -0.4px;
   color: var(--text);
+  overflow-wrap: anywhere;
 }
 .cardDescription {
   margin: 0 0 18px;
-  font-size: 12px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-size: 14px;
   line-height: 1.8;
   color: var(--text-muted);
   font-family: var(--font-unified);
+}
+.eraAvailability {
+  align-self: flex-start;
+  margin: 0 0 14px;
+  padding: 4px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  color: var(--accent);
+  font: 12px/1.7 var(--font-unified);
+  overflow-wrap: anywhere;
 }
 .chipRow {
   display: flex;
@@ -176,7 +193,8 @@
   border: 1px solid var(--border);
   border-left: 2px solid var(--accent);
   border-radius: 2px;
-  font-size: 11px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
   line-height: 1.5;
   color: var(--text-muted);
   font-family: var(--font-unified);
@@ -200,6 +218,15 @@
 .cardFooter > span:last-child {
   font-size: 18px;
   transition: transform 250ms ease;
+}
+.card:not([data-single]) .cardFooter {
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  min-height: 44px;
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  background: var(--accent-soft);
+  font-size: 14px;
 }
 .card:hover .cardFooter > span:last-child {
   transform: translate(2px, -2px);
@@ -418,67 +445,94 @@
   color: var(--text-muted);
   background: var(--bg-inset);
   cursor: pointer;
+  transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .modalClose:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--bg);
+  background: var(--accent);
 }
 .modalBody {
   position: relative;
-  min-height: 530px;
 }
 .modal .kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding-right: 45px;
   font-size: 11px;
-  font-weight: 600;
-  font-family: var(--font-unified);
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  margin-bottom: 6px;
 }
 .modal .title {
-  font-size: 30px;
-  margin: 13px 50px 14px 0;
+  font-size: clamp(26px, 4vw, 34px);
+  font-weight: 600;
+  text-wrap: balance;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  margin: 8px 50px 12px 0;
+  color: var(--text);
   font-family: var(--font-unified);
 }
 .modalArchitecture {
   position: relative;
-  margin-bottom: 20px;
+  margin: 20px 0;
   border-block: 1px solid var(--border);
   background: radial-gradient(ellipse at 50% 80%, var(--accent-soft), transparent 70%);
 }
 .modalArchitecture :global(.architecture) {
-  height: 200px;
+  height: 140px;
 }
 .modalArchitecture > span {
-  position: absolute;
-  bottom: 9px;
-  right: 10px;
+  display: block;
+  padding: 0 10px 9px;
   color: var(--text-faint);
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  text-align: right;
+  overflow-wrap: anywhere;
   font-family: var(--font-unified);
   letter-spacing: 0.5px;
 }
 .modal .chipRow {
-  margin: 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0;
 }
 .modal .chip {
-  padding: 6px 9px;
-  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  background: transparent;
+  border: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
   font-family: var(--font-unified);
+}
+.modal .chip + .chip {
+  padding-inline-start: 10px;
+  border-inline-start: 1px solid var(--border-strong);
 }
 .eraPanel {
-  padding: 19px 20px;
-  background: var(--bg-inset);
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--accent);
-  border-radius: 2px;
-  min-height: 180px;
+  max-width: 64ch;
+  margin-inline: auto;
 }
 .eraLabel {
-  margin: 0 0 9px;
-  color: var(--accent);
-  font-size: 11px;
+  margin: 0 0 18px;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
   font-weight: 600;
   font-family: var(--font-unified);
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
 }
 .eraHeadline {
   margin: 0 0 10px;
@@ -490,35 +544,35 @@
 }
 .eraDetails {
   margin: 0;
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.8;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  line-height: 1.85;
   font-family: var(--font-unified);
+  letter-spacing: 0.15px;
 }
 .eraRole {
-  margin: 10px 0 0;
-  color: var(--text-muted);
-  font-size: 12px;
+  margin: 14px 0 0;
+  color: var(--text-faint);
+  font-size: 13px;
+  overflow-wrap: anywhere;
   font-style: italic;
   line-height: 1.7;
   font-family: var(--font-unified);
 }
 .eraSource {
-  margin-top: 14px;
-  padding: 9px 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--accent);
-  border-radius: 2px;
-  font-size: 11px;
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  overflow-wrap: anywhere;
   line-height: 1.6;
   color: var(--text-muted);
   font-family: var(--font-unified);
 }
 .sourceTag {
-  color: var(--accent);
+  color: var(--text);
   font-weight: 600;
-  margin-right: 6px;
 }
 .priceIndex {
   margin-top: 18px;
@@ -572,13 +626,20 @@
 
 .ownerControls {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   margin-top: 14px;
 }
 
 .editEntryBtn {
-  flex: 1;
+  flex: 1 1 120px;
+  min-width: 0;
+  min-height: 44px;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+  text-align: center;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -588,7 +649,7 @@
   border: 1px solid var(--accent);
   border-radius: 3px;
   color: var(--accent);
-  font: 11px/1.4 var(--font-mono);
+  font: 12px/1.7 var(--font-mono);
   letter-spacing: 1px;
   text-transform: uppercase;
   text-decoration: none;
@@ -602,6 +663,12 @@
 }
 
 .deleteEntryBtn {
+  flex: 1 1 120px;
+  min-width: 0;
+  min-height: 44px;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -611,7 +678,7 @@
   border: 1px solid rgba(239, 68, 68, 0.4);
   border-radius: 3px;
   color: #f87171;
-  font: 11px/1.4 var(--font-mono);
+  font: 12px/1.7 var(--font-mono);
   letter-spacing: 1px;
   text-transform: uppercase;
   cursor: pointer;
@@ -629,38 +696,76 @@
   cursor: not-allowed;
 }
 
-.warpBtn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.panorama {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  height: clamp(164px, 32vw, 250px);
+  margin: 0 0 24px;
   overflow: hidden;
-  width: 100%;
-  min-height: 50px;
-  margin: 0;
-  padding: 13px 18px;
-  border: 1px solid var(--accent);
-  border-radius: 3px;
-  color: var(--bg);
-  background: var(--accent);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+}
+.panorama[data-expanded="heritage"] {
+  grid-template-columns: 2fr 1fr;
+}
+.panorama[data-running="true"] {
+  transition: grid-template-columns 640ms ease-in-out;
+}
+.eraScene {
+  position: relative;
+  display: grid;
+  place-items: end center;
+  min-width: 0;
+  padding: 8px;
+  overflow: hidden;
+  border: 0;
+  color: #fff;
+  background: radial-gradient(ellipse at 70% 20%, #326d6b, #163c40 75%);
   cursor: pointer;
 }
-.warpBtn:hover:not(:disabled) {
-  filter: brightness(1.08);
+.eraScene[data-era="heritage"] {
+  background: radial-gradient(ellipse at 30% 20%, #805c3f, #402e22 75%);
+  border-inline-end: 1px solid #f5e8c990;
 }
-.warpLabel {
-  flex: 1;
-  text-align: left;
-  font: 10px/1.6 var(--font-mono);
-  letter-spacing: 1px;
+.eraScene[aria-disabled="true"] {
+  cursor: default;
 }
-.warpArrow {
-  display: inline-flex;
-  font-size: 20px;
+.eraScene :global(.architecture) {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: calc(100% - 32px);
+  width: auto;
+  max-width: none;
+  aspect-ratio: 5 / 3;
 }
-.warpBtnRunning {
-  cursor: wait;
+.eraScene > span {
+  position: relative;
+  padding: 5px 8px;
+  font: 600 14px/1.45 var(--font-body);
+  overflow-wrap: anywhere;
+}
+.eraScene[aria-pressed="false"] > span {
+  border-radius: 8px;
+  color: #172522;
+  background: #f2f2e7;
+  box-shadow: 0 2px 8px #0003;
+}
+.eraScene[aria-pressed="false"]:hover > span {
+  background: white;
+}
+.eraScene:focus-visible {
+  outline: 3px solid white;
+  outline-offset: -4px;
+}
+@keyframes ink-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 .disFwd,
 .disBack {
@@ -668,59 +773,11 @@
 }
 .rebFwd > :not(.modalArchitecture),
 .rebBack > :not(.modalArchitecture) {
-  animation: reveal 750ms ease both;
-  animation-delay: 160ms;
-}
-.rebFwd .eraPanel,
-.rebBack .eraPanel {
-  animation-delay: 350ms;
+  animation: ink-in 260ms ease-out both;
 }
 @keyframes modal-depart {
   to {
-    opacity: 0.12;
-    transform: translateX(6px);
-  }
-}
-.rebEdge {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  z-index: 5;
-  pointer-events: none;
-  background: var(--accent);
-  box-shadow: 0 0 16px var(--accent);
-}
-.rebEdgeFwd {
-  animation: edge-forward 1200ms ease-in-out both;
-}
-.rebEdgeBack {
-  animation: edge-back 1200ms ease-in-out both;
-}
-@keyframes edge-forward {
-  from {
-    left: 0;
-    opacity: 0;
-  }
-  25% {
-    opacity: 0.5;
-  }
-  to {
-    left: 100%;
-    opacity: 0;
-  }
-}
-@keyframes edge-back {
-  from {
-    right: 0;
-    opacity: 0;
-  }
-  25% {
-    opacity: 0.5;
-  }
-  to {
-    right: 100%;
-    opacity: 0;
+    opacity: 0.55;
   }
 }
 .warpTrailFwd,
@@ -768,7 +825,7 @@
     font-size: 24px;
   }
   .cardDescription {
-    font-size: 12px;
+    font-size: 14px;
   }
   .chip {
     font-size: 10px;
@@ -785,14 +842,11 @@
     margin-right: 42px;
   }
   .modalArchitecture :global(.architecture) {
-    height: 170px;
+    height: 120px;
   }
   .modalClose {
     right: 12px;
     top: 12px;
-  }
-  .modalBody {
-    min-height: 540px;
   }
   .priceRow {
     grid-template-columns: 1fr 1fr;
@@ -801,14 +855,17 @@
   .priceItem {
     grid-column: 1 / -1;
   }
-  .warpLabel {
-    font-size: 9px;
-  }
-  .eraPanel {
-    padding: 16px;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
+  .panorama[data-running="true"] {
+    transition: none;
+  }
+  .disFwd,
+  .disBack,
+  .rebFwd > :not(.modalArchitecture),
+  .rebBack > :not(.modalArchitecture) {
+    animation: none;
+  }
   .card:hover {
     transform: none;
   }

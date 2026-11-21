@@ -28,7 +28,6 @@ export default function ArchiveApp() {
   const [warpDir, setWarpDir] = useState("fwd");
   const targetRef = useRef("modern");
   const [warpKind, setWarpKind] = useState("page");
-  const warpKindRef = useRef("page");
 
   const t = translations[lang] || translations.en;
 
@@ -202,7 +201,6 @@ export default function ArchiveApp() {
     }
 
     setWarpKind("page");
-    warpKindRef.current = "page";
     targetRef.current = next;
     setPagePhase("dis");
     setWarping(true);
@@ -218,25 +216,31 @@ export default function ArchiveApp() {
     }
 
     setWarpKind("modal");
-    warpKindRef.current = "modal";
     targetRef.current = next;
     setWarpDir(next === "modern" ? "fwd" : "back");
     setWarpPhase("dis");
     setWarping(true);
   }
 
-  function handleSwap() {
-    if (warpKindRef.current === "modal") {
-      if (!selected) {
-        setWarpPhase("idle");
-        return;
-      }
+  useEffect(() => {
+    if (!warping || warpKind !== "modal") return;
+    const swap = window.setTimeout(() => {
       setModalEra(targetRef.current);
       setWarpPhase("reb");
-    } else {
-      setEra(targetRef.current);
-      setPagePhase("reb");
-    }
+    }, 320);
+    const done = window.setTimeout(() => {
+      setWarpPhase("idle");
+      setWarping(false);
+    }, 640);
+    return () => {
+      window.clearTimeout(swap);
+      window.clearTimeout(done);
+    };
+  }, [warpKind, warping]);
+
+  function handleSwap() {
+    setEra(targetRef.current);
+    setPagePhase("reb");
   }
 
   function handleDone() {
@@ -263,6 +267,7 @@ export default function ArchiveApp() {
   }
 
   function closeEntry() {
+    if (warpKind === "modal") setWarping(false);
     setSelected(null);
     setModalEra(era);
     setWarpPhase("idle");
@@ -283,9 +288,8 @@ export default function ArchiveApp() {
     <>
       <Atmosphere era={era} paused={motionPaused} />
       <TimeWarp
-        active={warping}
+        active={isPageWarping}
         target={targetRef.current}
-        mode={warpKind === "modal" ? "quick" : "full"}
         onSwap={handleSwap}
         onDone={handleDone}
       />

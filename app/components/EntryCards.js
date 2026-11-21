@@ -152,41 +152,7 @@ function ArchivePhotoGallery({ card, era, lang = "en" }) {
 
   const total = photos.length;
 
-  // Render placeholder if no pictures exist for this era
-  if (total === 0) {
-    return (
-      <div className={styles.photoGallery}>
-        <div className={styles.photoGalleryHeader}>
-          <span className={styles.photoGalleryTitle}>{t.archivePhotosTitle(isHeritage)}</span>
-          <span className={styles.photoGalleryCounter}>
-            {lang === "km" ? "០ រូបថត" : "0 PHOTOGRAPHS"}
-          </span>
-        </div>
-
-        <div className={styles.photoFrame}>
-          <div className={styles.photoPlaceholder}>
-            <svg
-              className={styles.placeholderIcon}
-              width="36"
-              height="36"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              aria-hidden="true"
-            >
-              <rect x="3" y="5" width="18" height="14" rx="2" />
-              <circle cx="8.5" cy="10" r="1.5" />
-              <path d="M21 15l-5-5L5 21" />
-            </svg>
-            <p className={styles.placeholderTitle}>{t.noPhotosTitle(isHeritage)}</p>
-            <p className={styles.placeholderText}>{t.noPhotosDesc(isHeritage, card.topic)}</p>
-            <span className={styles.placeholderBadge}>{t.photoPatternBadge(prefix, folder)}</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  if (!total) return null;
 
   // Infinite scroll handlers — loops seamlessly from end to beginning
   const next = () => setIndex((prev) => (prev + 1) % total);
@@ -273,14 +239,6 @@ function EntryModal({
   closeRef.current = onClose;
   const data = card[era] ?? {};
   const other = era === "heritage" ? "modern" : "heritage";
-  const otherDecade =
-    other === "heritage"
-      ? lang === "km"
-        ? "ទសវត្សរ៍ ៨០"
-        : "1980s"
-      : lang === "km"
-        ? "ទសវត្សរ៍ ២០២០"
-        : "2020s";
   const running = warpPhase !== "idle";
   // back = target is heritage (moving left); fwd = target is modern (moving right)
   const back = running ? warpDir === "back" : other === "heritage";
@@ -351,10 +309,10 @@ function EntryModal({
         ref={dialogRef}
         className={styles.modal}
         data-era={era}
-        data-rebuilding={warpPhase === "reb"}
+        data-rebuilding={!otherAvailable && warpPhase === "reb"}
         role="dialog"
         aria-modal="true"
-        aria-label={`${card.topic} — entry details`}
+        aria-labelledby="entry-modal-title"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -373,28 +331,68 @@ function EntryModal({
           </svg>
         </button>
 
-        {/* Rebuild photonic scan edge */}
-        {warpPhase === "reb" ? (
-          <span
-            className={`${styles.rebEdge} ${back ? styles.rebEdgeBack : styles.rebEdgeFwd}`}
-            aria-hidden="true"
-          />
-        ) : null}
-
-        <div className={bodyClass} key={era}>
+        <header>
           <p className={styles.kicker}>
             {t.storyLabel} {card.num} / {data.label}
           </p>
-          <h2 className={styles.title}>{card.topic}</h2>
-          <div className={styles.modalArchitecture}>
-            <StoryIllustration era={era} story={rawStoryNum} topic={card} lang={lang} />
-            <span>{illustrationCaption(era, rawStoryNum, lang, card)}</span>
-          </div>
-          <ChipRow chips={data.chips} />
+          <h2 id="entry-modal-title" className={styles.title}>
+            {data.headline || card.topic}
+          </h2>
+          {data.headline && data.headline !== card.topic ? (
+            <p className={styles.eraLabel}>{card.topic}</p>
+          ) : null}
+        </header>
 
+        {otherAvailable && (
+          <div
+            className={styles.panorama}
+            role="group"
+            aria-label={lang === "km" ? "ប្រៀបធៀបសម័យ" : "Compare eras"}
+            data-expanded={running ? (back ? "heritage" : "modern") : era}
+            data-running={running}
+          >
+            {["heritage", "modern"].map((choice) => {
+              const past = choice === "heritage";
+              const active = choice === era;
+              const decade = past ? t.eraPastDecade : t.eraPresentDecade;
+              const cue = past
+                ? lang === "km" ? "← មើលអតីតកាល" : "← View past"
+                : lang === "km" ? "មើលបច្ចុប្បន្ន →" : "View present →";
+              return (
+                <button
+                  key={choice}
+                  type="button"
+                  className={styles.eraScene}
+                  data-era={choice}
+                  aria-label={active ? decade : cue}
+                  aria-pressed={active}
+                  aria-disabled={active || warping}
+                  onClick={() => !warping && !active && onTimeWarp?.()}
+                >
+                  <StoryIllustration era={choice} story={rawStoryNum} topic={card} lang={lang} />
+                  <span>{active ? decade : cue}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {!otherAvailable && (
+          <p className={styles.eraLabel}>
+            {era === "heritage"
+              ? lang === "km"
+                ? "មិនទាន់មានសាច់រឿងសម័យបច្ចុប្បន្នទេ។"
+                : "No present-day version yet."
+              : lang === "km"
+                ? "មិនទាន់មានសាច់រឿងសម័យអតីតកាលទេ។"
+                : "No past version yet."}
+          </p>
+        )}
+
+        <ArchivePhotoGallery key={era} card={card} era={era} lang={lang} />
+
+        <div className={bodyClass} key={`body-${era}`}>
           <div className={styles.eraPanel}>
-            <p className={styles.eraLabel}>{data.label}</p>
-            <h3 className={styles.eraHeadline}>{data.headline}</h3>
             <p className={styles.eraDetails} style={{ whiteSpace: "pre-line" }}>
               {data.details}
             </p>
@@ -409,68 +407,19 @@ function EntryModal({
             ) : null}
           </div>
 
-          <ArchivePhotoGallery card={card} era={era} lang={lang} />
+          {!otherAvailable && (
+            <div className={styles.modalArchitecture}>
+              <StoryIllustration era={era} story={rawStoryNum} topic={card} lang={lang} />
+              <span>{illustrationCaption(era, rawStoryNum, lang, card)}</span>
+            </div>
+          )}
+          <ChipRow chips={data.chips} />
 
           <PriceIndex rows={card.priceIndex} title={t.priceIndexTitle} />
         </div>
 
-        {/* Compare in place: warp the popup to the other era */}
-        <div className={styles.modalFooter}>
-          <button
-            type="button"
-            className={`${styles.warpBtn} ${back ? styles.warpBtnBack : styles.warpBtnFwd} ${running ? styles.warpBtnRunning : ""}`}
-            onClick={() => otherAvailable && onTimeWarp?.()}
-            disabled={warping || !otherAvailable}
-            style={!otherAvailable ? { opacity: 0.45, cursor: "not-allowed" } : undefined}
-            aria-label={
-              otherAvailable
-                ? `Time warp to the ${otherDecade} version of ${card.topic}`
-                : t.warpUnavailable
-            }
-          >
-            {/* Back arrow on left when target is 1980s */}
-            {back && otherAvailable && (
-              <span
-                className={`${styles.warpArrow} ${styles.warpArrowLeft} ${running ? styles.warpArrowRunBack : ""}`}
-                aria-hidden="true"
-              >
-                ←
-              </span>
-            )}
-
-            {/* Energy trail */}
-            {running && otherAvailable && (
-              <span
-                className={back ? styles.warpTrailBack : styles.warpTrailFwd}
-                aria-hidden="true"
-              />
-            )}
-
-            <span className={styles.warpLabel}>
-              {!otherAvailable
-                ? t.warpUnavailable
-                : running
-                  ? back
-                    ? t.warpingToPast
-                    : t.warpingToPresent
-                  : back
-                    ? t.warpToPast
-                    : t.warpToPresent}
-            </span>
-
-            {/* Forward arrow on right when target is 2020s */}
-            {!back && otherAvailable && (
-              <span
-                className={`${styles.warpArrow} ${styles.warpArrowRight} ${running ? styles.warpArrowRunFwd : ""}`}
-                aria-hidden="true"
-              >
-                →
-              </span>
-            )}
-          </button>
-
-          {/* Owner controls: show Edit and Delete buttons only when logged-in user is the entry's owner */}
-          {currentUser?.id && card?.owner && currentUser.id === card.owner ? (
+        {currentUser?.id && card?.owner && currentUser.id === card.owner ? (
+          <div className={styles.modalFooter}>
             <div className={styles.ownerControls}>
               <a
                 href={`/contribute?edit=${card.id}`}
@@ -488,8 +437,8 @@ function EntryModal({
                 <span aria-hidden="true">✕</span> {lang === "km" ? "លុបព័ត៌មាន" : "Delete Entry"}
               </button>
             </div>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -567,8 +516,8 @@ export default function EntryCards({
           </h3>
           <p>
             {lang === "km"
-              ? "មិនទាន់មានទិន្នន័យនៅក្នុង Supabase នៅឡើយទេ។ សូមបញ្ចូលទិន្នន័យដំបូង។"
-              : "The archive database has 0 entries. Run the migration script in Supabase to seed entries."}
+              ? "មិនទាន់មានរឿងរ៉ាវនៅឡើយទេ។ សូមត្រឡប់មកមើលនៅពេលក្រោយ។"
+              : "No stories yet. Please check back later."}
           </p>
         </div>
       ) : visible.length === 0 ? (
@@ -586,6 +535,11 @@ export default function EntryCards({
             const rawStoryNum = c.rawNum || c.num;
             const singleEra =
               Boolean(c.heritage) === Boolean(c.modern) ? null : c.heritage ? "heritage" : "modern";
+            const openLabel = singleEra
+              ? t.stepIntoStory
+              : lang === "km"
+                ? "ប្រៀបធៀបសម័យ"
+                : "Compare eras";
             return (
               <article
                 key={`${c.rawNum || c.num}-${era}`}
@@ -609,7 +563,7 @@ export default function EntryCards({
                     onSelect?.(raw);
                   }}
                   aria-haspopup="dialog"
-                  aria-label={`Open entry: ${c.topic}`}
+                  aria-label={`${openLabel}: ${data.headline || c.topic}`}
                   disabled={warping}
                 />
                 <div className={styles.cardScene}>
@@ -635,9 +589,23 @@ export default function EntryCards({
                 <div className={styles.cardBody}>
                   <span className={styles.kicker}>
                     {era === "heritage" ? t.kickerHeritage : t.kickerModern}
+                    {data.headline && data.headline !== c.topic ? ` · ${c.topic}` : ""}
                   </span>
-                  <h3 className={styles.title}>{c.topic}</h3>
-                  <p className={styles.cardDescription}>{data.headline}</p>
+                  <h3 className={styles.title}>{data.headline || c.topic}</h3>
+                  {singleEra && (
+                    <span className={styles.eraAvailability}>
+                      {singleEra === "heritage"
+                        ? lang === "km"
+                          ? "មានតែសម័យអតីតកាល"
+                          : "Past only"
+                        : lang === "km"
+                          ? "មានតែសម័យបច្ចុប្បន្ន"
+                          : "Present only"}
+                    </span>
+                  )}
+                  {typeof data.details === "string" && data.details.trim() ? (
+                    <p className={styles.cardDescription}>{data.details}</p>
+                  ) : null}
                   <div className={styles.chipRow}>
                     {(data.chips ?? []).slice(0, 3).map((chip) => (
                       <span key={chip} className={styles.chip}>
@@ -654,7 +622,7 @@ export default function EntryCards({
                     </div>
                   ) : null}
                   <div className={styles.cardFooter}>
-                    <span>{t.stepIntoStory}</span>
+                    <span>{openLabel}</span>
                     <span aria-hidden="true">↗</span>
                   </div>
                 </div>
