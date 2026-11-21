@@ -10,6 +10,7 @@ import Architecture from "./Architecture";
 import Atmosphere from "./Atmosphere";
 import { translations, getTranslatedCard } from "../lib/translations";
 import { filterCardsByTerms } from "../lib/search";
+import MenuIcon from "./MenuIcon";
 
 export default function ArchiveApp() {
   const [lang, setLang] = useState("en");
@@ -38,6 +39,10 @@ export default function ArchiveApp() {
   const [isReviewer, setIsReviewer] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const [langOpen, setLangOpen] = useState(false);
+  const langPicker = useRef(null);
+  const langTrigger = useRef(null);
+  const langNames = { en: "English", km: "Khmer · ខ្មែរ" };
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -121,22 +126,37 @@ export default function ArchiveApp() {
   }
 
   useEffect(() => {
-    if (!menuOpen) return;
-    function onDocClick(event) {
+    if (!menuOpen) {
+      setLangOpen(false);
+      return;
+    }
+    function onOutside(event) {
+      if (!langPicker.current?.contains(event.target)) setLangOpen(false);
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMenuOpen(false);
       }
     }
     function onKey(event) {
-      if (event.key === "Escape") setMenuOpen(false);
+      if (event.key === "Escape" && langOpen) {
+        event.preventDefault();
+        setLangOpen(false);
+        langTrigger.current?.focus();
+        return;
+      }
+      if (event.key === "Escape" && menuRef.current?.contains(document.activeElement)) {
+        setMenuOpen(false);
+        menuRef.current.querySelector(".profile-btn")?.focus();
+      }
     }
-    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("pointerdown", onOutside, true);
+    document.addEventListener("focusin", onOutside);
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("pointerdown", onOutside, true);
+      document.removeEventListener("focusin", onOutside);
       document.removeEventListener("keydown", onKey);
     };
-  }, [menuOpen]);
+  }, [menuOpen, langOpen]);
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -302,14 +322,20 @@ export default function ArchiveApp() {
               <a href="/contribute">{lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}</a>
             </div>
 
-            <div className="profile" ref={menuRef}>
+            <div
+              className="profile"
+              ref={menuRef}
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) setMenuOpen(false);
+              }}
+            >
               <button
                 type="button"
                 className="profile-btn"
                 onClick={() => setMenuOpen((value) => !value)}
-                aria-haspopup="menu"
+                aria-controls="profile-disclosure"
                 aria-expanded={menuOpen}
-                aria-label={userEmail ? "Account menu" : "Main menu"}
+                aria-label={lang === "km" ? "ម៉ឺនុយរុករក និងគណនី" : "Navigation and account"}
               >
                 {userEmail ? (
                   userEmail.charAt(0).toUpperCase()
@@ -325,43 +351,161 @@ export default function ArchiveApp() {
                   </svg>
                 )}
               </button>
-              {menuOpen ? (
-                <div className="profile-menu" role="menu">
-                  <p className="profile-menu-email" title={userEmail || undefined}>
-                    {userEmail || (lang === "km" ? "ម៉ឺនុយ" : "Menu")}
-                  </p>
-                  <div className="profile-menu-row">
-                    <span className="profile-menu-label">
-                      {lang === "km" ? "ភាសា" : "Language"}
-                    </span>
-                    <div className="lang-toggle" role="group" aria-label="Language selection">
-                      <button
-                        type="button"
-                        className={`lang-btn ${lang === "en" ? "active" : ""}`}
-                        onClick={() => setLang("en")}
-                        aria-pressed={lang === "en"}
+              <div className="profile-menu" id="profile-disclosure" hidden={!menuOpen}>
+                <div className="profile-menu-group profile-menu-nav">
+                  <h2 className="profile-menu-heading">{lang === "km" ? "រុករក" : "Navigation"}</h2>
+                  <a
+                    href="#archive"
+                    className="profile-menu-item"
+                    onClick={(event) => {
+                      if (
+                        event.defaultPrevented ||
+                        event.button !== 0 ||
+                        event.metaKey ||
+                        event.ctrlKey ||
+                        event.shiftKey ||
+                        event.altKey
+                      ) {
+                        return;
+                      }
+                      document.getElementById("archive")?.focus({ preventScroll: true });
+                      setMenuOpen(false);
+                    }}
+                  >
+                    {t.navExplore}
+                  </a>
+                  <a
+                    href="#about"
+                    className="profile-menu-item"
+                    onClick={(event) => {
+                      if (
+                        event.defaultPrevented ||
+                        event.button !== 0 ||
+                        event.metaKey ||
+                        event.ctrlKey ||
+                        event.shiftKey ||
+                        event.altKey
+                      ) {
+                        return;
+                      }
+                      document.getElementById("about")?.focus({ preventScroll: true });
+                      setMenuOpen(false);
+                    }}
+                  >
+                    {t.navAbout}
+                  </a>
+                  <a href="/contribute" className="profile-menu-item">
+                    {lang === "km" ? "ចូលរួមចំណែក" : "Contribute"}
+                  </a>
+                </div>
+                <div className="profile-menu-group">
+                  <h2 className="profile-menu-heading">
+                    {lang === "km" ? "ចំណូលចិត្ត" : "Preferences"}
+                  </h2>
+                  <div className="archive-lang" ref={langPicker}>
+                    <svg
+                      width="0"
+                      height="0"
+                      style={{ position: "absolute" }}
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <symbol id="archive-flag-en" viewBox="0 0 60 36">
+                        <path fill="#012169" d="M0 0h60v36H0z" />
+                        <path stroke="#fff" strokeWidth="7" d="m0 0 60 36M60 0 0 36" />
+                        <path
+                          fill="#c8102e"
+                          d="M0 0l25 15h-5L0 3zM60 0 35 15h-5L55 0zM0 36l25-15h5L5 36zM60 36 35 21h5l20 12z"
+                        />
+                        <path stroke="#fff" strokeWidth="12" d="M30 0v36M0 18h60" />
+                        <path stroke="#c8102e" strokeWidth="7" d="M30 0v36M0 18h60" />
+                      </symbol>
+                      <symbol id="archive-flag-km" viewBox="0 0 60 36">
+                        <path fill="#032ea1" d="M0 0h60v36H0z" />
+                        <path fill="#e00025" d="M0 9h60v18H0z" />
+                        <path
+                          fill="#fff"
+                          d="M12 25v-2h3v-2h3v-4h1v-2h1l1-4 1 4h1v2h1v3l3-2v-3h1v-2h1l1-5 1 5h1v2h1v3l3 2v-3h1v-2h1l1-4 1 4h1v2h1v4h3v2h3v2z"
+                        />
+                        <path stroke="#e00025" d="M15 23h30m-25-2v-2m10 2v-3m10 3v-2" />
+                      </symbol>
+                    </svg>
+                    <button
+                      type="button"
+                      className="archive-lang-trigger"
+                      ref={langTrigger}
+                      aria-expanded={langOpen}
+                      aria-controls="archive-lang-options"
+                      onClick={() => setLangOpen((open) => !open)}
+                    >
+                      <span className="archive-lang-action">
+                        {lang === "km" ? "ប្ដូរភាសា" : "Change language"}
+                      </span>
+                      <svg width="25" height="15" aria-hidden="true">
+                        <use href={`#archive-flag-${lang}`} />
+                      </svg>
+                      {langNames[lang]}
+                      <svg
+                        className="archive-lang-chevron"
+                        width="12"
+                        height="8"
+                        viewBox="0 0 12 8"
+                        aria-hidden="true"
                       >
-                        EN
-                      </button>
-                      <button
-                        type="button"
-                        className={`lang-btn ${lang === "km" ? "active" : ""}`}
-                        onClick={() => setLang("km")}
-                        aria-pressed={lang === "km"}
-                      >
-                        ខ្មែរ
-                      </button>
+                        <path
+                          d="m1 1 5 5 5-5"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        />
+                      </svg>
+                    </button>
+                    <div
+                      className="archive-lang-options"
+                      id="archive-lang-options"
+                      hidden={!langOpen}
+                    >
+                      {Object.entries(langNames).map(([code, name]) => (
+                        <button
+                          key={code}
+                          type="button"
+                          lang={code}
+                          aria-pressed={code === lang}
+                          onClick={() => {
+                            setLang(code);
+                            setLangOpen(false);
+                            langTrigger.current?.focus();
+                          }}
+                        >
+                          <svg width="25" height="15" aria-hidden="true">
+                            <use href={`#archive-flag-${code}`} />
+                          </svg>
+                          {name}
+                          {code === lang && <span aria-hidden="true">✓</span>}
+                        </button>
+                      ))}
                     </div>
                   </div>
                   <button
                     type="button"
                     className="profile-menu-item"
                     onClick={() => setMotionPaused((value) => !value)}
-                    aria-pressed={motionPaused}
+                    role="switch"
+                    aria-checked={!motionPaused}
                   >
-                    <span aria-hidden="true">{motionPaused ? "▷" : "Ⅱ"}</span>
-                    {motionPaused ? t.motionOff : t.motionOn}
+                    <span className="profile-menu-icon" aria-hidden="true">
+                      <MenuIcon name={motionPaused ? "play" : "pause"} />
+                    </span>
+                    {lang === "km" ? "ចលនា" : "Animations"}
                   </button>
+                </div>
+                <div className="profile-menu-group profile-menu-account">
+                  <h2 className="profile-menu-heading">{lang === "km" ? "គណនី" : "Account"}</h2>
+                  {userEmail ? (
+                    <p className="profile-menu-email" title={userEmail}>
+                      {userEmail}
+                    </p>
+                  ) : null}
                   {userEmail ? (
                     <>
                       <a
@@ -369,7 +513,9 @@ export default function ArchiveApp() {
                         className="profile-menu-item"
                         style={{ textDecoration: "none" }}
                       >
-                        <span aria-hidden="true">📋</span>
+                        <span className="profile-menu-icon" aria-hidden="true">
+                          <MenuIcon name="entries" />
+                        </span>
                         {t.navMyEntries}
                       </a>
                       {isReviewer ? (
@@ -378,11 +524,16 @@ export default function ArchiveApp() {
                           className="profile-menu-item"
                           style={{ textDecoration: "none" }}
                         >
-                          <span aria-hidden="true">🗂</span>
+                          <span className="profile-menu-icon" aria-hidden="true">
+                            <MenuIcon name="review" />
+                          </span>
                           {t.navReviewPanel}
                         </a>
                       ) : null}
                       <button type="button" className="profile-menu-item" onClick={handleLogout}>
+                        <span className="profile-menu-icon" aria-hidden="true">
+                          <MenuIcon name="logout" />
+                        </span>
                         {t.authLogout}
                       </button>
                     </>
@@ -390,22 +541,28 @@ export default function ArchiveApp() {
                     <>
                       <a
                         href="/login"
-                        className="profile-menu-item"
+                        className="profile-menu-item profile-login"
                         style={{ textDecoration: "none" }}
                       >
+                        <span className="profile-menu-icon" aria-hidden="true">
+                          <MenuIcon name="login" />
+                        </span>
                         {t.authLoginLink}
                       </a>
                       <a
                         href="/signup"
-                        className="profile-menu-item"
+                        className="profile-menu-item profile-signup"
                         style={{ textDecoration: "none" }}
                       >
+                        <span className="profile-menu-icon" aria-hidden="true">
+                          <MenuIcon name="signup" />
+                        </span>
                         {t.authSignupLink}
                       </a>
                     </>
                   )}
                 </div>
-              ) : null}
+              </div>
             </div>
           </div>
         </nav>
@@ -446,7 +603,7 @@ export default function ArchiveApp() {
           </div>
         </header>
 
-        <main id="archive">
+        <main id="archive" tabIndex={-1}>
           <div className="timeline-console">
             <div className="timeline-intro">
               <p className="kicker">{t.timelineKicker}</p>
@@ -638,7 +795,7 @@ export default function ArchiveApp() {
           />
         </main>
 
-        <section className="about-project" id="about">
+        <section className="about-project" id="about" tabIndex={-1}>
           <div>
             <p className="kicker">{t.aboutKicker}</p>
             <h2>
