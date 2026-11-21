@@ -9,36 +9,85 @@ import collection from "../../collection.config.js";
 
 export default function MyEntriesPage() {
   const [user, setUser] = useState(null);
+  const [lang, setLang] = useState("en");
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState(false);
   const [entries, setEntries] = useState([]);
-  const [loadError, setLoadError] = useState(null);
+  const [loadError, setLoadError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    const supabase = createClient();
-    async function init() {
-      const {
-        data: { user: authUser },
-      } = await supabase.auth.getUser();
-      setUser(authUser ?? null);
+    try {
+      const saved = localStorage.getItem("cambodia_lifestyle_lang");
+      if (saved === "km" || saved === "en") setLang(saved);
+    } catch (_) {}
+  }, []);
 
-      if (authUser) {
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    setAuthError(false);
+    setLoadError(false);
+    setEntries([]);
+
+    async function init() {
+      let supabase;
+      try {
+        supabase = createClient();
+      } catch (err) {
+        console.error("My entries client setup failed:", err);
+        if (active) {
+          setAuthError(true);
+          setLoading(false);
+        }
+        return;
+      }
+
+      let authUser = null;
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        if (error && error.name !== "AuthSessionMissingError") throw error;
+        authUser = error ? null : (data?.user ?? null);
+      } catch (err) {
+        if (err?.name !== "AuthSessionMissingError") {
+          console.error("My entries sign-in check failed:", err);
+          if (active) {
+            setAuthError(true);
+            setLoading(false);
+          }
+          return;
+        }
+        authUser = null;
+      }
+
+      if (!active) return;
+      setUser(authUser);
+      if (!authUser) {
+        setLoading(false);
+        return;
+      }
+
+      try {
         const { data, error } = await supabase
           .from("entries")
           .select("*")
           .eq("owner", authUser.id)
           .order("created_at", { ascending: false });
-
-        if (error) {
-          console.error("Reading My entries failed:", error);
-          setLoadError(error);
-        } else {
-          setEntries(data || []);
-        }
+        if (error) throw error;
+        if (active) setEntries(data || []);
+      } catch (err) {
+        console.error("Reading My entries failed:", err);
+        if (active) setLoadError(true);
+      } finally {
+        if (active) setLoading(false);
       }
-      setLoading(false);
     }
+
     init();
-  }, []);
+    return () => {
+      active = false;
+    };
+  }, [attempt]);
 
   return (
     <main className={styles.page}>
@@ -64,6 +113,26 @@ export default function MyEntriesPage() {
           <div className={styles.card}>
             <p className={styles.sub}>កំពុងផ្ទុកការចូលរួម... / Loading entries...</p>
           </div>
+        ) : authError ? (
+          <div
+            className={styles.card}
+            role="alert"
+            style={{ textAlign: "center", padding: "40px 20px" }}
+          >
+            <p style={{ margin: "0 0 8px 0", fontWeight: 600, color: "var(--accent)" }}>
+              Could not check your sign-in
+            </p>
+            <p style={{ margin: "0 0 16px 0", color: "var(--text-muted)", fontSize: "13px" }}>
+              Your session may have expired. Retry, or log in again.
+            </p>
+            <button
+              type="button"
+              className={styles.submitBtn}
+              onClick={() => setAttempt((count) => count + 1)}
+            >
+              RETRY (ព្យាយាមម្តងទៀត)
+            </button>
+          </div>
         ) : !user ? (
           <ContributeLoginPrompt />
         ) : loadError ? (
@@ -75,9 +144,16 @@ export default function MyEntriesPage() {
             <p style={{ margin: "0 0 8px 0", fontWeight: 600, color: "var(--accent)" }}>
               Could not load your entries
             </p>
-            <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "13px" }}>
-              Check your connection and reload the page to try again.
+            <p style={{ margin: "0 0 16px 0", color: "var(--text-muted)", fontSize: "13px" }}>
+              Check your connection, then retry.
             </p>
+            <button
+              type="button"
+              className={styles.submitBtn}
+              onClick={() => setAttempt((count) => count + 1)}
+            >
+              RETRY (ព្យាយាមម្តងទៀត)
+            </button>
           </div>
         ) : entries.length === 0 ? (
           <div className={styles.card} style={{ textAlign: "center", padding: "40px 20px" }}>
@@ -96,11 +172,22 @@ export default function MyEntriesPage() {
             </a>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            {entries.map((entry) => (
-              <MyEntriesCard key={entry.id} entry={entry} />
-            ))}
-          </div>
+          <>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              {entries.map((entry) => (
+                <MyEntriesCard key={entry.id} entry={entry} lang={lang} />
+              ))}
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px" }}>
+              <a
+                href="/contribute"
+                className={styles.submitBtn}
+                style={{ textDecoration: "none", display: "inline-block" }}
+              >
+                + CONTRIBUTE AN ENTRY (ចូលរួមចំណែក)
+              </a>
+            </div>
+          </>
         )}
       </div>
     </main>
