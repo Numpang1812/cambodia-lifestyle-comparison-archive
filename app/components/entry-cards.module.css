@@ -160,16 +160,6 @@
   color: var(--text-muted);
   font-family: var(--font-unified);
 }
-.eraAvailability {
-  align-self: flex-start;
-  margin: 0 0 14px;
-  padding: 4px 8px;
-  border: 1px solid var(--border-strong);
-  border-radius: 2px;
-  color: var(--accent);
-  font: 12px/1.7 var(--font-unified);
-  overflow-wrap: anywhere;
-}
 .chipRow {
   display: flex;
   flex-wrap: wrap;
@@ -208,25 +198,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid var(--border);
-  padding: 16px 0;
-  font-size: 11px;
   font-weight: 600;
   font-family: var(--font-unified);
   color: var(--accent);
-}
-.cardFooter > span:last-child {
-  font-size: 18px;
-  transition: transform 250ms ease;
-}
-.card:not([data-single]) .cardFooter {
-  margin-bottom: 16px;
+  margin: auto 0 16px;
   padding: 10px 14px;
   min-height: 44px;
   border: 1px solid var(--border-strong);
   border-radius: 3px;
   background: var(--accent-soft);
   font-size: 14px;
+}
+.cardFooter > span:last-child {
+  font-size: 18px;
+  transition: transform 250ms ease;
 }
 .card:hover .cardFooter > span:last-child {
   transform: translate(2px, -2px);
@@ -285,27 +270,6 @@
   background: #281b1288;
   border-color: #bb916344;
   border-left-color: #d5a576;
-}
-
-/* Single-era stories: only the past exists -> orange; only the present -> green.
-   Signals that this story is missing its time-warp counterpart. */
-.card[data-single="heritage"] {
-  border-color: #e07b39;
-  box-shadow:
-    0 0 0 1px #e07b3966,
-    var(--card-shadow);
-}
-.card[data-single="modern"] {
-  border-color: #4ea87a;
-  box-shadow:
-    0 0 0 1px #4ea87a66,
-    var(--card-shadow);
-}
-.card[data-single="heritage"]:hover {
-  border-color: #f0904a;
-}
-.card[data-single="modern"]:hover {
-  border-color: #5fc492;
 }
 
 /* Build the visible facade before revealing its story. */
@@ -574,39 +538,6 @@
   color: var(--text);
   font-weight: 600;
 }
-.priceIndex {
-  margin-top: 18px;
-  border: 1px solid var(--border);
-  padding: 16px;
-}
-.priceTitle {
-  margin: 0 0 10px;
-  font-size: 11px;
-  line-height: 1.6;
-  font-weight: 600;
-  font-family: var(--font-unified);
-  letter-spacing: 0.8px;
-  color: var(--accent);
-}
-.priceRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-  padding: 10px 0;
-  border-top: 1px solid var(--border);
-  font-size: 12px;
-  line-height: 1.6;
-  font-family: var(--font-unified);
-}
-.priceItem {
-  color: var(--text);
-}
-.pricePast {
-  color: var(--text-muted);
-}
-.pricePresent {
-  color: var(--accent);
-}
 .modalFooter {
   position: sticky;
   bottom: -32px;
@@ -847,13 +778,6 @@
   .modalClose {
     right: 12px;
     top: 12px;
-  }
-  .priceRow {
-    grid-template-columns: 1fr 1fr;
-    gap: 5px 12px;
-  }
-  .priceItem {
-    grid-column: 1 / -1;
   }
 }
 @media (prefers-reduced-motion: reduce) {

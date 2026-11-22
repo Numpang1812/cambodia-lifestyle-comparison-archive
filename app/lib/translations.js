@@ -4,8 +4,8 @@ export const translations = {
   en: {
     brand: "KHMER LIVING",
     brandSub: "THE LIFESTYLE ARCHIVE",
-    navExplore: "Explore the archive",
-    navAbout: "About the project",
+    navExplore: "Explore",
+    navAbout: "About",
     motionOn: "Motion on",
     motionOff: "Motion off",
     skipLink: "Skip to the archive",
@@ -31,9 +31,9 @@ export const translations = {
     timelineKicker: "THE TIME MACHINE",
     timelineTitle: "Same place.",
     timelineTitleSub: "A different time.",
-    eraPast: "The past",
+    eraPast: "The Past",
     eraPastDecade: "1980s–90s",
-    eraPresent: "The present",
+    eraPresent: "The Present",
     eraPresentDecade: "2020s",
     statusPast: "Heritage era · You are here",
     statusPresent: "Present era · You are here",
@@ -62,7 +62,6 @@ export const translations = {
 
     // Modal
     closeEntry: "Close entry",
-    priceIndexTitle: "PRICE INDEX — 1980s ⇄ 2020s",
     archivePhotosTitle: (isHeritage) =>
       `ARCHIVE PHOTOGRAPHS · ${isHeritage ? "1980s–90s" : "2020s"}`,
     photoCounter: (curr, total) => `PHOTO ${curr} OF ${total}`,
@@ -213,7 +212,6 @@ export const translations = {
 
     // Modal
     closeEntry: "បិទផ្ទាំង",
-    priceIndexTitle: "សន្ទស្សន៍តម្លៃទំនិញ — ទសវត្សរ៍ ៨០ ⇄ ២០២០",
     archivePhotosTitle: (isHeritage) =>
       `រូបថតបណ្ណសារ · ${isHeritage ? "ទសវត្សរ៍ ៨០–៩០" : "ទសវត្សរ៍ ២០២០"}`,
     photoCounter: (curr, total) => `រូបថតទី ${curr} នៃ ${total}`,
@@ -708,23 +706,6 @@ export const rawCardsData = [
         km: "ឪពុករបស់ខ្ញុំ (សយ ពិសិដ្ឋ) និងអ៊ុំបង្កើតរបស់ខ្ញុំ (លាង ផល្លី)",
       },
     },
-    priceIndex: [
-      {
-        item: { en: "Street snack", km: "ចំណីតាមផ្លូវ" },
-        past: { en: "100–500 Riel", km: "១០០–៥០០ រៀល" },
-        present: { en: "≈4,000 KHR ($1.00)", km: "≈ ៤,០០០ រៀល ($១.០០)" },
-      },
-      {
-        item: { en: "Num Banh Chok bowl", km: "នំបញ្ចុកមួយចាន" },
-        past: { en: "~200 Riel", km: "~ ២០០ រៀល" },
-        present: { en: "~5,000 KHR", km: "~ ៥,០០០ រៀល" },
-      },
-      {
-        item: { en: "Iced drink", km: "ភេសជ្ជៈត្រជាក់" },
-        past: { en: "Iced Syrup ~100 Riel", km: "ទឹកសេរ៉ូ ~ ១០០ រៀល" },
-        present: { en: "Boba ~8,000 KHR ($2.00)", km: "តែគុជ ~ ៨,០០០ រៀល ($២.០០)" },
-      },
-    ],
     caption: {
       heritage: { en: "CHIVE CAKES & CART BELLS", km: "នំកាឆាយ និងកណ្តឹងរទេះលក់ដូរ" },
       modern: { en: "BOBA & DOORSTEP DELIVERY", km: "តែគុជ និងសេវាដឹកដល់កន្លែង" },
@@ -934,16 +915,6 @@ export function getTranslatedCard(rawCard, lang = "en") {
     topic: rawCard.topic[l] || rawCard.topic.en,
     modern: translateEra(rawCard.modern, l),
     heritage: translateEra(rawCard.heritage, l),
-    priceIndex: Array.isArray(rawCard.priceIndex)
-      ? rawCard.priceIndex.map((row) => ({
-          item: typeof row?.item === "object" ? row.item[l] || row.item.en : row?.item || "",
-          past: typeof row?.past === "object" ? row.past[l] || row.past.en : row?.past || "",
-          present:
-            typeof row?.present === "object"
-              ? row.present[l] || row.present.en
-              : row?.present || "",
-        }))
-      : null,
     caption: {
       heritage: rawCard.caption?.heritage?.[l] || rawCard.caption?.heritage?.en,
       modern: rawCard.caption?.modern?.[l] || rawCard.caption?.modern?.en,

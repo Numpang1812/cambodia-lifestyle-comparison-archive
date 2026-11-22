@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./entry-cards.module.css";
-import StoryIllustration, { illustrationCaption } from "./StoryIllustration";
+import StoryIllustration from "./StoryIllustration";
 import { translations, getTranslatedCard } from "../lib/translations";
 import { searchTerms, scoreCard, filterCardsByTerms } from "../lib/search";
 
@@ -21,22 +21,6 @@ function ChipRow({ chips }) {
         <span key={chip} className={styles.chip}>
           {chip}
         </span>
-      ))}
-    </div>
-  );
-}
-
-function PriceIndex({ rows, title }) {
-  if (!rows?.length) return null;
-  return (
-    <div className={styles.priceIndex}>
-      <p className={styles.priceTitle}>{title || "PRICE INDEX — 1980s ⇄ 2020s"}</p>
-      {rows.map((r) => (
-        <div key={r.item} className={styles.priceRow}>
-          <span className={styles.priceItem}>{r.item}</span>
-          <span className={styles.pricePast}>{r.past}</span>
-          <span className={styles.pricePresent}>{r.present}</span>
-        </div>
       ))}
     </div>
   );
@@ -356,8 +340,12 @@ function EntryModal({
               const active = choice === era;
               const decade = past ? t.eraPastDecade : t.eraPresentDecade;
               const cue = past
-                ? lang === "km" ? "← មើលអតីតកាល" : "← View past"
-                : lang === "km" ? "មើលបច្ចុប្បន្ន →" : "View present →";
+                ? lang === "km"
+                  ? "← មើលអតីតកាល"
+                  : "← View past"
+                : lang === "km"
+                  ? "មើលបច្ចុប្បន្ន →"
+                  : "View present →";
               return (
                 <button
                   key={choice}
@@ -407,15 +395,7 @@ function EntryModal({
             ) : null}
           </div>
 
-          {!otherAvailable && (
-            <div className={styles.modalArchitecture}>
-              <StoryIllustration era={era} story={rawStoryNum} topic={card} lang={lang} />
-              <span>{illustrationCaption(era, rawStoryNum, lang, card)}</span>
-            </div>
-          )}
           <ChipRow chips={data.chips} />
-
-          <PriceIndex rows={card.priceIndex} title={t.priceIndexTitle} />
         </div>
 
         {currentUser?.id && card?.owner && currentUser.id === card.owner ? (
@@ -533,26 +513,11 @@ export default function EntryCards({
           {visible.map((c, index) => {
             const data = c[era] ?? {};
             const rawStoryNum = c.rawNum || c.num;
-            const singleEra =
-              Boolean(c.heritage) === Boolean(c.modern) ? null : c.heritage ? "heritage" : "modern";
-            const openLabel = singleEra
-              ? t.stepIntoStory
-              : lang === "km"
-                ? "ប្រៀបធៀបសម័យ"
-                : "Compare eras";
             return (
               <article
                 key={`${c.rawNum || c.num}-${era}`}
                 className={styles.card}
                 data-era={era}
-                data-single={singleEra || undefined}
-                title={
-                  singleEra
-                    ? singleEra === "heritage"
-                      ? t.addEraMissingModern
-                      : t.addEraMissingPast
-                    : undefined
-                }
                 style={{ "--entry-delay": `${index * 90}ms` }}
               >
                 <button
@@ -563,7 +528,7 @@ export default function EntryCards({
                     onSelect?.(raw);
                   }}
                   aria-haspopup="dialog"
-                  aria-label={`${openLabel}: ${data.headline || c.topic}`}
+                  aria-label={`${t.stepIntoStory}: ${data.headline || c.topic}`}
                   disabled={warping}
                 />
                 <div className={styles.cardScene}>
@@ -582,47 +547,14 @@ export default function EntryCards({
                     </span>
                   </div>
                   <StoryIllustration era={era} story={rawStoryNum} topic={c} lang={lang} />
-                  <span className={styles.sceneTag}>
-                    {illustrationCaption(era, rawStoryNum, lang, c)}
-                  </span>
                 </div>
                 <div className={styles.cardBody}>
-                  <span className={styles.kicker}>
-                    {era === "heritage" ? t.kickerHeritage : t.kickerModern}
-                    {data.headline && data.headline !== c.topic ? ` · ${c.topic}` : ""}
-                  </span>
                   <h3 className={styles.title}>{data.headline || c.topic}</h3>
-                  {singleEra && (
-                    <span className={styles.eraAvailability}>
-                      {singleEra === "heritage"
-                        ? lang === "km"
-                          ? "មានតែសម័យអតីតកាល"
-                          : "Past only"
-                        : lang === "km"
-                          ? "មានតែសម័យបច្ចុប្បន្ន"
-                          : "Present only"}
-                    </span>
-                  )}
                   {typeof data.details === "string" && data.details.trim() ? (
                     <p className={styles.cardDescription}>{data.details}</p>
                   ) : null}
-                  <div className={styles.chipRow}>
-                    {(data.chips ?? []).slice(0, 3).map((chip) => (
-                      <span key={chip} className={styles.chip}>
-                        {chip.replace(/^[^\p{L}\p{N}]+/u, "")}
-                      </span>
-                    ))}
-                  </div>
-                  {data.source ? (
-                    <div className={styles.cardSource}>
-                      <span className={styles.cardSourceLabel}>
-                        {t.cardSourceLabel || "Source"}:
-                      </span>{" "}
-                      {data.source}
-                    </div>
-                  ) : null}
                   <div className={styles.cardFooter}>
-                    <span>{openLabel}</span>
+                    <span>{t.stepIntoStory}</span>
                     <span aria-hidden="true">↗</span>
                   </div>
                 </div>

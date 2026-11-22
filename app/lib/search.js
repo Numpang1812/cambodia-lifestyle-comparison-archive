@@ -86,12 +86,6 @@ export function getCardHaystack(rawCard, era = null) {
     rawCard.caption?.heritage?.en,
     rawCard.caption?.heritage?.km,
     ...(rawCard.heritageKeywords || rawCard.heritage?.keywords || []),
-    ...(Array.isArray(rawCard.priceIndex) ? rawCard.priceIndex : []).flatMap((r) => [
-      typeof r?.item === "object" ? r.item?.en : r?.item,
-      typeof r?.item === "object" ? r.item?.km : r?.item,
-      typeof r?.past === "object" ? r.past?.en : r?.past,
-      typeof r?.past === "object" ? r.past?.km : r?.past,
-    ]),
   ];
 
   // 2020s Modern items
@@ -111,12 +105,6 @@ export function getCardHaystack(rawCard, era = null) {
     rawCard.caption?.modern?.en,
     rawCard.caption?.modern?.km,
     ...(rawCard.modernKeywords || rawCard.modern?.keywords || []),
-    ...(Array.isArray(rawCard.priceIndex) ? rawCard.priceIndex : []).flatMap((r) => [
-      typeof r?.item === "object" ? r.item?.en : r?.item,
-      typeof r?.item === "object" ? r.item?.km : r?.item,
-      typeof r?.present === "object" ? r.present?.en : r?.present,
-      typeof r?.present === "object" ? r.present?.km : r?.present,
-    ]),
   ];
 
   let items = [];

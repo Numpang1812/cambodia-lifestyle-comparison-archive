@@ -172,26 +172,6 @@ export default function ReviewCard({ entry, t, lang, busy, locked, onDecide }) {
                   : JSON.stringify(entry.keywords, null, 2)}
             </p>
           ) : null}
-          {entry.price_index != null && entry.price_index !== "" ? (
-            <div>
-              <p style={{ margin: 0, font: "11px var(--font-mono)", color: "var(--text-muted)" }}>
-                {t.priceIndexTitle}
-              </p>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: "14px",
-                  color: "var(--text)",
-                  whiteSpace: "pre-wrap",
-                  overflowWrap: "anywhere",
-                }}
-              >
-                {typeof entry.price_index === "string" || typeof entry.price_index === "number"
-                  ? String(entry.price_index)
-                  : JSON.stringify(entry.price_index, null, 2)}
-              </p>
-            </div>
-          ) : null}
           <div
             style={{
               display: "flex",
