@@ -16,7 +16,7 @@ The **Cambodia Lifestyle Archive** is a living community archive that preserves 
 
 This archive is designed for Cambodians across generations—students, elders, local researchers, and the diaspora—who want to understand how rapidly everyday Cambodian life has transformed over forty years. To serve this community authentically:
 
-- **Khmer First:** Khmer is treated as primary content, never as a secondary translation or transliterated afterthought. Headings use Google Font `Moulpali` for classical Khmer display styling, while body text and UI controls use `Kantumruy Pro` for high legibility on mobile screens. Khmer numerals (`០–៩`) are dynamically rendered via `toKmNum()` helpers, and every comparison category, prompt, and button includes verified Khmer phrasing.
+- **Khmer support:** Visitors can switch between English and Khmer. The archive displays Khmer numerals (`០–៩`) via `toKmNum()`, credits the source in story details, and accepts Khmer titles and keywords. Some contributor prompts are still in English; a new story does not automatically get a translated body.
 - **Phones First:** Most Cambodian users access the web exclusively on mobile devices. The entire application uses a mobile-first responsive layout (tested down to 360px–390px viewport widths), with thumb-friendly touch targets, sliding drawers, and collapsible comparison cards.
 - **Resilient on Slow Connections:** The frontend avoids heavyweight CSS utility frameworks and bloated component libraries, relying on lightweight Vanilla CSS and modular styles. Images are loaded on-demand, font variable subsets are scoped to Khmer and Latin glyphs, and server components minimize hydration overhead over 3G/4G mobile networks.
 - **Source Dignity & Crediting:** Oral history sources from elder relatives are named and credited with explicit family consent, establishing generational authority for 1980s memories, while 2020s contemporary accounts are attributed directly to student observers and contributing community members.
@@ -25,7 +25,7 @@ This archive is designed for Cambodians across generations—students, elders, l
 
 ## 3. How It Works
 
-The platform is deployed as a **Next.js 15 (App Router)** application on **Vercel**, backed by **Supabase** for user authentication, PostgreSQL relational data, and comparative photo storage.
+The platform is deployed as a **Next.js 16 (App Router)** application on **Vercel**, backed by **Supabase** for authentication, PostgreSQL data, and optional photo uploads. Contributors can choose from ten topics, preview three covers for the selected topic, or browse all thirty covers for that era.
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
@@ -46,7 +46,7 @@ The platform is deployed as a **Next.js 15 (App Router)** application on **Verce
 ```
 
 ### Database Tables
-- **`entries`**: The core data table storing archive records. Key columns include `id`, `num`, `slug`, `title` (bilingual `[en, km]`), `content` (bilingual `[en, km]`), `timeline`, `topic`, `source`, `owner` (UUID referencing `auth.users.id`), `status` (`'pending' | 'published' | 'returned'`), `image_config` / `image`, and `price_index`.
+- **`entries`**: Stories have an `id`, `num`, `slug`, bilingual `title`, `content`, `timeline`, `topic`, `source`, `keywords`, `owner`, and `status`. The two era rows of a comparison share a slug. `image_config` holds optional photo metadata and the cover selection.
 - **`reviewers`**: Stores user IDs authorized to moderate entries (`user_id` referencing `auth.users.id`).
 - **`storage.buckets/photos`**: Storage bucket housing user-uploaded lifestyle photographs.
 
@@ -67,7 +67,7 @@ The platform is deployed as a **Next.js 15 (App Router)** application on **Verce
 - **`entries` DELETE:**
   - Contributors can delete only their own rows (`owner = auth.uid()`).
 - **`reviewers` Table:**
-  - All direct client `INSERT`, `UPDATE`, and `DELETE` queries are denied by RLS. Reviewer assignments can only be created by administrative service-role scripts (`scripts/add-reviewer.mjs`) or database administrators.
+   - Contributors cannot add themselves as reviewers. Reviewer assignment is an administrative task.
 
 ---
 
@@ -90,14 +90,24 @@ To establish an unbypassable gate, moderation authority is locked inside Postgre
 
 ### Design Decisions
 - **What a Returned Entry Says:** When a reviewer returns an entry, its status becomes `returned`. In `/my-entries`, the contributor sees the item flagged with a returned notice, indicating that the submission requires clarification or better source attribution. Editing the card resets its status to `pending`, sending it back to the review desk.
-- **Reviewer Take-Downs & Scope:** The review desk (`/review`) intentionally queries `.neq("status", "published")`. Reviewers focus on vetting incoming and returned content. Once an entry is published, it remains on the public shelf; if a contributor edits any field of their published entry, the update policy automatically drops the entry back to `pending`, pulling it "off the shelf" until re-approved.
+- **Review queue scope:** `/review` queries `.eq("status", "pending")`. Returning an entry takes it out of the queue until its contributor revises and resubmits it. When a non-reviewer edits a published entry it returns to pending; reviewer edits preserve the existing status.
 - **Search Isolation for Pending Entries:** Public search queries (`fetchEntries`) query the public view of the archive, returning strictly `published` entries. A contributor's pending entries appear only within their personal `/my-entries` dashboard. This prevents unverified claims or inappropriate submissions from leaking into public search results before moderation.
 
 ---
 
 ## 5. AI Use
 
-AI assistance was utilized iteratively throughout the project in compliance with ICT 340 course guidelines. Below is the full audit of models, tasks, code verdicts, and verification methods.
+### Where I reviewed the agent’s work
+
+My review came **after each prompt, before I accepted the change or gave the next instruction**. I read the changed code to see how the agent had implemented my request, then manually tried the affected feature. I checked both what it did and what a contributor actually saw. If either was wrong, I pointed to the code or shared a screenshot and asked for a specific revision. The agent wrote the revisions; I decided which version to keep.
+
+For example, when I asked for a topic picker, the agent used a native HTML `<select>`. It let me choose a topic, so a functional check alone would have passed. But it looked like a browser default beside the archive’s illustrated cards. I caught that during review and asked for numbered topic choices styled to match the archive. For cover art, my criterion was different: I wanted to see the picture *before* choosing it. When “See more” hid every preview, I sent that version back too. I kept three clickable previews with the remaining designs in a scrollable gallery. The final picker in `components/ContributeSelectField.js` still uses native buttons and radio inputs for keyboard access; what I rejected was letting the browser’s default appearance make the design decision.
+
+### Models and subagents
+
+- **Main model, final session:** OpenAI **GPT-6.2 Astra** (`openai/gpt-6.2-astra`), running in OpenCode. It wrote the React and CSS for the pickers, drew the SVG covers in code, revised the Supabase queries, and drafted the reflection and README edits. I supplied the examples, corrected the reflection when it missed what I had learned, and chose which UI revisions to keep.
+- **Subagents, final session:** None. The main model made the edits and ran the checks directly. No separate model generated the artwork or reviewed the code.
+- **Earlier sprints:** The table below preserves the model names and tasks recorded for those sprints. Those records do not distinguish main agents from subagents, so I cannot attribute a subagent model to those tasks.
 
 | Model | Task / Prompt Scope | What the AI Wrote | Verdict & Revisions | How It Was Checked |
 | :--- | :--- | :--- | :--- | :--- |
@@ -169,19 +179,13 @@ npm run lint
 
 ## 8. Submission Checklist
 
-- Live URL loads logged out and shows published entries only: yes, https://cambodia-lifestyle-comparison-archive.vercel.app [or your live Vercel URL]
-- A stranger cannot publish their own entry through the page or the console: yes, tested with `node scripts/security-probe.mjs` and `npm test` on 2026-11-08
-- Logged out, the API returns nothing pending or returned: yes, tested in `tests/review-security.test.mjs` (Subtest E & 7) on 2026-11-08
-- Contributors can edit and delete only their own entries: yes, enforced by `entries_owner_manage` RLS policy and verified in `tests/review-security.test.mjs`
-- No secrets anywhere in the repo history: yes, checked with git log scans and `.env.local` gitignore rules
-- At least eight real entries, each with a credited source: yes, 10 entries across 5 dual-era comparison categories (Commute, Morning Routine, Free Time, Street Food, Romance)
-- Khmer renders on every screen a user meets, including the queue: yes, verified across `/`, `/login`, `/signup`, `/my-entries`, and `/review`
-- Works at phone width: yes, tested on 375px & 390px (iPhone 13/14 viewport in Chrome DevTools)
-- No test entries, lorem ipsum or TODO comments in shipped pages: yes, verified via global search
-- No console errors on the main pages: yes, clean browser console output
-- jesseorndorff is a collaborator on this repo: yes
-- Supabase project restored and awake on (date): yes, active and awake
-- Demo video link opens in a private window: yes, [UNSURE: Paste your private-window accessible Loom/YouTube/Drive demo video link here]
-- Reflection pasted in the Canvas submission: yes
-- Posted in the Show Your Archive discussion: yes
-- Q&A slot booked for (date and time): yes, [UNSURE: Paste your scheduled Q&A date and time here]
+- [x] Live homepage loads signed out: https://cambodia-lifestyle-comparison-archi.vercel.app
+- [x] Pre-push integration checks passed for contributor self-publication refusal, ownership, anonymous reads, return/resubmit, and simultaneous reviewer decisions.
+- [x] Anonymous read on Nov 22, 2026: 12 visible entries, all published, all with a source.
+- [x] GitHub collaborator access confirmed for `jesseorndorff`.
+- [ ] Open Supabase Dashboard before submitting and confirm the project is active. The public API responded on Nov 22, 2026.
+- [ ] Walk through logged-out browse/search and the contributor/reviewer paths on the deployed site. Check Khmer, phone layout, console output, and the shelf for test content.
+- [ ] Confirm the final history scan and AI-assisted commit labels.
+- [ ] Submit the two links and four reflection answers in Canvas.
+- [ ] Test the video link in a private window and submit it separately in **Demo Video**.
+- [ ] Confirm the Show Your Archive discussion post and Q&A slot.
