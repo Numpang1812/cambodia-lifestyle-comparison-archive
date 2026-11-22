@@ -10,6 +10,10 @@ export default function ContributeFormMetaFields({
   setTitleKm,
   topic,
   setTopic,
+  artwork,
+  setArtwork,
+  design,
+  setDesign,
   timeline,
   setTimeline,
   errors,
@@ -43,6 +47,20 @@ export default function ContributeFormMetaFields({
         onChange={setTopic}
         error={errors.topic}
         required
+      />
+
+      <ContributeSelectField
+        id="artwork"
+        label="COVER ARTWORK (OPTIONAL)"
+        value={artwork}
+        storyTopic={topic}
+        design={design}
+        onChange={(artworkTopic, print) => {
+          setArtwork(artworkTopic);
+          setDesign(print);
+        }}
+        error={errors.artwork}
+        era={/^\d{4}$/.test(timeline) && Number(timeline) < 2000 ? "heritage" : "modern"}
       />
 
       <ContributeTextField

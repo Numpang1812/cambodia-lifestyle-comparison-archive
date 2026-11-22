@@ -6,6 +6,11 @@ export const VALID_TOPICS = [
   "Free Time, Entertainment & Side Hustles",
   "Street Food & Cost of Living",
   "Romance & Dating Culture",
+  "Festivals & Family Traditions",
+  "Homes & Neighborhoods",
+  "Farming & Fishing",
+  "Weaving & Everyday Clothing",
+  "Music & Dance",
 ];
 
 export function validateTitle(val) {
@@ -51,7 +56,7 @@ export function validateTimeline(val) {
 
 export function validateTopic(val) {
   if (!val || !VALID_TOPICS.includes(val)) {
-    return "Must be 1 of the 5 archive topics.";
+    return "Choose a topic from the archive list.";
   }
   return null;
 }
@@ -63,13 +68,6 @@ export function validateSource(val) {
   if (!/^[a-zA-Z0-9\u1780-\u17FF\s]+$/.test(val)) {
     return "No special characters allowed.";
   }
-  return null;
-}
-
-export function validatePriceIndex(val) {
-  if (!val || val === "") return null; // Can be null
-  if (val.length > 30) return "Maximum 30 digits allowed.";
-  if (!/^\d+$/.test(val)) return "Digits only, no special characters.";
   return null;
 }
 

@@ -70,7 +70,7 @@ export default function MyEntriesPage() {
       try {
         const { data, error } = await supabase
           .from("entries")
-          .select("*")
+          .select("id,status,title,topic,timeline,content,source,created_at,updated_at")
           .eq("owner", authUser.id)
           .order("created_at", { ascending: false });
         if (error) throw error;

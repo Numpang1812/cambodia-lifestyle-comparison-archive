@@ -2,6 +2,7 @@
 
 import ContributeTextField from "./ContributeTextField";
 import ContributePhotoField from "./ContributePhotoField";
+import ContributeKeywordField from "./ContributeKeywordField";
 
 export default function ContributeFormExtraFields({
   photoFile,
@@ -9,8 +10,6 @@ export default function ContributeFormExtraFields({
   onFileSelect,
   source,
   setSource,
-  priceIndex,
-  setPriceIndex,
   keywords,
   setKeywords,
   errors,
@@ -39,23 +38,7 @@ export default function ContributeFormExtraFields({
         required
       />
 
-      <ContributeTextField
-        id="price_index"
-        label="PRICE INDEX (DIGITS ONLY)"
-        value={priceIndex}
-        onChange={setPriceIndex}
-        error={errors.price_index}
-        placeholder="Optional (digits only, e.g. 1500)"
-      />
-
-      <ContributeTextField
-        id="keywords"
-        label="KEYWORDS (JSON FORMAT)"
-        value={keywords}
-        onChange={setKeywords}
-        error={errors.keywords}
-        placeholder='Optional JSON, e.g. ["commute", "cyclo"]'
-      />
+      <ContributeKeywordField value={keywords} onChange={setKeywords} />
     </>
   );
 }

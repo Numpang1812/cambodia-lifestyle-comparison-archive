@@ -32,7 +32,7 @@ export default function ContributeForm({ user, initialData = null, pairSlug = nu
       <p className={styles.hint} style={{ margin: 0 }}>
         {isEdit
           ? "Photo is optional when editing; leave it unchanged to keep the current image. Depending on your account, saving may return the entry to review before it appears in the archive again."
-          : "One photo is required (JPEG, PNG or WEBP, up to 5MB). New entries are reviewed before they appear in the archive; track status in My Entries."}
+          : "You can submit without a photo. New entries are reviewed before they appear in the archive; track status in My Entries."}
       </p>
 
       <fieldset

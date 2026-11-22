@@ -53,7 +53,7 @@ export default function ReviewPage() {
       try {
         const { data, error } = await supabase
           .from("entries")
-          .select("*")
+          .select("id,owner,status,title,content,timeline,topic,source,image_config,keywords")
           .eq("status", "pending")
           .order("created_at", { ascending: false });
         if (error) {

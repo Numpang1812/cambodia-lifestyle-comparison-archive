@@ -10,7 +10,6 @@ export default function ContributePhotoField({
   onChange,
   error,
   disabled = false,
-  isEdit = false,
 }) {
   const inputRef = useRef(null);
   const sizeMb = file?.size ? (file.size / (1024 * 1024)).toFixed(1) + " MB" : "";
@@ -19,14 +18,7 @@ export default function ContributePhotoField({
     <div className={styles.field}>
       <div className={styles.labelRow}>
         <label htmlFor={id} className={styles.label}>
-          PHOTO{" "}
-          {isEdit ? (
-            <span style={{ opacity: 0.65, fontSize: "11px", fontWeight: "normal" }}>
-              (OPTIONAL)
-            </span>
-          ) : (
-            <span className={styles.requiredStar}>*</span>
-          )}
+          PHOTO (OPTIONAL)
         </label>
         {error && (
           <span className={styles.fieldError} role="alert">

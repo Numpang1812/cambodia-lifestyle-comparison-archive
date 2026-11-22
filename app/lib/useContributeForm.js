@@ -11,9 +11,7 @@ import {
   validateTimeline,
   validateTopic,
   validateSource,
-  validatePriceIndex,
   validateImage,
-  validateKeywords,
 } from "./contribute-validation";
 
 export function useContributeForm(user, initialData = null, pairSlug = null) {
@@ -34,19 +32,22 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
   const [topic, setTopic] = useState(
     Array.isArray(initialData?.topic) ? initialData.topic[0] || "" : initialData?.topic || ""
   );
+  const [artwork, setArtwork] = useState(initialData?.image_config?.artwork || "");
+  const savedDesign = initialData?.image_config?.design;
+  const [design, setDesign] = useState([2, 3].includes(savedDesign) ? savedDesign : 1);
   const [source, setSource] = useState(
     Array.isArray(initialData?.source) ? initialData.source[0] || "" : initialData?.source || ""
   );
-  const [priceIndex, setPriceIndex] = useState(
-    initialData?.price_index
-      ? typeof initialData.price_index === "object"
-        ? JSON.stringify(initialData.price_index)
-        : String(initialData.price_index)
-      : ""
-  );
-  const [keywords, setKeywords] = useState(
-    initialData?.keywords ? JSON.stringify(initialData.keywords) : ""
-  );
+  const savedKeywords = initialData?.keywords;
+  const [keywordEdit, setKeywords] = useState(null);
+  const keywords = keywordEdit ?? {
+    tags: Array.isArray(savedKeywords)
+      ? savedKeywords.map(String)
+      : typeof savedKeywords === "string"
+        ? savedKeywords.match(/\S+/gu) || []
+        : [],
+    draft: "",
+  };
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(initialData?.image_config?.url || null);
 
@@ -77,9 +78,7 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
     const file = e.target.files?.[0] || null;
     setPhotoFile(file);
     setPhotoPreview(file ? URL.createObjectURL(file) : initialData?.image_config?.url || null);
-    if (file) setErrors((prev) => ({ ...prev, image: validateImage(file) }));
-    else if (!isEdit) setErrors((prev) => ({ ...prev, image: "Photo is required." }));
-    else setErrors((prev) => ({ ...prev, image: null }));
+    setErrors((prev) => ({ ...prev, image: file ? validateImage(file) : null }));
   }
 
   async function handleSubmit(e) {
@@ -87,19 +86,25 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
     if (submitLock.current) return;
     setFormError("");
 
+    const words = [...keywords.tags, ...(keywords.draft.match(/\S+/gu) || [])];
     const trimmed = {
       title: title.trim(),
       titleKm: titleKm.trim(),
       content: content.trim(),
       timeline: timeline.trim(),
       topic: topic.trim(),
+      artwork,
+      design,
       source: source.trim(),
-      priceIndex: priceIndex.trim(),
-      keywords: keywords.trim(),
+      keywords:
+        isEdit && !keywordEdit && savedKeywords != null
+          ? JSON.stringify(savedKeywords)
+          : words.length
+            ? JSON.stringify(words)
+            : "",
     };
 
-    // Changing photo is optional on edit; if no new file chosen, keep existing photo
-    const imageError = isEdit && !photoFile ? null : validateImage(photoFile);
+    const imageError = photoFile ? validateImage(photoFile) : null;
 
     const newErrors = {
       title: validateTitle(trimmed.title),
@@ -107,22 +112,20 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
       content: validateContent(trimmed.content),
       timeline: validateTimeline(trimmed.timeline),
       topic: validateTopic(trimmed.topic),
+      artwork: artwork ? validateTopic(artwork) : null,
       source: validateSource(trimmed.source),
-      price_index: validatePriceIndex(trimmed.priceIndex),
       image: imageError,
-      keywords: validateKeywords(trimmed.keywords),
     };
 
     const order = [
       "title",
       "title_km",
       "topic",
+      "artwork",
       "timeline",
       "content",
       "image",
       "source",
-      "price_index",
-      "keywords",
     ];
     const firstInvalid = order.find((key) => newErrors[key]);
     focusTarget.current = firstInvalid || null;
@@ -197,6 +200,10 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
       setTitleKm,
       topic,
       setTopic,
+      artwork,
+      setArtwork,
+      design,
+      setDesign,
       timeline,
       setTimeline,
       errors,
@@ -207,8 +214,6 @@ export function useContributeForm(user, initialData = null, pairSlug = null) {
       onFileSelect: handleFileSelect,
       source,
       setSource,
-      priceIndex,
-      setPriceIndex,
       keywords,
       setKeywords,
       errors,

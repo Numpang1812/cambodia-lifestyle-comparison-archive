@@ -41,21 +41,33 @@ export async function uploadAndCreateEntry({
     if (card[era]) throw new Error("NOT_SAVED");
   }
 
-  // Tuesday check 4: Path is <user_id>/<random_uuid>.<clean_extension>
-  const rawExt = (photoFile.name.split(".").pop() || "jpg").toLowerCase();
-  const ext = rawExt === "web" ? "webp" : rawExt;
-  const randomPath = `${currentUser.id}/${crypto.randomUUID()}.${ext}`;
+  let imageConfig = trimmed.artwork
+    ? { artwork: trimmed.artwork, design: [2, 3].includes(trimmed.design) ? trimmed.design : 1 }
+    : {};
+  if (photoFile) {
+    // Tuesday check 4: Path is <user_id>/<random_uuid>.<clean_extension>
+    const rawExt = (photoFile.name.split(".").pop() || "jpg").toLowerCase();
+    const ext = rawExt === "web" ? "webp" : rawExt;
+    const randomPath = `${currentUser.id}/${crypto.randomUUID()}.${ext}`;
 
-  const { error: uploadError } = await supabase.storage
-    .from("photos")
-    .upload(randomPath, photoFile, {
-      contentType: photoFile.type || "image/jpeg",
-      upsert: false,
-    });
+    const { error: uploadError } = await supabase.storage
+      .from("photos")
+      .upload(randomPath, photoFile, {
+        contentType: photoFile.type || "image/jpeg",
+        upsert: false,
+      });
 
-  if (uploadError) throw uploadError;
+    if (uploadError) throw uploadError;
 
-  const { data: urlData } = supabase.storage.from("photos").getPublicUrl(randomPath);
+    const { data: urlData } = supabase.storage.from("photos").getPublicUrl(randomPath);
+    imageConfig = {
+      ...imageConfig,
+      bucket: "photos",
+      path: randomPath,
+      url: urlData.publicUrl,
+      ext,
+    };
+  }
 
   const parsedKeywords = trimmed.keywords ? JSON.parse(trimmed.keywords) : null;
   const baseSlug = (trimmed.title || trimmed.topic)
@@ -65,13 +77,6 @@ export async function uploadAndCreateEntry({
   // Reuse an existing story's slug when contributing the missing era so the two
   // rows pair up for the time warp; otherwise mint a fresh slug.
   const slug = pairSlug || `${baseSlug}-${crypto.randomUUID().slice(0, 6)}`;
-
-  const imageConfig = {
-    bucket: "photos",
-    path: randomPath,
-    url: urlData.publicUrl,
-    ext: ext,
-  };
 
   // Calculate next sequential card number (e.g. "06", "07") to satisfy NOT NULL constraint
   const { data: existingRows } = await supabase
@@ -94,12 +99,11 @@ export async function uploadAndCreateEntry({
       timeline: trimmed.timeline,
       topic: [trimmed.topic],
       source: [trimmed.source],
-      price_index: trimmed.priceIndex || null,
       keywords: parsedKeywords,
       image_config: imageConfig,
       slug: slug,
     })
-    .select();
+    .select("id");
 
   if (insertError) throw insertError;
 
@@ -157,6 +161,16 @@ export async function updateExistingEntry({
     };
   }
 
+  const artwork = trimmed.artwork ?? existingImageConfig?.artwork;
+  if (artwork || existingImageConfig?.artwork) {
+    const design = trimmed.design ?? existingImageConfig?.design;
+    finalImageConfig = {
+      ...finalImageConfig,
+      artwork: artwork || null,
+      design: artwork && [2, 3].includes(design) ? design : 1,
+    };
+  }
+
   const parsedKeywords = trimmed.keywords ? JSON.parse(trimmed.keywords) : null;
 
   // Reviewer check: reviewers keep their edits published, non-reviewers return to pending
@@ -171,7 +185,6 @@ export async function updateExistingEntry({
   const updatePayload = {
     title: [trimmed.title, trimmed.titleKm],
     timeline: trimmed.timeline,
-    price_index: trimmed.priceIndex || null,
     keywords: parsedKeywords,
     ...(finalImageConfig ? { image_config: finalImageConfig } : {}),
     updated_at: new Date().toISOString(),
@@ -195,7 +208,7 @@ export async function updateExistingEntry({
     .update(updatePayload)
     .eq("id", entryId)
     .eq("owner", currentUser.id)
-    .select();
+    .select("id");
 
   if (updateError || !updatedRows || updatedRows.length === 0) {
     console.error(

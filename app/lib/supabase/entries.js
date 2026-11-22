@@ -7,36 +7,6 @@ export function toKmNum(num) {
   return String(num).replace(/\d/g, (d) => kmDigits[d] || d);
 }
 
-function normalizePriceIndex(raw) {
-  if (!raw) return null;
-  if (Array.isArray(raw)) return raw;
-  if (typeof raw === "string") {
-    try {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) return parsed;
-    } catch (_) {}
-    if (raw.trim()) {
-      return [
-        {
-          item: { en: "Price Index", km: "សន្ទស្សន៍តម្លៃ" },
-          past: { en: `${raw} KHR`, km: `${toKmNum(raw)} រៀល` },
-          present: { en: "—", km: "—" },
-        },
-      ];
-    }
-  }
-  if (typeof raw === "number") {
-    return [
-      {
-        item: { en: "Price Index", km: "សន្ទស្សន៍តម្លៃ" },
-        past: { en: `${raw} KHR`, km: `${toKmNum(raw)} រៀល` },
-        present: { en: "—", km: "—" },
-      },
-    ];
-  }
-  return null;
-}
-
 const TOPIC_KM_MAP = {
   "Commute & Mobility": "ការធ្វើដំណើរ និងមធ្យោបាយធ្វើដំណើរ",
   "Morning Routine & School Prep": "ទម្លាប់ពេលព្រឹក និងការរៀបចំទៅរៀន",
@@ -105,7 +75,6 @@ export function normalizeEntries(rows) {
           ext: "png",
         },
         image: row.image || null,
-        priceIndex: normalizePriceIndex(row.price_index),
         commonKeywords: Array.isArray(row.keywords) ? row.keywords : [],
         heritageKeywords: [],
         modernKeywords: [],
@@ -121,9 +90,23 @@ export function normalizeEntries(rows) {
     if (row.image && !card.image) {
       card.image = row.image;
     }
-    if (row.image_config && !card.imageConfig?.url && !card.imageConfig?.path) {
-      card.imageConfig = row.image_config;
-    }
+    const artworkByEra = card.imageConfig.artworkByEra || {};
+    const imageConfig =
+      row.image_config && !card.imageConfig.url && !card.imageConfig.path
+        ? row.image_config
+        : card.imageConfig;
+    card.imageConfig = {
+      ...imageConfig,
+      designByEra: {
+        ...card.imageConfig.designByEra,
+        [eraKey]: [2, 3].includes(row.image_config?.design) ? row.image_config.design : 1,
+      },
+      artworkByEra: {
+        ...artworkByEra,
+        [eraKey]:
+          row.image_config?.artwork || (Array.isArray(row.topic) ? row.topic[0] : row.topic),
+      },
+    };
 
     const defaultLabel = isHeritage
       ? { en: "HERITAGE · 1980s–90s", km: "សម័យដើម · ទសវត្សរ៍ ៨០–៩០" }
@@ -197,7 +180,9 @@ export async function fetchEntries(supabase) {
   try {
     const { data, error } = await supabase
       .from("entries")
-      .select("*")
+      .select(
+        "id,owner,num,slug,topic,image_config,keywords,timeline,title,content,role,source,chips"
+      )
       .eq("status", "published")
       .order("num", { ascending: true });
 
@@ -220,7 +205,7 @@ export async function fetchEntryById(supabase, entryId) {
   try {
     const { data, error } = await supabase
       .from("entries")
-      .select("*")
+      .select("id,owner,title,content,timeline,topic,source,keywords,image_config")
       .eq("id", entryId)
       .maybeSingle();
 
@@ -240,7 +225,7 @@ export async function deleteEntry(supabase, entryId, ownerId) {
   if (!supabase || !entryId) throw new Error("Missing entry ID");
   const query = supabase.from("entries").delete().eq("id", entryId);
   if (ownerId) query.eq("owner", ownerId);
-  const { data, error } = await query.select();
+  const { data, error } = await query.select("id");
 
   if (error || !data || data.length === 0) {
     console.error("Delete failed or no row returned:", error || "Zero rows returned from delete");

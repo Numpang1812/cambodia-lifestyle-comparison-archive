@@ -79,6 +79,52 @@
   gap: 8px;
 }
 
+.keywordBox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-inset);
+}
+
+.keywordBox:focus-within {
+  border-color: var(--accent);
+}
+.keywordBox input {
+  flex: 1 1 10rem;
+  min-width: 0;
+  padding: 5px;
+  background: transparent;
+  color: var(--text);
+  border: 0;
+  font: inherit;
+}
+
+.keywordChip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  gap: 4px;
+  padding-left: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--accent-soft);
+}
+
+.keywordChip button {
+  min-width: 28px;
+  min-height: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 18px;
+  cursor: pointer;
+}
+
 .labelRow {
   display: flex;
   justify-content: space-between;
@@ -95,6 +141,190 @@
 
 .requiredStar {
   color: var(--accent);
+}
+
+.topicIndex {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.topicGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(215px, 100%), 1fr));
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.topicGrid .topicTab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 5px 12px 5px 6px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.topicTab span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+  align-self: stretch;
+  border-right: 1px dashed var(--border-strong);
+  color: var(--accent);
+  font: 11px var(--font-mono);
+}
+
+.topicTab:has(input:checked) span {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.galleryTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 6px 14px;
+  margin-top: 6px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font: 600 13px var(--font-unified);
+  cursor: pointer;
+}
+
+.galleryTrigger .printImage {
+  width: 72px;
+  margin: 0;
+}
+.galleryTrigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.galleryDialog {
+  width: min(680px, 92vw);
+  max-height: 80dvh;
+  box-sizing: border-box;
+  margin: auto;
+  padding: 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--card-radius);
+  background: var(--bg-card);
+  color: var(--text);
+}
+
+.galleryDialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+.galleryDialog::backdrop {
+  background: rgb(0 0 0 / 70%);
+}
+.galleryDialog .printGrid {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 5px;
+}
+.galleryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.galleryHeader h2 {
+  margin: 0;
+  font: 500 20px/1.3 var(--font-display);
+}
+
+.printGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(155px, 100%), 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.printChoice {
+  display: block;
+  position: relative;
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  background: var(--bg-inset);
+  cursor: pointer;
+}
+
+.printChoice input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+}
+
+.printChoice:hover,
+.printChoice:has(input:checked) {
+  border-color: var(--accent);
+}
+
+.printChoice:has(input:checked) {
+  background: var(--accent-soft);
+  box-shadow: inset 0 -3px var(--accent);
+}
+
+.printChoice:has(input:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.printImage {
+  display: block;
+  position: relative;
+  margin: 5px;
+  background: #102e32;
+}
+
+.printImage[data-era="heritage"] {
+  background: #30231c;
+}
+
+.printStamp {
+  padding: 4px 6px;
+  background: var(--accent);
+  color: var(--bg);
+  font: 700 10px/1.1 var(--font-mono);
+  letter-spacing: 1px;
+}
+
+.printImage .printStamp {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
+
+.printCaption,
+.autoPrint {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 10px 12px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.printCaption small {
+  color: var(--accent);
+  font: 11px var(--font-mono);
+  border-right: 1px solid var(--border-strong);
+  padding-right: 7px;
+}
+
+.autoPrint {
+  width: fit-content;
+  align-items: center;
+  padding: 8px 12px;
 }
 
 .fieldError {
