@@ -46,10 +46,10 @@ export const translations = {
     toolbarTitleSub: "Big changes.",
     searchPlaceholder: "Find a story… (e.g. food, bicycle, romance)",
     searchClear: "Clear search",
-    searchNoMatch: "no direct match — press Enter to search anyway",
+    searchNoMatch: "No matching stories in this era.",
 
     // Cards list
-    storiesCountAll: "05 stories to explore · Choose an illustration to step inside",
+    storiesCountAll: (total) => `${total} ${total === 1 ? "story" : "stories"} to explore`,
     storiesCountMatch: (matchCount, total) =>
       `${matchCount} of ${total} stories matching your search`,
     noStoriesFound: "No stories found",
@@ -196,10 +196,10 @@ export const translations = {
     toolbarTitleSub: "ការផ្លាស់ប្តូរធំៗ។",
     searchPlaceholder: "ស្វែងរកសាច់រឿង… (ឧ. ម្ហូប, កង់, ស្នេហា)",
     searchClear: "សម្អាតការស្វែងរក",
-    searchNoMatch: "គ្មានលទ្ធផលត្រូវគ្នាផ្ទាល់ — ចុច Enter ដើម្បីស្វែងរក",
+    searchNoMatch: "គ្មានសាច់រឿងត្រូវគ្នាក្នុងសម័យនេះទេ។",
 
     // Cards list
-    storiesCountAll: "០៥ សាច់រឿងសម្រាប់រុករក · ចុចលើរូបគំនូរដើម្បីចូលអាន",
+    storiesCountAll: (total) => `${total.toLocaleString("km-KH-u-nu-khmr")} សាច់រឿងសម្រាប់រុករក`,
     storiesCountMatch: (matchCount, total) =>
       `${matchCount} នៃ ${total} សាច់រឿងត្រូវគ្នានឹងការស្វែងរករបស់អ្នក`,
     noStoriesFound: "រកមិនឃើញសាច់រឿងទេ",
@@ -903,8 +903,9 @@ function translateEra(era, l) {
 }
 
 // Helper to get card in target language
-export function getTranslatedCard(rawCard, lang = "en") {
+export function getTranslatedCard(rawCard, lang = "en", era = null) {
   const l = lang === "km" ? "km" : "en";
+  const topic = rawCard[era]?.topic || rawCard.topic;
   return {
     id: rawCard.id,
     owner: rawCard.owner || null,
@@ -912,7 +913,7 @@ export function getTranslatedCard(rawCard, lang = "en") {
     rawNum: rawCard.num,
     slug: rawCard.slug,
     imageConfig: rawCard.imageConfig,
-    topic: rawCard.topic[l] || rawCard.topic.en,
+    topic: topic[l] || topic.en,
     modern: translateEra(rawCard.modern, l),
     heritage: translateEra(rawCard.heritage, l),
     caption: {

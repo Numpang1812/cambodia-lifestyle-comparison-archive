@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import styles from "./entry-cards.module.css";
 import StoryIllustration from "./StoryIllustration";
+import SearchExcerpt from "./SearchExcerpt";
 import { translations, getTranslatedCard } from "../lib/translations";
 import { searchTerms, scoreCard, filterCardsByTerms } from "../lib/search";
 
@@ -457,13 +458,13 @@ export default function EntryCards({
     [eraCards, terms, query, era]
   );
   const visible = useMemo(
-    () => visibleRaw.map((c) => getTranslatedCard(c, lang)),
-    [visibleRaw, lang]
+    () => visibleRaw.map((c) => getTranslatedCard(c, lang, era)),
+    [visibleRaw, lang, era]
   );
 
   const translatedSelected = useMemo(
-    () => (selected ? getTranslatedCard(selected, lang) : null),
-    [selected, lang]
+    () => (selected ? getTranslatedCard(selected, lang, modalEra ?? era) : null),
+    [selected, lang, modalEra, era]
   );
 
   return (
@@ -475,7 +476,7 @@ export default function EntryCards({
             : "Loading archive entries..."
           : terms.length
             ? t.storiesCountMatch(visible.length, eraCards.length)
-            : t.storiesCountAll}
+            : t.storiesCountAll(eraCards.length)}
       </p>
 
       {loading ? (
@@ -550,7 +551,11 @@ export default function EntryCards({
                 </div>
                 <div className={styles.cardBody}>
                   <h3 className={styles.title}>{data.headline || c.topic}</h3>
-                  {typeof data.details === "string" && data.details.trim() ? (
+                  {terms.length ? (
+                    <p className={styles.cardDescription}>
+                      <SearchExcerpt card={visibleRaw[index]} era={era} terms={terms} lang={lang} />
+                    </p>
+                  ) : typeof data.details === "string" && data.details.trim() ? (
                     <p className={styles.cardDescription}>{data.details}</p>
                   ) : null}
                   <div className={styles.cardFooter}>

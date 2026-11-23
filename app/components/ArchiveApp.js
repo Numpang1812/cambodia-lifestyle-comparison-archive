@@ -11,6 +11,7 @@ import Atmosphere from "./Atmosphere";
 import { translations, getTranslatedCard } from "../lib/translations";
 import { filterCardsByTerms } from "../lib/search";
 import MenuIcon from "./MenuIcon";
+import SearchExcerpt from "./SearchExcerpt";
 
 export default function ArchiveApp() {
   const [lang, setLang] = useState("en");
@@ -20,7 +21,6 @@ export default function ArchiveApp() {
   const [pagePhase, setPagePhase] = useState("idle");
   const [suggestIndex, setSuggestIndex] = useState(-1);
   const [draft, setDraft] = useState("");
-  const [query, setQuery] = useState("");
   const [showSuggest, setShowSuggest] = useState(false);
   const [selected, setSelected] = useState(null);
   const [modalEra, setModalEra] = useState("modern");
@@ -194,6 +194,8 @@ export default function ArchiveApp() {
 
   function toggle(next) {
     if (warping || next === era) return;
+    setShowSuggest(false);
+    setSuggestIndex(-1);
 
     if (motionPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setEra(next);
@@ -250,13 +252,12 @@ export default function ArchiveApp() {
   }
 
   function commitSearch() {
-    setQuery(draft.trim());
     setShowSuggest(false);
+    setSuggestIndex(-1);
   }
 
   function clearSearch() {
     setDraft("");
-    setQuery("");
     setShowSuggest(false);
   }
 
@@ -275,12 +276,16 @@ export default function ArchiveApp() {
 
   const suggestTerms = useMemo(() => searchTerms(draft), [draft]);
   const suggestions = useMemo(
-    () =>
-      draft.trim().length ? filterCardsByTerms(cards, suggestTerms, draft, era).slice(0, 6) : [],
+    () => (suggestTerms.length ? filterCardsByTerms(cards, suggestTerms, draft, era) : []),
     [cards, suggestTerms, draft, era]
   );
 
-  const showDropdown = showSuggest && draft.trim().length > 0;
+  const showDropdown = showSuggest && suggestTerms.length > 0;
+  useEffect(() => {
+    if (showDropdown && suggestIndex >= 0) {
+      document.getElementById(`suggestion-${suggestIndex}`)?.scrollIntoView({ block: "nearest" });
+    }
+  }, [showDropdown, suggestIndex]);
   const isPageWarping = warping && warpKind === "page";
   const past = era === "heritage";
 
@@ -680,9 +685,6 @@ export default function ArchiveApp() {
                 onChange={(e) => {
                   const val = e.target.value;
                   setDraft(val);
-                  if (!val.trim()) {
-                    setQuery("");
-                  }
                   setShowSuggest(true);
                   setSuggestIndex(-1);
                 }}
@@ -747,7 +749,7 @@ export default function ArchiveApp() {
                 >
                   {suggestions.length ? (
                     suggestions.map((c, index) => {
-                      const translated = getTranslatedCard(c, lang);
+                      const translated = getTranslatedCard(c, lang, era);
                       return (
                         <li
                           key={c.num}
@@ -761,7 +763,8 @@ export default function ArchiveApp() {
                             onMouseDown={(e) => e.preventDefault()}
                             onClick={() => pickSuggestion(c)}
                           >
-                            {translated.num} · {translated.topic}
+                            {translated.num} · {translated[era]?.headline || translated.topic}
+                            <SearchExcerpt card={c} era={era} terms={suggestTerms} lang={lang} />
                           </button>
                         </li>
                       );
@@ -781,7 +784,7 @@ export default function ArchiveApp() {
             loading={loading}
             era={era}
             lang={lang}
-            query={query}
+            query={draft}
             selected={selected}
             modalEra={modalEra}
             warping={warping}

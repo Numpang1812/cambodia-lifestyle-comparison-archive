@@ -756,6 +756,8 @@ html[data-era="heritage"][lang="km"] {
   appearance: none;
 }
 .searchSuggestList {
+  max-height: min(45vh, 22rem);
+  overflow-y: auto;
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
@@ -784,6 +786,19 @@ html[data-era="heritage"][lang="km"] {
 .searchSuggestItem:hover,
 .searchSuggestList [aria-selected="true"] {
   background: var(--accent-soft);
+}
+.searchExcerpt {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.searchSuggestItem .searchExcerpt {
+  margin-top: 3px;
+  color: var(--text-muted);
+}
+.searchExcerpt mark {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
 }
 .searchSuggestEmpty {
   padding: 12px;

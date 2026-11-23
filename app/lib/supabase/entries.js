@@ -49,12 +49,16 @@ export function normalizeEntries(rows) {
       }
     }
 
+    const primaryTopic = Array.isArray(row.topic) ? row.topic[0] : row.topic;
+    const topic = {
+      en: primaryTopic || "Archive Entry",
+      km:
+        (Array.isArray(row.topic) && row.topic[1]) ||
+        TOPIC_KM_MAP[primaryTopic] ||
+        primaryTopic ||
+        "ព័ត៌មានបណ្ណសារ",
+    };
     if (!cardMap.has(key)) {
-      const primaryTopic = Array.isArray(row.topic) ? row.topic[0] : row.topic;
-      const topicKm = Array.isArray(row.topic)
-        ? row.topic[1] || TOPIC_KM_MAP[primaryTopic] || row.topic[0] || ""
-        : TOPIC_KM_MAP[row.topic] || row.topic || "ព័ត៌មានបណ្ណសារ";
-
       cardMap.set(key, {
         id: row.id,
         owner: row.owner || null,
@@ -62,10 +66,7 @@ export function normalizeEntries(rows) {
         numKm: toKmNum(row.num || "01"),
         rawNum: row.num || null,
         slug: row.slug || "entry",
-        topic: {
-          en: primaryTopic || "Archive Entry",
-          km: topicKm,
-        },
+        topic,
         imageConfig: row.image_config || {
           folder: TOPIC_FOLDER_MAP[primaryTopic] || row.slug || "commute-and-mobility",
           pastPrefix: "past",
@@ -75,7 +76,7 @@ export function normalizeEntries(rows) {
           ext: "png",
         },
         image: row.image || null,
-        commonKeywords: Array.isArray(row.keywords) ? row.keywords : [],
+        commonKeywords: [],
         heritageKeywords: [],
         modernKeywords: [],
         heritage: null,
@@ -140,6 +141,8 @@ export function normalizeEntries(rows) {
         : { en: [], km: [] };
 
     card[eraKey] = {
+      topic,
+      timeline: row.timeline,
       label: defaultLabel,
       headline,
       details,
